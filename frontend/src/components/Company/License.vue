@@ -1,5 +1,5 @@
 <template>
-    <div>네브바 컴포넌트</div>
+    <div>특허 리스트 제공</div>
 </template>
 
 <script setup></script>

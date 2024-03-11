@@ -1,5 +1,5 @@
 <template>
-    <div>메인 홈페이지</div>
+    <div>전체 보이는 곳</div>
 </template>
 
 <script setup></script>
