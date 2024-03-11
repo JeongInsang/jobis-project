@@ -1,23 +1,51 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import LoginView from '@/views/Users/LoginView.vue';
+import CompanyView from '@/views/Company/CompanyView.vue';
+import CompanyDetail from '@/views/Company/CompanyDetail.vue';
+import MypageView from '@/views/Users/MypageView.vue';
+import SignupView from '@/views/Users/SignupView.vue';
+import LoginSuccessView from '@/views/Users/LoginSuccessView.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
-  ]
-})
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: HomeView,
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginView,
+        },
+        {
+            path: '/company',
+            name: 'company',
+            component: CompanyView,
+        },
+        {
+            path: '/companydetail',
+            name: 'companydetail',
+            component: CompanyDetail,
+        },
+        {
+            path: '/mypage',
+            name: 'mypage',
+            component: MypageView,
+        },
+        {
+            path: '/signup',
+            name: 'signup',
+            component: SignupView,
+        },
+        {
+            path: '/login-success/:atk/:rtk',
+            name: 'loginsuccess',
+            component: LoginSuccessView,
+        },
+    ],
+});
 
-export default router
+export default router;
