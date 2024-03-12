@@ -1,7 +1,11 @@
 <template>
-    <div>메인 홈페이지 ?</div>
+    <div>
+        <Carousel />
+    </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Carousel from '@/components/Home/Carousel.vue';
+</script>
 
 <style scoped></style>
