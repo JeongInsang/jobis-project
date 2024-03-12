@@ -13,9 +13,9 @@
                                 수많은 기업 중 당신에게 맞는 최상의 선택을 발견하세요.
                             </div>
                             <div class="button">
-                                <button class="primary">
+                                <div class="primary">
                                     <div class="title3">가입하기</div>
-                                </button>
+                                </div>
                             </div>
                         </div>
                         <svg
