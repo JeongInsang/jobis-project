@@ -74,7 +74,9 @@
     font-weight: 700;
     position: relative;
     width: 520px;
+    margin-bottom: -10px; /* 이 부분을 추가하여 요소 사이의 간격을 조정합니다. */
 }
+
 .description {
     color: white;
     text-align: center;
