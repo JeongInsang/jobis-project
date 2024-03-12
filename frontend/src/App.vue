@@ -1,7 +1,15 @@
 <template>
-    <div>전체 보이는 곳</div>
+    <div>
+        <Navbar />
+        <RouterView />
+        <Footer />
+    </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { RouterView } from 'vue-router';
+import Navbar from './components/Home/Navbar.vue';
+import Footer from './components/Home/Footer.vue';
+</script>
 
 <style scoped></style>
