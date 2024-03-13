@@ -1,17 +1,15 @@
 <template>
     <div>
-        <Carousel />
-        <CompanyTop10 />
-        <Top10ComapnyList />
-        <SearchList />
+        <LoginHome v-if="isLogin" />
+        <LogoutHome v-else />
     </div>
 </template>
 
 <script setup>
-import Carousel from '@/components/Home/Carousel.vue';
-import CompanyTop10 from '@/components/Home/CompanyTop10.vue';
-import Top10ComapnyList from '@/components/Home/Top10ComapnyList.vue';
-import SearchList from '@/components/Home/SearchList.vue';
+import LogoutHome from '@/components/Home/LogoutHome.vue';
+import LoginHome from '@/components/Home/LoginHome.vue';
+import { ref } from 'vue';
+const isLogin = ref(false);
 </script>
 
 <style scoped></style>
