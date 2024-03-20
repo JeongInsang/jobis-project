@@ -24,14 +24,14 @@ export const useCounterStore = defineStore('counter', () => {
     };
 
     const logIn = function (payload) {
-        const username = payload.username;
+        const userId = payload.userId;
         const password = payload.password;
 
         axios({
             method: 'post',
             url: `${API_URL}/login/`, // 임시임
             data: {
-                username,
+                userId,
                 password,
             },
         })

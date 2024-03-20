@@ -14,7 +14,11 @@
                             </div>
                             <div class="button">
                                 <div class="primary">
-                                    <div class="title3">가입하기</div>
+                                    <RouterLink
+                                        style="text-decoration: none"
+                                        :to="{ name: 'signup' }">
+                                        <div class="title3">가입하기</div>
+                                    </RouterLink>
                                 </div>
                             </div>
                         </div>
