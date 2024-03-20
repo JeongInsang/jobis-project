@@ -1,7 +1,11 @@
 <template>
-    <div>로그인페이지</div>
+    <Login />
+    <!-- <TestLogin /> -->
 </template>
 
-<script setup></script>
+<script setup>
+import Login from '@/components/Users/Login.vue';
+import TestLogin from '@/components/Users/TestLogin.vue';
+</script>
 
 <style scoped></style>
