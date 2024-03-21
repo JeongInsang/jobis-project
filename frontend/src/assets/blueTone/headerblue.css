@@ -1,0 +1,82 @@
+.top-bar,
+.top-bar * {
+    box-sizing: border-box;
+}
+.top-bar {
+    background: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 80px;
+    position: relative;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+.rectangle-4137 {
+    /* background: rgba(0, 0, 0, 0.1); */
+    border-radius: 100px;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    position: relative;
+}
+.title {
+    color: #000000;
+    text-align: left;
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 500;
+    position: relative;
+    flex: 1;
+    margin: 0px;
+}
+.navigation {
+    background: #ffffff;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+}
+.tab {
+    color: #000000;
+    text-align: left;
+    font-family: 'Roboto-Regular', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    position: relative;
+}
+.primary {
+    background: #007bff;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 100px;
+    height: 24px;
+    position: relative;
+    /* button 설정입니다. */
+    cursor: pointer; /* 마우스 커서 모양을 손가락 포인터로 변경합니다. */
+    border: none; /* 테두리를 없앱니다. */
+}
+.title2 {
+    color: #ffffff;
+    text-align: left;
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    position: relative;
+}

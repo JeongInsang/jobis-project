@@ -1,250 +1,305 @@
 <template>
-    <div class="wrapper">
-        <div class="card-switch">
-            <label class="switch">
-                <input type="checkbox" class="toggle" />
-                <span class="slider"></span>
-                <span class="card-side"></span>
-                <div class="flip-card__inner">
-                    <div class="flip-card__front">
-                        <div class="title">Log in</div>
-                        <form class="flip-card__form" action="">
-                            <input
-                                class="flip-card__input"
-                                name="email"
-                                placeholder="Email"
-                                type="email" />
-                            <input
-                                class="flip-card__input"
-                                name="password"
-                                placeholder="Password"
-                                type="password" />
-                            <button class="flip-card__btn">Let`s go!</button>
-                        </form>
-                    </div>
-                    <div class="flip-card__back">
-                        <div class="title">Sign up</div>
-                        <form class="flip-card__form" action="">
-                            <input class="flip-card__input" placeholder="Name" type="name" />
-                            <input
-                                class="flip-card__input"
-                                name="email"
-                                placeholder="Email"
-                                type="email" />
-                            <input
-                                class="flip-card__input"
-                                name="password"
-                                placeholder="Password"
-                                type="password" />
-                            <button class="flip-card__btn">Confirm!</button>
-                        </form>
-                    </div>
+    <div class="container">
+        <div class="welcome">
+            <div class="pinkbox" :style="{ transform: pinkboxTransform }">
+                <div class="signup" :class="{ nodisplay: !showSignup }">
+                    <h1>register</h1>
+                    <form autocomplete="off">
+                        <input type="text" placeholder="username" />
+                        <input type="email" placeholder="email" />
+                        <input type="password" placeholder="password" />
+                        <input type="password" placeholder="confirm password" />
+                        <button class="button submit">create account</button>
+                    </form>
                 </div>
-            </label>
+                <div class="signin" :class="{ nodisplay: !showSignin }">
+                    <h1>sign in</h1>
+                    <form class="more-padding" autocomplete="off">
+                        <input type="text" placeholder="username" />
+                        <input type="password" placeholder="password" />
+                        <div class="checkbox">
+                            <input type="checkbox" id="remember" /><label for="remember"
+                                >remember me</label
+                            >
+                        </div>
+
+                        <button class="button submit">login</button>
+                    </form>
+                </div>
+            </div>
+            <div class="leftbox">
+                <h2 class="title"><span>JOB</span>IS</h2>
+                <p class="desc">pick your perfect <span>JOB</span></p>
+                <LoginLogo class="logo" />
+                <p class="account">have an account?</p>
+                <button class="button" @click="showSignIn">login</button>
+            </div>
+            <div class="rightbox">
+                <h2 class="title"><span>JOB</span>IS</h2>
+                <p class="desc">pick your perfect <span>JOB</span></p>
+                <LoginLogo class="logo" />
+                <p class="account">don't have an account?</p>
+                <button class="button" @click="showSignUp">sign up</button>
+            </div>
         </div>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, computed } from 'vue';
+import LoginLogo from '@/components/Users/LoginLogo.vue';
 
-<style scoped>
-.wrapper {
-    --input-focus: #2d8cf0;
-    --font-color: #323232;
-    --font-color-sub: #666;
-    --bg-color: #fff;
-    --bg-color-alt: #666;
-    --main-color: #323232;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
+const showSignup = ref(false);
+const showSignin = ref(true);
+
+const pinkboxTransform = computed(() => {
+    return showSignup.value ? 'translateX(80%)' : 'translateX(0%)';
+});
+
+const showSignIn = () => {
+    showSignup.value = false;
+    showSignin.value = true;
+};
+
+const showSignUp = () => {
+    showSignup.value = true;
+    showSignin.value = false;
+};
+</script>
+
+<style lang="scss" scoped>
+$gray: #8e9aaf;
+$lavender: #cbc0d3;
+$pale: #eac7cc;
+$white: #f6f6f6;
+$font: #3498db;
+
+$pink: #007bff; // 기존 색상 대신 새로운 색상으로 변경
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400|Lora');
+
+$sans-serif: 'Open Sans', sans-serif;
+$serif: 'Lora', serif;
+
+body {
+    background: $lavender;
 }
-/* switch card */
-.switch {
-    transform: translateY(-200px);
+
+/* div box styling */
+.container {
+    margin: auto;
+    width: 650px;
+    height: 550px;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    width: 50px;
-    height: 20px;
 }
 
-.card-side::before {
+.welcome {
+    background: $white;
+    width: 650px;
+    height: 415px;
     position: absolute;
-    content: 'Log in';
-    left: -70px;
-    top: 0;
-    width: 100px;
-    text-decoration: underline;
-    color: var(--font-color);
-    font-weight: 600;
-}
-
-.card-side::after {
-    position: absolute;
-    content: 'Sign up';
-    left: 70px;
-    top: 0;
-    width: 100px;
-    text-decoration: none;
-    color: var(--font-color);
-    font-weight: 600;
-}
-
-.toggle {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    box-sizing: border-box;
+    top: 25%;
     border-radius: 5px;
-    border: 2px solid var(--main-color);
-    box-shadow: 4px 4px var(--main-color);
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--bg-colorcolor);
-    transition: 0.3s;
+    box-shadow: rgba(0, 123, 255, 1);
 }
 
-.slider:before {
-    box-sizing: border-box;
+.pinkbox {
     position: absolute;
-    content: '';
-    height: 20px;
-    width: 20px;
-    border: 2px solid var(--main-color);
+    top: -10%;
+    left: 5%;
+    background: $pink; // 여기서 핑크색을 새로운 색상으로 변경
+    width: 320px;
+    height: 500px;
     border-radius: 5px;
-    left: -2px;
-    bottom: 2px;
-    background-color: var(--bg-color);
-    box-shadow: 0 3px 0 var(--main-color);
-    transition: 0.3s;
+    box-shadow: 2px 0 10px rgba(0, 123, 255, 1);
+    transition: all 0.5s ease-in-out;
+    z-index: 2;
 }
 
-.toggle:checked + .slider {
-    background-color: var(--input-focus);
+.nodisplay {
+    display: none;
+    transition: all 0.5s ease;
 }
 
-.toggle:checked + .slider:before {
-    transform: translateX(30px);
+.leftbox,
+.rightbox {
+    position: absolute;
+    width: 50%;
+    transition: 1s all ease;
 }
 
-.toggle:checked ~ .card-side:before {
-    text-decoration: none;
+.leftbox {
+    left: -2%;
+}
+.rightbox {
+    right: -2%;
 }
 
-.toggle:checked ~ .card-side:after {
-    text-decoration: underline;
-}
-
-/* card */
-
-.flip-card__inner {
-    width: 300px;
-    height: 350px;
-    position: relative;
-    background-color: transparent;
-    perspective: 1000px;
-    /* width: 100%;
-    height: 100%; */
+/* font & button styling */
+h1 {
+    font-family: $sans-serif;
     text-align: center;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-}
-
-.toggle:checked ~ .flip-card__inner {
-    transform: rotateY(180deg);
-}
-
-.toggle:checked ~ .flip-card__front {
-    box-shadow: none;
-}
-
-.flip-card__front,
-.flip-card__back {
-    padding: 20px;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    background: lightgrey;
-    gap: 20px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    box-shadow: 4px 4px var(--main-color);
-}
-
-.flip-card__back {
-    width: 100%;
-    transform: rotateY(180deg);
-}
-
-.flip-card__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    margin-top: 95px;
+    text-transform: uppercase;
+    color: $white;
+    font-size: 2em;
+    letter-spacing: 8px;
 }
 
 .title {
-    margin: 20px 0 20px 0;
-    font-size: 25px;
-    font-weight: 900;
+    font-family: $serif;
+    color: $gray;
+    font-size: 1.8em;
+    line-height: 1.1em;
+    letter-spacing: 3px;
     text-align: center;
-    color: var(--main-color);
+    font-weight: 300;
+    margin-top: 20%;
+}
+.desc {
+    margin-top: -8px;
+}
+.account {
+    margin-top: 45%;
+    font-size: 10px;
+}
+p {
+    font-family: $sans-serif;
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    color: $gray;
+    text-align: center;
 }
 
-.flip-card__input {
-    width: 250px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--font-color);
-    padding: 5px 10px;
-    outline: none;
+span {
+    color: $font;
 }
 
-.flip-card__input::placeholder {
-    color: var(--font-color-sub);
-    opacity: 0.8;
-}
-
-.flip-card__input:focus {
-    border: 2px solid var(--input-focus);
-}
-
-.flip-card__btn:active,
-.button-confirm:active {
-    box-shadow: 0px 0px var(--main-color);
-    transform: translate(3px, 3px);
-}
-
-.flip-card__btn {
-    margin: 20px 0 20px 0;
+.flower {
+    position: absolute;
     width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--font-color);
-    cursor: pointer;
+    height: 120px;
+    top: 46%;
+    left: 29%;
+    opacity: 0.7;
+}
+
+.smaller {
+    width: 90px;
+    height: 100px;
+    top: 48%;
+    left: 38%;
+    opacity: 0.9;
+}
+
+button {
+    padding: 12px;
+    font-family: $sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 11px;
+    border-radius: 10px;
+    margin: auto;
+    outline: none;
+    display: block;
+    &:hover {
+        background: $pink;
+        color: $white;
+        transition: background-color 1s ease-out;
+    }
+}
+
+.button {
+    margin-top: 3%;
+    background: $white;
+    color: $pink; // 버튼 텍스트 색상을 새로운 핑크색으로 변경
+    border: solid 1px $pink; // 버튼 테두리 색상도 새로운 핑크색으로 변경
+}
+
+/* form styling */
+
+form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 7px;
+}
+.more-padding {
+    padding-top: 35px;
+    input {
+        padding: 12px;
+    }
+    .submit {
+        margin-top: 45px;
+    }
+}
+.submit {
+    margin-top: 25px;
+    padding: 12px;
+    border-color: $pink;
+    &:hover {
+        background: $lavender;
+        border-color: darken($lavender, 5%);
+    }
+}
+
+input {
+    background: $pink;
+    width: 65%;
+    color: $white;
+    border: none;
+    border-bottom: 1px solid rgba($white, 0.5);
+    padding: 9px;
+    margin: 7px;
+    &::placeholder {
+        color: rgba($white, 1);
+        letter-spacing: 2px;
+        font-size: 1.3em;
+        font-weight: 100;
+    }
+    &:focus {
+        color: $white;
+        outline: none;
+        border-bottom: 1.2px solid rgba($pink, 0.7);
+        font-size: 1em;
+        transition: 0.8s all ease;
+        &::placeholder {
+            opacity: 0;
+        }
+    }
+}
+
+label {
+    font-family: $sans-serif;
+    color: $white;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+}
+
+.checkbox {
+    display: inline;
+    white-space: nowrap;
+    position: relative;
+    left: -62px;
+    top: 5px;
+}
+
+input[type='checkbox'] {
+    width: 7px;
+    background: $pink;
+}
+
+.checkbox input[type='checkbox']:checked + label {
+    color: $white;
+    transition: 0.5s all ease;
+}
+//
+.logo {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    top: 46%;
+    left: 40%;
+    opacity: 0.7;
 }
 </style>

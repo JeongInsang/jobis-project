@@ -44,5 +44,6 @@ const goLogin = () => {
 </script>
 
 <style scoped>
-@import url('@/assets/header.css');
+/* @import url('@/assets/header.css'); */
+@import url('@/assets/blueTone/headerblue.css');
 </style>

@@ -1,6 +1,6 @@
 <template>
     <!-- <Login /> -->
-    <TestLogin />
+    <TestLogin style="height: 650px" />
 </template>
 
 <script setup>
