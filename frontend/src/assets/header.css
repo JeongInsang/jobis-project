@@ -33,6 +33,7 @@
     font-weight: 500;
     position: relative;
     flex: 1;
+    margin: 0px;
 }
 .navigation {
     background: #ffffff;

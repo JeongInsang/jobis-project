@@ -112,7 +112,8 @@
     flex-shrink: 0;
     width: 160px;
     position: relative;
-    cursor: pointer; /* 마우스 커서 모양을 손가락 포인터로 변경합니다. */
+    /* 마우스 커서 모양을 손가락 포인터로 변경합니다. */
+    cursor: pointer;
 }
 .title3 {
     color: #ffffff;
