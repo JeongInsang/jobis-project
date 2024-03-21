@@ -1,6 +1,6 @@
 <template>
-    <Login />
-    <!-- <TestLogin /> -->
+    <!-- <Login /> -->
+    <TestLogin />
 </template>
 
 <script setup>

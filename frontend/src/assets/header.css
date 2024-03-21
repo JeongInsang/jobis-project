@@ -17,7 +17,7 @@
     overflow: hidden;
 }
 .rectangle-4137 {
-    background: rgba(0, 0, 0, 0.1);
+    /* background: rgba(0, 0, 0, 0.1); */
     border-radius: 100px;
     flex-shrink: 0;
     width: 40px;

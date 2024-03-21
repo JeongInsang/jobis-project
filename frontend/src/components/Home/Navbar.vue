@@ -1,6 +1,7 @@
 <template>
     <div class="top-bar">
-        <div class="rectangle-4137"></div>
+        <Logo />
+        <!-- <div class="rectangle-4137"><Logo /></div> -->
         <div class="title">
             <RouterLink style="text-decoration: none" :to="{ name: 'home' }">JOBIS</RouterLink>
         </div>
@@ -26,6 +27,7 @@
 <script setup>
 import router from '@/router';
 import { RouterLink } from 'vue-router';
+import Logo from './Logo.vue';
 import TestLogin from '../Users/TestLogin.vue';
 
 const goSignUp = () => {
