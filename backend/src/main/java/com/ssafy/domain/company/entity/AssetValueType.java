@@ -1,6 +1,32 @@
 package com.ssafy.domain.company.entity;
 
-public enum AssetType {
+/**
+ * 유동자산
+ * 비유동자산
+ * 자산총계
+ * 유동부채
+ * 비유동부채
+ * 부채총계
+ * 자본금
+ * 자본금잉여금
+ * 이익잉여금
+ * 자본조정
+ * 자본총계
+ * 매출액
+ * 매출총이익
+ * 영업이익
+ * 영업외수익
+ * 영업외비용
+ * 당기순이익
+ * 현금흐름표
+ * 영업활동으로인한 현금흐름
+ * 투자활동으로 인한 현금흐름
+ * 재무활동으로 인한 현금흐름
+ * 현금의 증가감소
+ * 기말현금
+ */
+
+public enum AssetValueType {
 
     CURRENT_ASSETS,
     NON_CURRENT_ASSETS,
@@ -24,6 +50,6 @@ public enum AssetType {
     CASH_FLOWS_FROM_INVESTING_ACTIVITIES,
     CASH_FLOWS_FROM_FINANCING_ACTIVITIES,
     NET_INCREASE_DECREASE_IN_CASH,
-    CASH_AT_END_OF_PERIOD,
+    CASH_AT_END_OF_PERIOD
 
 }
