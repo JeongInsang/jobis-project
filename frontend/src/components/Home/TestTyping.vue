@@ -1,6 +1,8 @@
 <template>
     <div class="carousel">
-        <div class="background-image"><img src="" alt="" /></div>
+        <div class="background-image">
+            <img :src="getImageUrl(fname)" class="background-image" />
+        </div>
         <div class="title1">당신은</div>
         <div class="typing-animation" id="typing-animation"></div>
         <div class="title2">될 수 있습니다.</div>
@@ -9,6 +11,25 @@
 
 <script setup>
 import 'vue3-carousel/dist/carousel.css';
+import 'animate.css';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+
+// 이미지 자동 전환 로직
+const fname = ref('gif1');
+
+function getImageUrl(name) {
+    return new URL(`/src/assets/images/${name}.gif`, import.meta.url).href;
+}
+
+setInterval(() => {
+    console.log(fname.value);
+    if (fname.value === 'gif1') {
+        fname.value = 'gif2';
+    } else if (fname.value === 'gif2') {
+        fname.value = 'gif1';
+    }
+}, 5000);
 
 // 타이핑할 문자열 배열
 const texts = ['Engineer', 'Programmer', 'Doctor'];
@@ -51,7 +72,7 @@ function deleteWriter(text, i, typingAnimation) {
 }
 
 // 페이지 로드 시 타이핑 애니메이션 시작
-document.addEventListener('DOMContentLoaded', function () {
+onMounted(() => {
     const typingAnimation = document.getElementById('typing-animation');
     if (typingAnimation) {
         typeWriter(texts[textIndex], 0, typingAnimation);
@@ -70,19 +91,29 @@ document.addEventListener('DOMContentLoaded', function () {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0; /* 오른쪽 정렬을 해제합니다. */
-    bottom: 0; /* 아래쪽 정렬을 해제합니다. */
-    margin: auto; /* 수평, 수직 가운데 정렬을 위해 margin을 auto로 설정합니다. */
-    margin-top: 3%;
-    width: 90%;
+    right: 0;
+    bottom: 0;
+    /* 수평, 수직 가운데 정렬을 위해 margin을 auto로 설정합니다. */
+    margin: auto;
+    width: 100%;
     height: 100%;
-    background-image: url('@/img/gif1.gif'); /* 백그라운드 이미지 경로를 설정하세요 */
     background-size: cover;
     background-position: center;
-    z-index: -1; /* 타이핑 메시지 위에 오도록 배치 */
+    /* 타이핑 메시지 위에 오도록 배치 */
+    z-index: -2;
+    /* 가로세로 비율 유지 */
+    object-fit: cover;
     /* 애니메이션 효과 추가 */
-    animation: zoom-in 5s infinite alternate;
+    /* animation: fadeIn 1s; */
 }
+/* @keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+} */
 
 .typing-animation {
     font-size: 3em;
