@@ -1,6 +1,12 @@
 package com.ssafy.domain.company.entity;
 
 import com.ssafy.common.embeddable.Factor;
+import com.ssafy.domain.news.entity.News;
+import com.ssafy.domain.patent.entity.Patent;
+
+import org.hibernate.annotations.ColumnDefault;
+
+import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +14,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "company")
@@ -60,5 +65,23 @@ public class Company {
     @ColumnDefault("0")
     @Column(name = "views")
     private Long views;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<CompanyStatement> companyStatements;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<CompanyRate> companyRates;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<Patent> patents;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<News> news;
+
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private CompanyYouth companyYouth;
+
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private CompanyQuarterInfo companyQuarterInfo;
 
 }
