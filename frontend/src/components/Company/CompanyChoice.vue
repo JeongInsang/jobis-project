@@ -1,70 +1,86 @@
 <template>
     <div>
-        <h1 v-if="!winner">Ideal Type World Cup</h1>
-        <button v-if="!winner" @click="startTournament">Start Tournament</button>
-        <div v-if="!winner && selectedCards.length === 2" class="selected-cards">
-            <div v-for="card in selectedCards" :key="card.id" class="card">
-                <img :src="card.image" :alt="card.name" />
+        <div v-if="!winner">
+            <div v-for="(match, index) in matches" :key="index">
+                <h2>대진 {{ index + 1 }}</h2>
+                <p>1. {{ match[0] }} vs 2. {{ match[1] }}</p>
+                <button @click="selectWinner(index, 0)">1번 기업 선택</button>
+                <button @click="selectWinner(index, 1)">2번 기업 선택</button>
             </div>
-            <button @click="moveNextRound">Next Round</button>
         </div>
-        <h1 v-if="winner">{{ winner.name }} Wins!</h1>
+        <div v-else>
+            <h2>축하합니다!</h2>
+            <p>{{ winner }}가 기업 선택 월드컵에서 우승했습니다!</p>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
-const cards = ref([]);
-const selectedCards = ref([]);
-const winner = ref(null);
+const companies = [
+    '기업 A',
+    '기업 B',
+    '기업 C',
+    '기업 D',
+    '기업 E',
+    '기업 F',
+    '기업 G',
+    '기업 H',
+    '기업 I',
+    '기업 J',
+    '기업 K',
+    '기업 L',
+    '기업 M',
+    '기업 N',
+    '기업 O',
+    '기업 P',
+];
+const matches = ref([]);
+const winners = ref([]);
+const winner = ref('');
 
-// 더미 데이터 생성
-const generateDummyData = () => {
-    const dummyCards = [];
-    for (let i = 1; i <= 32; i++) {
-        dummyCards.push({
-            id: i,
-            name: `Person ${i}`,
-            image: `https://via.placeholder.com/150?text=Person${i}`,
-        });
-    }
-    return dummyCards;
-};
-
-const startTournament = () => {
-    const shuffledCards = generateDummyData().sort(() => Math.random() - 0.5);
-    selectedCards.value = shuffledCards.slice(0, 2);
-    cards.value = shuffledCards.slice(2, 18);
-};
-
-const moveNextRound = () => {
-    const shuffledCards = cards.value.sort(() => Math.random() - 0.5);
-    selectedCards.value = shuffledCards.slice(0, 2);
-    cards.value = shuffledCards.slice(2);
-    if (cards.value.length === 0) {
-        winner.value = selectedCards.value[0];
+const shuffleCompanies = () => {
+    for (let i = companies.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [companies[i], companies[j]] = [companies[j], companies[i]];
     }
 };
+
+const createMatches = () => {
+    for (let i = 0; i < companies.length; i += 2) {
+        matches.value.push([companies[i], companies[i + 1]]);
+    }
+};
+
+const selectWinner = (matchIndex, winnerIndex) => {
+    winners.value.push(matches.value[matchIndex][winnerIndex]);
+    matches.value.splice(matchIndex, 1);
+    if (matches.value.length === 0) {
+        startNextRound();
+    }
+};
+
+const startNextRound = () => {
+    if (winners.value.length === 1) {
+        winner.value = winners.value[0];
+    } else {
+        matches.value = [];
+        matches.value.push(
+            ...winners.value
+                .map((val, idx, arr) => (idx % 2 === 0 ? [val, arr[idx + 1]] : null))
+                .filter(Boolean)
+        );
+        winners.value = [];
+    }
+};
+
+onMounted(() => {
+    shuffleCompanies();
+    createMatches();
+});
 </script>
 
 <style scoped>
-.selected-cards {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.card {
-    width: 150px;
-    margin: 10px;
-}
-
-.card img {
-    width: 100%;
-}
-
-h1 {
-    margin-bottom: 20px;
-}
+/* Add your styles here */
 </style>
