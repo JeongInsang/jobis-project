@@ -1,4 +1,4 @@
-package com.ssafy.common.embeddable;
+package com.ssafy.domain.common.embeddable;
 
 import java.util.Objects;
 

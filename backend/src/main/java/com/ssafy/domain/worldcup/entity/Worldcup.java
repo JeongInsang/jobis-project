@@ -1,6 +1,6 @@
 package com.ssafy.domain.worldcup.entity;
 
-import com.ssafy.common.embeddable.Factor;
+import com.ssafy.domain.common.embeddable.Factor;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

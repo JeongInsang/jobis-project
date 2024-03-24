@@ -1,6 +1,6 @@
 package com.ssafy.domain.company.dto.response;
 
-import com.ssafy.common.embeddable.Factor;
+import com.ssafy.domain.common.embeddable.Factor;
 
 import lombok.Builder;
 import lombok.Getter;
