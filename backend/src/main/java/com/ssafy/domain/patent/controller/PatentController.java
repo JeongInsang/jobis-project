@@ -2,7 +2,6 @@ package com.ssafy.domain.patent.controller;
 
 import com.ssafy.domain.patent.dto.response.PatentResponse;
 import com.ssafy.domain.patent.service.PatentService;
-
 import com.ssafy.global.response.code.SuccessCode;
 import com.ssafy.global.response.structure.SuccessResponse;
 
