@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -24,6 +25,7 @@ public class JwtUtil {
     @Value("${jwt.refresh-expired}")
     private Long refreshTokenExpired;
 
+    private final static String BEARER_TYPE = "Bearer";
     private final static String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private final static String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private final static String CLAIM_USER_ID_KEY = "userId";
@@ -40,12 +42,13 @@ public class JwtUtil {
      * DTO에 해당 정보를 담아 리턴해주는 메서드
      *
      */
-    public JwtDto generateJwtDto(Users user) {
+    public JwtDto generateJwtDto(Authentication authentication) {
         log.info("== jwtDto 생성 ==");
+        log.info("authentication info {}", authentication.toString());
 
         String accessToken = Jwts.builder()
                 .subject(ACCESS_TOKEN_SUBJECT)
-                .claim(CLAIM_USER_ID_KEY, user.getId().toString())
+                .claim(CLAIM_USER_ID_KEY, authentication.getName())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessTokenExpired))
                 .signWith(key)
@@ -53,13 +56,14 @@ public class JwtUtil {
 
         String refreshToken = Jwts.builder()
                 .subject(REFRESH_TOKEN_SUBJECT)
-                .claim(CLAIM_USER_ID_KEY, user.getId().toString())
+                .claim(CLAIM_USER_ID_KEY, authentication.getName())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + accessTokenExpired))
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpired))
                 .signWith(key)
                 .compact();
 
         return JwtDto.builder()
+                .type(BEARER_TYPE)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

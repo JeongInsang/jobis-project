@@ -2,6 +2,7 @@ package com.ssafy.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.security.filter.CustomUsernamePasswordAuthenticationFilter;
+import com.ssafy.security.handler.CustomAuthenticationSuccessHandler;
 import com.ssafy.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,9 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
+
     private final AuthenticationConfiguration authenticationConfiguration;
+    private  final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,6 +63,7 @@ public class SecurityConfig {
     public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() throws Exception {
         CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter(jwtUtil, objectMapper);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        filter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
         return filter;
     }
 

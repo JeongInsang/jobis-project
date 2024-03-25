@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,12 +29,10 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
     private final ObjectMapper objectMapper;
 
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/auth/login";  // /auth/login으로 오는 요청을 처리
-    private static final String HTTP_METHOD = "POST";    //HTTP 메서드의 방식은 POST
-    private static final String CONTENT_TYPE = "application/json";//json 타입의 데이터로만 로그인을 진행
-
+    private static final String HTTP_METHOD_POST = HttpMethod.POST.name();    //HTTP 메서드의 방식은 POST
 
     private static final AntPathRequestMatcher ANT_PATH_REQUEST_MATCHER =
-            new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD);
+            new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD_POST);
 
     public CustomUsernamePasswordAuthenticationFilter(JwtUtil jwtUtil, ObjectMapper objectMapper) {
         super(ANT_PATH_REQUEST_MATCHER);
@@ -61,24 +61,28 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
         log.info("Request method: {}", request.getMethod());
         log.info("Content-Type: {}", request.getHeader("Content-Type"));
         // 사용자 정보를 기반으로 인증 시도
-        if(!request.getMethod().equals(HTTP_METHOD)) {
+
+        if(!request.getMethod().equals(HTTP_METHOD_POST)) {
             throw new AuthenticationServiceException("post 요청이 아닙니다");
         }
 
-        if(!request.getHeader("Content-Type").equals(CONTENT_TYPE)) {
-            throw new AuthenticationServiceException("json타입 요청이 아닙니다");
+        if(!request.getHeader("Content-Type").equals(MediaType.APPLICATION_JSON_VALUE)) {
+            throw new AuthenticationServiceException("json 타입 요청이 아닙니다");
         }
 
+        // 요청으로부터 사용자 정보를 읽어와 RegisterRequest 객체로 변환
         RegisterRequest registerRequest = objectMapper.readValue(request.getInputStream(), RegisterRequest.class);
 
-
+        // 인증 요청 객체 생성 (사용자 이메일과 패스워드)
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 registerRequest.getEmail(),
                 registerRequest.getPassword()
         );
-        log.info("registerRequest {}", authRequest);
+        log.info("authRequest {}", authRequest);
+        log.info("getAuthenticationManager().authenticate(authRequest) {}", getAuthenticationManager().authenticate(authRequest));
 
         // 인증 성공 시 Authentication 객체 반환
+        // authenticationManager의 authenticate메서드는 구현된 usersDetailsService를 수행하여 결과 반환
         return getAuthenticationManager().authenticate(authRequest);
     }
 
