@@ -1,6 +1,6 @@
 <template>
     <div class="chart-canvas">
-        <h2>Visualization</h2>
+        <h2>기업지표 시각화정보</h2>
         <canvas ref="chartCanvas"></canvas>
     </div>
 </template>
@@ -9,47 +9,56 @@
 import { ref, onMounted } from 'vue';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
+import 'chartjs-plugin-datalabels';
 
 const chartCanvas = ref(null);
 const visualizationData = ref({
-    stability: 80,
-    growth: 90,
-    activity: 85,
-    profitability: 75,
-    availability: 95,
+    안정성: 9,
+    성장성: -9,
+    활동성: 4,
+    수익성: -2,
+    가용성: 5,
 });
 
 onMounted(() => {
     const ctx = chartCanvas.value.getContext('2d');
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: Object.keys(visualizationData.value),
-            datasets: [
-                {
-                    label: 'Value',
-                    data: Object.values(visualizationData.value),
-                    backgroundColor: 'rgba(0, 123, 255, 0.7)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
-                    borderWidth: 1,
+    console.log(visualizationData.value),
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: Object.keys(visualizationData.value),
+                datasets: [
+                    {
+                        label: '점수',
+                        data: Object.values(visualizationData.value),
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    r: {
+                        max: 9,
+                        min: -9,
+                        stepSize: 3,
+                    },
                 },
-            ],
-        },
-        options: {
-            scales: {
-                r: {
-                    max: 100,
-                    min: 0,
-                    stepSize: 20,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    datalabels: {
+                        display: true, // 데이터 라벨 표시 여부
+                        color: '#000',
+                        font: {
+                            weight: 'bold',
+                        },
+                    },
                 },
             },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-            },
-        },
-    });
+        });
 });
 </script>
 

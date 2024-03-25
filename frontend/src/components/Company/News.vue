@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>News</h2>
+        <h2>최근 뉴스 정보</h2>
         <ul>
             <li v-for="article in newsArticles" :key="article.id">
                 {{ article.title }} - {{ article.date }}
