@@ -1,20 +1,20 @@
 <template>
     <div class="company-info">
-        <h1>Company Information</h1>
+        <h1>기업 상세 정보</h1>
         <div class="info-card" v-if="companyData">
             <img :src="companyData.logo" :alt="companyData.name" class="company-logo" />
             <div class="details">
                 <h2>{{ companyData.name }}</h2>
                 <p>{{ companyData.description }}</p>
                 <div class="additional-info">
-                    <div><strong>Industry:</strong> {{ companyData.industry }}</div>
-                    <div><strong>Founded:</strong> {{ companyData.founded }}</div>
-                    <div><strong>CEO:</strong> {{ companyData.ceo }}</div>
+                    <div><strong>산업 :</strong> {{ companyData.industry }}</div>
+                    <div><strong>매출액 :</strong> {{ companyData.founded }}</div>
+                    <div><strong>정보 :</strong> {{ companyData.ceo }}</div>
                 </div>
             </div>
         </div>
         <div v-else>
-            <p>Loading...</p>
+            <p>로 딩 중 !</p>
         </div>
     </div>
 </template>

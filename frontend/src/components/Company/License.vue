@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>License</h2>
+        <h2>특허정보</h2>
         <ul>
             <li v-for="patent in patents" :key="patent.id">
                 {{ patent.title }} - {{ patent.date }}

@@ -1,31 +1,59 @@
 <template>
     <div class="container">
         <div v-if="!winner">
-            <!-- 현재 라운드 -->
             <h2 style="text-align: center">{{ currentRound }}</h2>
-
-            <!-- 현재 대진만 표시 -->
-            <div v-if="currentMatchIndex < matches.length" class="current-match-display">
-                <div class="company-card">
-                    <h3>1. {{ matches[currentMatchIndex][0] }}</h3>
-                    <button @click="selectWinner(currentMatchIndex, 0)">1번 기업 선택</button>
+            <transition name="fade" mode="out-in">
+                <div
+                    v-if="currentMatchIndex < matches.length"
+                    class="current-match-display"
+                    :key="currentMatchIndex">
+                    <!-- 기업 1 카드 -->
+                    <div class="card" @click="selectWinner(currentMatchIndex, 0)">
+                        <div class="image">
+                            <Visualization />
+                        </div>
+                        <div class="text">
+                            <span>{{ matches[currentMatchIndex][0] }}</span>
+                            <p>성장성 : 1</p>
+                            <p>안정성 : 2</p>
+                            <p>수익성 : 3</p>
+                            <p>활동성 : 4</p>
+                            <p>가용성 : 5</p>
+                            <br />
+                            <span>전체 분석 내용</span>
+                            <p>이 기업은 특허 개수를 바탕으로 성장성이 뛰어나고 어쩌구저쩌구</p>
+                        </div>
+                    </div>
+                    <!-- 기업 2 카드 -->
+                    <div class="card" @click="selectWinner(currentMatchIndex, 1)">
+                        <div class="image">
+                            <Visualization />
+                        </div>
+                        <div class="text">
+                            <span>{{ matches[currentMatchIndex][1] }}</span>
+                            <p>성장성 : 5</p>
+                            <p>안정성 : 4</p>
+                            <p>수익성 : 3</p>
+                            <p>활동성 : 2</p>
+                            <p>가용성 : 1</p>
+                            <br />
+                            <span>전체 분석 내용</span>
+                            <p>이 기업은 30년간 안정적으로 운영된 기업으로 복지가 좋고 그렇다나</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="company-card">
-                    <h3>2. {{ matches[currentMatchIndex][1] }}</h3>
-                    <button @click="selectWinner(currentMatchIndex, 1)">2번 기업 선택</button>
-                </div>
-            </div>
+            </transition>
         </div>
         <div v-else>
             <h2>축하합니다!</h2>
-            <p>{{ winner }}가 기업 선택 월드컵에서 우승했습니다!</p>
+            <p>{{ winner }}가 코드 선택 월드컵에서 우승했습니다!</p>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-
+import Visualization from './Visualization.vue';
 const companies = [
     '기업 A',
     '기업 B',
@@ -54,6 +82,8 @@ const winner = ref('');
 const currentMatchIndex = ref(0);
 // 현재 라운드
 let currentRound = ref('16강');
+// 선택 확인 딜레이 상태
+const selectionConfirmed = ref(false);
 
 // 대진 생성 함수
 const createMatches = () => {
@@ -66,13 +96,18 @@ const createMatches = () => {
 const selectWinner = (matchIndex, winnerIndex) => {
     winners.value.push(matches.value[matchIndex][winnerIndex]);
 
-    // 다음 대진으로 이동
-    currentMatchIndex.value++;
+    // 선택 확인 딜레이 시작
+    selectionConfirmed.value = false;
+    setTimeout(() => {
+        selectionConfirmed.value = true;
+        // 다음 대진으로 이동
+        currentMatchIndex.value++;
 
-    // 모든 대진이 끝나면 다음 라운드로
-    if (currentMatchIndex.value >= matches.value.length) {
-        startNextRound();
-    }
+        // 모든 대진이 끝나면 다음 라운드로
+        if (currentMatchIndex.value >= matches.value.length) {
+            startNextRound();
+        }
+    }, 50); // 1초 딜레이
 };
 
 // 다음 라운드를 시작하는 함수
@@ -107,8 +142,8 @@ onMounted(() => {
 .container {
     border: solid #f0f0f0 3px;
     border-radius: 10px;
-    width: 60%;
-    height: 30rem;
+    width: 80%;
+    height: 50rem;
     margin-left: auto;
     margin-right: auto;
 }
@@ -119,37 +154,118 @@ onMounted(() => {
     gap: 20px;
     margin-bottom: 20px;
 }
-
-/* 기업 카드 스타일링 */
-.company-card {
-    width: 20rem;
-    height: 15rem;
-    flex-basis: 80%; /* 카드가 부모 컨테이너의 거의 절반을 차지하도록 설정 */
-    padding: 20px;
-    text-align: center;
-    background-color: #f0f0f0; /* 카드 배경색 */
-    border-radius: 10px; /* 카드 모서리 둥글게 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 카드에 그림자 효과 추가 */
-    transition: transform 0.3s ease; /* 호버 시 변환 효과를 부드럽게 */
-}
-
-.company-card:hover {
-    transform: translateY(-5px); /* 호버 시 카드가 조금 위로 올라감 */
+.card {
+    position: relative;
+    background: #fff;
+    width: 30rem;
+    height: 35rem;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 120ms;
+    overflow: hidden;
+    box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
 }
 
-/* 선택 버튼 스타일링 */
-.company-card button {
+.card:active {
+    transform: scale(0.95);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0px 0px 25px 5px rgba(255, 255, 255, 0.5);
+    z-index: 2;
+}
+
+.card::after {
+    content: '선택하기';
+    position: absolute;
+    bottom: -50%;
+    left: 0;
+    padding-left: 15px;
+    background: #181818;
+    width: 100%;
+    height: 60px;
+    color: #fff;
+    line-height: 50px;
+    text-transform: uppercase;
+    z-index: 2;
+    transition: all 0.2s ease-in;
+}
+
+.card:hover::after {
+    bottom: 0;
+}
+
+.card:active::after {
+    content: 'Adding !';
+    height: 65px;
+}
+
+.image {
+    position: absolute;
+    top: 0; /* 변경된 부분: 상단에 위치하도록 수정 */
+    left: 50%;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(3px 3px 5px #18181815);
+    transform: translate(-50%, 0); /* 애니메이션에 맞춰 수정 */
+    animation: shoes 1s ease infinite alternate;
+    transition: all 0.5s ease-in;
+}
+
+@keyframes shoes {
+    from {
+        top: -0.5%; /* 변경된 부분: 애니메이션 동작을 위해 상단에 위치하도록 수정 */
+    }
+
+    to {
+        top: 0.5%; /* 변경된 부분: 애니메이션 동작을 위해 상단에 위치하도록 수정 */
+    }
+}
+
+.card:hover .image {
+    /* top: 20%;
+  left: 30%; */
+    width: 220px;
+    height: auto;
+    animation: none;
+    transform: rotate(15deg) translate(-35%, -25%);
+}
+
+.text {
+    position: absolute;
+    top: 15%;
+    left: -80%;
+    color: #181818;
+    transition: all 0.3s ease-in;
+}
+
+.text span {
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.text p {
+    font-size: 18px;
     margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #007bff; /* 버튼 배경색 */
-    color: white; /* 버튼 글자색 */
-    border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 버튼 모서리 둥글게 */
-    cursor: pointer; /* 마우스 오버 시 커서 변경 */
 }
 
-.company-card button:hover {
-    background-color: #0056b3; /* 호버 시 버튼 배경색 변경 */
+.card:hover .text {
+    top: 15%;
+    left: 5%;
+}
+/* 애니메이션 스타일 */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0;
 }
 </style>
