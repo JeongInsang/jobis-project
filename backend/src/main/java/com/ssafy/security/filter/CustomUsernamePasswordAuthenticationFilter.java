@@ -82,7 +82,8 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
         log.info("getAuthenticationManager().authenticate(authRequest) {}", getAuthenticationManager().authenticate(authRequest));
 
         // 인증 성공 시 Authentication 객체 반환
-        // authenticationManager의 authenticate메서드는 구현된 usersDetailsService를 수행하여 결과 반환
+        // authenticationManager는 usersDetailsService를 통해 userDetails 객체를 가져오고
+        // 해당 userDetails가 사용 가능한 사용자인지 확인 후 최종 인증 성공, 실패 여부 판단
         return getAuthenticationManager().authenticate(authRequest);
     }
 
