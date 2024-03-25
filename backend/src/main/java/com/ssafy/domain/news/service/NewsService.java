@@ -1,6 +1,6 @@
 package com.ssafy.domain.news.service;
 
-import com.ssafy.domain.company.repository.CompanyRepositoryTest;    // 이 부분 고치기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//import com.ssafy.domain.company.repository.CompanyRepositoryTest;    // 이 부분 고치기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 import com.ssafy.domain.news.dto.NewsDtoMapper;
 import com.ssafy.domain.news.dto.response.NewsResponse;
 import com.ssafy.domain.news.entity.News;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class NewsService {
 
     private final NewsRepository newsRepository;
-    private final CompanyRepositoryTest companyRepositoryTest;    // 이 부분 고치기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//    private final CompanyRepositoryTest companyRepositoryTest;    // 이 부분 고치기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     @Transactional(readOnly = false)
     public List<NewsResponse> findNews(Long companyId, String name) {
@@ -50,7 +50,7 @@ public class NewsService {
                                 .date(getNew.get("date"))
                                 .link(getNew.get("link"))
                                 .build());
-                newsList.add(new News(getNew, companyRepositoryTest.findCompanyById(companyId))); //  이 부분 고치기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//                newsList.add(new News(getNew, companyRepositoryTest.findCompanyById(companyId))); //  이 부분 고치기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
 
             newsRepository.saveAll(newsList);
