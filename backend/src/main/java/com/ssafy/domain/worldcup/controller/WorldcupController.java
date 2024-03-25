@@ -25,7 +25,7 @@ public class WorldcupController {
 
     private final WorldcupService worldcupService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Object> worldcupList() {
         logger.info("REQUEST: Worldcup list");
 
