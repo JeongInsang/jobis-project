@@ -1,12 +1,25 @@
 <template>
     <div>
         <TestTyping />
-        <GoWorldcup />
-        <Carousel2 />
-        <CompanyTop10 />
+        <GoWorldcup
+            data-aos="fade-right"
+            data-aos-offset="10"
+            data-aos-delay="50"
+            data-aos-duration="1000"
+            data-aos-easing="ease-in-out"
+            data-aos-mirror="true"
+            data-aos-once="false"
+            data-aos-anchor-placement="top-center" />
+        <Carousel2
+            data-aos="fade-left"
+            data-aos-offset="200"
+            data-aos-delay="50"
+            data-aos-duration="1000"
+            data-aos-easing="ease-in-out"
+            data-aos-mirror="true"
+            data-aos-once="false"
+            data-aos-anchor-placement="top-bottom" />
         <Top10ComapnyList />
-        <Top10CompanyTable />
-        <SearchList />
     </div>
 </template>
 

@@ -2,15 +2,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* 카드들을 가운데 정렬 */
-}
-
-.card {
-    flex-basis: calc(20% - 100px); /* 한 줄에 5개의 카드가 들어가도록 조정 */
-    width: 0; /* flexbox와 함께 사용할 때 필요 */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 10px;
-    background-color: #f9f9f9;
-    aspect-ratio: 1 / 1; /* 정사각형 비율을 유지하도록 설정 */
+    height: 300px;
+    width: 80%;
 }

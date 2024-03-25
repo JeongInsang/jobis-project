@@ -24,7 +24,8 @@
                 <img src="@/img/cheer.png" class="d-block w-100" alt="..." />
             </div>
             <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="..." />
+                <!-- <img src="..." class="d-block w-100" alt="..." /> -->
+                <Carousel />
             </div>
             <div class="carousel-item">
                 <img src="..." class="d-block w-100" alt="..." />
@@ -49,6 +50,8 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Carousel from './Carousel.vue';
+</script>
 
 <style scoped></style>
