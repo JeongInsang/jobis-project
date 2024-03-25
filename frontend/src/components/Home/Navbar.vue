@@ -14,9 +14,9 @@
                     >기업추천</RouterLink
                 >
             </div>
-            <button class="primary" @click="goSignUp">
+            <!-- <button class="primary" @click="goSignUp">
                 <div class="title2">회원가입</div>
-            </button>
+            </button> -->
             <button class="primary" @click="goLogin">
                 <div class="title2">로그인</div>
             </button>
