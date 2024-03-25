@@ -64,17 +64,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * BindException
-     */
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity<Object> handleBindException(final BindException e) {
-        logger.error("BindException caught: ", e);
-
-        final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
-        return handleExceptionInternal(e, responseCode);
-    }
-
-    /**
      * ConstraintViolationException
      */
     @ExceptionHandler(ConstraintViolationException.class)
