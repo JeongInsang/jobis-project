@@ -22,43 +22,43 @@ const visualizationData = ref({
 
 onMounted(() => {
     const ctx = chartCanvas.value.getContext('2d');
-    console.log(visualizationData.value),
-        new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: Object.keys(visualizationData.value),
-                datasets: [
-                    {
-                        label: '점수',
-                        data: Object.values(visualizationData.value),
-                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
-                        borderColor: 'rgba(0, 123, 255, 1)',
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                scales: {
-                    r: {
-                        max: 9,
-                        min: -9,
-                        stepSize: 3,
-                    },
+    // console.log(visualizationData.value),
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: Object.keys(visualizationData.value),
+            datasets: [
+                {
+                    label: '점수',
+                    data: Object.values(visualizationData.value),
+                    backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1,
                 },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    datalabels: {
-                        display: true, // 데이터 라벨 표시 여부
-                        color: '#000',
-                        font: {
-                            weight: 'bold',
-                        },
-                    },
+            ],
+        },
+        options: {
+            scales: {
+                r: {
+                    max: 9,
+                    min: -9,
+                    stepSize: 3,
                 },
             },
-        });
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                datalabels: {
+                    display: true, // 데이터 라벨 표시 여부
+                    color: '#000',
+                    font: {
+                        weight: 'bold',
+                    },
+                },
+            },
+        },
+    });
 });
 </script>
 
