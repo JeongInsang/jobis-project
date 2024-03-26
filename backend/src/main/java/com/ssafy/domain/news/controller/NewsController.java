@@ -26,6 +26,11 @@ public class NewsController {
 
     private final NewsService newsService;
 
+    @GetMapping
+    public String test() {
+        return "JOBIS TEST TEST TEST";
+    }
+
     @GetMapping("/{companyId}/{name}")
     public ResponseEntity<Object> getNews(@PathVariable("companyId") Long companyId, @PathVariable("name") String name) {
         logger.info("REQUEST: news list: ", name);
@@ -34,6 +39,5 @@ public class NewsController {
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_NEWS_SUCCESS, newsResponseList);
     }
-
 
 }
