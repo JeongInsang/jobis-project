@@ -18,7 +18,13 @@ public class RefreshToken {
     private String refreshToken;
 
     @TimeToLive
-    @Value("${jwt.refresh-expired}")
     private Long refreshTokenExpired;
+
+    @Builder
+    public RefreshToken(String id, String refreshToken, Long refreshTokenExpired){
+        this.id = id;
+        this.refreshToken = refreshToken;
+        this.refreshTokenExpired = refreshTokenExpired;
+    }
 
 }

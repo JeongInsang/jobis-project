@@ -36,9 +36,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Value("${jwt.refresh-expired}")
     private int refreshTokenExpired;
 
+    @Value("${server-domain}")
+    private String SERVER_DOMAIN;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("=== success handler ===");
+        log.info("=== success handler {} ===", authentication);
         // 인증 성공 시 동작 정의
 
         // 토큰 생성
@@ -47,22 +50,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // redis에 refreshToken 저장
         refreshTokenService.addRefreshToken(Long.valueOf(authentication.getName()), jwtDto.getRefreshToken());
 
-        JwtResponse jwtResponse = JwtResponse.builder()
-                .type(jwtDto.getType())
-                .accessToken(jwtDto.getAccessToken())
-                .build();
-
         // 응답객체 타입 설정
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        // 클라이언트에게 응답 - 응답객체와 상태코드 추후 수정할것
-        try(OutputStream os = response.getOutputStream()) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(os, ResponseEntity.ok(jwtResponse));
-            os.flush();
-        }
-
+        // 헤더에 토큰 담아 전송
+        jwtUtil.setAccessAndRefreshToken(response, jwtDto);
     }
-
 
 }

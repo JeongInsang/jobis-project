@@ -48,6 +48,7 @@ public class Users implements UserDetails {
         return null;
     }
 
+    // 여기서의 userName은 유저 이름이 아닌 UserDetails 객체의 식별자를 나타냄 - user pk로 사용
     @Override
     public String getUsername() {
         return id.toString();
