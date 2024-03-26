@@ -229,12 +229,9 @@ onMounted(() => {
 }
 
 .card:hover .image {
-    /* top: 20%;
-  left: 30%; */
-    width: 220px;
-    height: auto;
-    animation: none;
-    transform: rotate(15deg) translate(-35%, -25%);
+    width: 150px; /* 이미지의 너비를 줄입니다. */
+    height: 100px; /* 이미지의 높이는 자동으로 조정됩니다. */
+    transition: width 0.5s ease-in-out height 0.5s ease-in-out; /* 너비 변화에 대한 transition 추가 */
 }
 
 .text {
