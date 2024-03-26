@@ -1,13 +1,11 @@
 <template>
-    <div>
-        회원가입 및 로그인 이동페이지
-    </div>
+    <!-- <Login /> -->
+    <TestLogin style="height: 650px" />
 </template>
 
 <script setup>
-
+import Login from '@/components/Users/Login.vue';
+import TestLogin from '@/components/Users/TestLogin.vue';
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

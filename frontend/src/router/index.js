@@ -6,6 +6,7 @@ import CompanyDetail from '@/views/Company/CompanyDetail.vue';
 import MypageView from '@/views/Users/MypageView.vue';
 import SignupView from '@/views/Users/SignupView.vue';
 import LoginSuccessView from '@/views/Users/LoginSuccessView.vue';
+import Test from '@/views/Company/Test.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
             path: '/login-success/:atk/:rtk',
             name: 'loginsuccess',
             component: LoginSuccessView,
+        },
+        {
+            path: '/test',
+            name: 'test',
+            component: Test,
         },
     ],
 });
