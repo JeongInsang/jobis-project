@@ -19,7 +19,7 @@ import { onMounted } from 'vue';
 const fname = ref('gif1');
 
 function getImageUrl(name) {
-    return new URL(`/src/assets/images/${name}.gif`, import.meta.url).href;
+    return new URL(`/src/assets/img/${name}.gif`, import.meta.url).href;
 }
 
 setInterval(() => {
