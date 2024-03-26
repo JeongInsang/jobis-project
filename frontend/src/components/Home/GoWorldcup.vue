@@ -4,12 +4,18 @@
             <span class="circle" aria-hidden="true">
                 <span class="icon arrow"></span>
             </span>
-            <span class="button-text">기업 분석 TEST</span>
+            <span class="button-text" @click="goCompany">기업 분석 TEST</span>
         </button>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import router from '@/router';
+
+const goCompany = () => {
+    router.push({ name: 'company' });
+};
+</script>
 
 <style scoped>
 .imgcontainer {
