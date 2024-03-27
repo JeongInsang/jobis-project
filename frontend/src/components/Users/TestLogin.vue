@@ -3,27 +3,41 @@
         <div class="welcome">
             <div class="pinkbox" :style="{ transform: pinkboxTransform }">
                 <div class="signup" :class="{ nodisplay: !showSignup }">
-                    <h1>register</h1>
-                    <form autocomplete="off">
-                        <input type="text" placeholder="username" />
-                        <input type="email" placeholder="email" />
-                        <input type="password" placeholder="password" />
-                        <input type="password" placeholder="confirm password" />
-                        <button class="button submit">create account</button>
+                    <h1>회원가입</h1>
+                    <form autocomplete="off" @submit.prevent="signUp">
+                        <input type="text" placeholder="이메일" v-model="userEmail" />
+                        <span
+                            v-if="!emailValid"
+                            class="error-message animate__animated animate__shakeX"
+                            >@를 포함하여 올바른 형식으로 작성해주세요.</span
+                        >
+                        <input type="password" placeholder="비밀번호" v-model="password1" />
+                        <span
+                            v-if="!passwordValid"
+                            class="error-message animate__animated animate__shakeX"
+                            >영문 + 숫자를 포함한 4자이상 20자 이내여야 합니다.</span
+                        >
+                        <input type="password" placeholder="비밀번호 확인" v-model="password2" />
+                        <span
+                            v-if="!passwordSamevalid"
+                            class="error-message animate__animated animate__shakeX"
+                            >비밀번호가 일치하지 않습니다.</span
+                        >
+                        <button class="button submit" @click="signUp">계정 만들기</button>
                     </form>
                 </div>
                 <div class="signin" :class="{ nodisplay: !showSignin }">
-                    <h1>sign in</h1>
+                    <h1>로그인</h1>
                     <form class="more-padding" autocomplete="off">
-                        <input type="text" placeholder="username" />
-                        <input type="password" placeholder="password" />
+                        <input type="text" placeholder="아이디" />
+                        <input type="password" placeholder="비밀번호" />
                         <div class="checkbox">
                             <input type="checkbox" id="remember" /><label for="remember"
                                 >remember me</label
                             >
                         </div>
 
-                        <button class="button submit">login</button>
+                        <button class="button submit" @submit="signIn">로그인</button>
                     </form>
                 </div>
             </div>
@@ -31,15 +45,15 @@
                 <h2 class="title"><span>JOB</span>IS</h2>
                 <p class="desc">pick your perfect <span>JOB</span></p>
                 <LoginLogo class="logo" />
-                <p class="account">have an account?</p>
-                <button class="button" @click="showSignIn">login</button>
+                <p class="account">계정이 있으신가요?</p>
+                <button class="button" @click="showSignIn">로그인</button>
             </div>
             <div class="rightbox">
                 <h2 class="title"><span>JOB</span>IS</h2>
                 <p class="desc">pick your perfect <span>JOB</span></p>
                 <LoginLogo class="logo" />
-                <p class="account">don't have an account?</p>
-                <button class="button" @click="showSignUp">sign up</button>
+                <p class="account">계정이 없으신가요?</p>
+                <button class="button" @click="showSignUp">회원가입</button>
             </div>
         </div>
     </div>
@@ -47,8 +61,61 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useCounterStore } from '@/stores/counter';
 import LoginLogo from '@/components/Users/LoginLogo.vue';
+import { watch } from 'vue';
 
+// 회원가입 로직
+const store = useCounterStore();
+const userEmail = ref('');
+const password1 = ref('');
+const password2 = ref('');
+const emailValid = ref(true);
+const passwordValid = ref(true);
+const passwordSamevalid = ref(true);
+
+const signUp = () => {
+    const payload = {
+        userEmail: userEmail.value,
+        password1: password1.value,
+        password2: password2.value,
+    };
+    // email 유효성 검사
+    const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    emailValid.value = regexEmail.test(userEmail.value);
+    // 비밀번호 유효성 검사
+    const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,20}$/;
+    passwordValid.value = regexPassword.test(password1.value);
+    passwordSamevalid.value = password1.value === password2.value;
+    if (
+        // emailValid.value == true &&
+        // passwordValid.value == true &&
+        // passwordSamevalid.value == true
+        emailValid.value == true
+    ) {
+        // store.signUp(payload);
+        if (passwordValid.value == true) {
+            if (passwordSamevalid.value == true) {
+                store.signUp(payload);
+            }
+        }
+    }
+};
+
+// Email 유효성 검사
+// const watchEmail = watch(userEmail, (newEmail, oldEmail) => {
+//     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+//     emailValid.value = regex.test(newEmail);
+// });
+
+// 비밀번호 유효성 검사
+// const watchPassword = watch([password1, password2], ([pass1, pass2]) => {
+//     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,20}$/;
+//     passwordValid.value = regex.test(pass1);
+//     passwordSamevalid.value = pass1 === pass2;
+// });
+
+// 로그인 회원가입 전환 로직
 const showSignup = ref(false);
 const showSignin = ref(true);
 
@@ -301,5 +368,13 @@ input[type='checkbox'] {
     top: 46%;
     left: 40%;
     opacity: 0.7;
+}
+
+/* 에러 메시지 */
+.error-message {
+    color: rgb(255, 242, 0);
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 700;
 }
 </style>
