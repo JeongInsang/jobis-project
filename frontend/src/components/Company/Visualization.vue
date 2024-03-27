@@ -1,5 +1,5 @@
 <template>
-    <div class="chart-canvas">
+    <div class="card">
         <h2>기업지표 시각화정보</h2>
         <canvas ref="chartCanvas"></canvas>
     </div>
@@ -63,6 +63,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.card {
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+    background: #fff;
+    width: 30rem;
+    height: 35rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 120ms;
+    overflow: hidden;
+    box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
+}
+
 .chart-canvas {
     width: 30rem; /* 원하는 너비로 설정 */
     height: 20rem; /* 원하는 높이로 설정 */

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div>
+        <div class="content">
             <button @click="startTournament" v-if="!isTournamentStarted">대진 시작</button>
             <button @click="resetTournament" v-if="winner">다시하기</button>
             <!-- 다시하기 버튼 추가 -->
@@ -42,7 +42,7 @@
                                 <p>가용성 : 1</p>
                                 <br />
                                 <span>전체 분석 내용</span>
-                                <p>
+                                <p style="width: 380px">
                                     이 기업은 30년간 안정적으로 운영된 기업으로 복지가 좋고 그렇다나
                                 </p>
                             </div>
@@ -158,6 +158,7 @@ const startNextRound = () => {
     }
 };
 </script>
+
 <style scoped>
 @import url('@/assets/choice.css');
 </style>

@@ -5,7 +5,16 @@
     height: 50rem;
     margin-left: auto;
     margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 세로 중앙 정렬을 위해 추가 */
 }
+
+/* content 내용을 중앙으로 정렬 */
+.content {
+    text-align: center;
+}
+
 /* 현재 대진 표시 영역 스타일링 */
 .current-match-display {
     display: flex;
