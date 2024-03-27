@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -31,17 +32,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
 
     // 필터 적용하지 않을 경로
     private final String[] excludePath = {
-            "/api/auth/register", "/api/auth/register",
-            "/swagger-ui/index.html",
+            "/api/auth/**",
+            "/api/company/**",
+            "/api/news/**",
+            "/api/patent/**",
+            "/api/swagger-ui/**",
+            "/api/api-docs/**",
+            "/api/v3/api-docs/**"
     };
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Arrays.stream(excludePath).anyMatch(path::startsWith);
+        return Arrays.stream(excludePath)
+                .anyMatch(pattern -> antPathMatcher.match(pattern, path));
     }
 
     @Override
