@@ -1,119 +1,417 @@
 <template>
-  <div>
-    <!-- 16강 부터 결승까지의 라운드를 표시합니다. -->
-    <div v-for="(round, index) in rounds" :key="index">
-      <h2 v-if="!isFinalRound(round)"> {{ round.title }} </h2>
-      <div class="matchups">
-        <!-- 각 라운드에서의 매치업을 표시합니다. -->
-        <div v-for="(matchup, i) in round.matches" :key="i" class="matchup">
-          <div class="company-card" v-for="company in matchup" :key="company">
-            <!-- 각 기업 카드를 표시합니다. -->
-            <img :src="getCompanyImage(company)" alt="company logo" />
-            <h3>{{ company }}</h3>
-            <button @click="selectWinner(company, matchup.filter(c => c !== company)[0])">선택하기</button>
-          </div>
+    <div class="container">
+        <div>
+            <button @click="startTournament" v-if="!isTournamentStarted">대진 시작</button>
+            <button @click="resetTournament" v-if="winner">다시하기</button>
+            <!-- 다시하기 버튼 추가 -->
+            <div v-if="!winner">
+                <!-- 페이드 애니메이션을 적용한 라운드 표시 -->
+                <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
+                    <h2 style="text-align: center" :key="currentRound">
+                        {{ currentRound }}
+                    </h2>
+                </transition>
+                <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
+                    <div
+                        v-if="currentMatchIndex < matches.length"
+                        class="current-match-display"
+                        :key="currentMatchIndex">
+                        <!-- 기업 1 카드 -->
+                        <div class="card" @click="selectWinner(currentMatchIndex, 0)">
+                            <!-- 시각화 영역 -->
+                            <div class="image">
+                                <canvas class="chart-canvas" ref="chartCanvas1"></canvas>
+                            </div>
+                            <!-- 기업 정보 표시 -->
+                            <div class="text">
+                                <span>{{ matches[currentMatchIndex][0].name }}</span>
+                                <!-- 기업의 특성 값들을 반복문을 통해 표시 -->
+                                <div
+                                    v-for="(value, key) in matches[currentMatchIndex][0]
+                                        .visualizationData"
+                                    :key="key">
+                                    <p>{{ key }} : {{ value }}</p>
+                                </div>
+                                <br />
+                                <span>전체 분석 내용</span>
+                                <p style="width: 380px">
+                                    이 기업은 특허 개수를 바탕으로 성장성이 뛰어나고 어쩌구저쩌구
+                                </p>
+                            </div>
+                        </div>
+                        <!-- 기업 2 카드 -->
+                        <div class="card" @click="selectWinner(currentMatchIndex, 1)">
+                            <!-- 시각화 영역 -->
+                            <div class="image">
+                                <canvas class="chart-canvas" ref="chartCanvas2"></canvas>
+                            </div>
+                            <!-- 기업 정보 표시 -->
+                            <div class="text">
+                                <span>{{ matches[currentMatchIndex][1].name }}</span>
+                                <!-- 기업의 특성 값들을 반복문을 통해 표시 -->
+                                <div
+                                    v-for="(value, key) in matches[currentMatchIndex][1]
+                                        .visualizationData"
+                                    :key="key">
+                                    <p>{{ key }} : {{ value }}</p>
+                                </div>
+                                <br />
+                                <span>전체 분석 내용</span>
+                                <p style="width: 380px">
+                                    이 기업은 특허 개수를 바탕으로 성장성이 뛰어나고 어쩌구저쩌구
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
+            <div v-else>
+                <h2>축하합니다!</h2>
+                <p>{{ winner }}가 코드 선택 월드컵에서 우승했습니다!</p>
+            </div>
         </div>
-      </div>
     </div>
-
-    <!-- 최종 우승자를 표시합니다. -->
-    <h2 v-if="finalWinner">최종 우승자: {{ finalWinner }}</h2>
-  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import Visualization from './Visualization.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useCounterStore } from '@/stores/counter';
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+import 'chartjs-plugin-datalabels';
 
-// 기업 목록
+const store = useCounterStore();
+
 const companies = [
-  '기업1', '기업2', '기업3', '기업4', '기업5', '기업6', '기업7', '기업8',
-  '기업9', '기업10', '기업11', '기업12', '기업13', '기업14', '기업15', '기업16',
-  '기업17', '기업18', '기업19', '기업20', '기업21', '기업22', '기업23', '기업24',
-  '기업25', '기업26', '기업27', '기업28', '기업29', '기업30', '기업31', '기업32',
+    {
+        name: '기업1',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업2',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업3',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업4',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업5',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업6',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업7',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업8',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업9',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업10',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업11',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업12',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업13',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업14',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업15',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    {
+        name: '기업16',
+        visualizationData: {
+            안정성: 9,
+            성장성: -9,
+            활동성: 4,
+            수익성: -2,
+            가용성: 5,
+        },
+    },
+    // 다른 기업 데이터들
 ];
+const matches = ref([]);
+const winners = ref([]);
+const winner = ref('');
+const currentMatchIndex = ref(0);
+let currentRound = ref('16강');
+const selectionConfirmed = ref(false);
 
-// 선택된 기업들을 저장합니다.
-const selectedCompanies = ref(companies.slice(0, 16));
+const chartCanvas1 = ref(null);
+const chartCanvas2 = ref(null);
 
-// 라운드 정보를 저장합니다.
-const rounds = ref([
-  { title: '16강', matches: chunkArray(selectedCompanies.value, 2) },
-  { title: '8강', matches: [] },
-  { title: '4강', matches: [] },
-  { title: '결승', matches: [] }
-]);
+onMounted(() => {
+    createMatches(); // 대진 생성
+});
 
-// 최종 우승자를 저장합니다.
-const finalWinner = ref('');
-
-// 기업 카드의 이미지 경로를 가져옵니다.
-const getCompanyImage = (company) => `@/img/${company.toLowerCase().replace(/\s+/g, '')}.png`;
-
-// 라운드가 최종 라운드인지 확인합니다.
-const isFinalRound = (round) => round.title === '결승';
-
-// 라운드 진행 버튼을 클릭했을 때의 동작입니다.
-const proceedToNextRound = () => {
-  const currentRoundIndex = rounds.value.findIndex(round => round.matches.length > 0);
-  const nextRoundIndex = currentRoundIndex + 1;
-  if (nextRoundIndex < rounds.value.length) {
-    rounds.value[nextRoundIndex].matches = chunkArray(rounds.value[currentRoundIndex].matches.map(match => selectWinner(match)), 2);
-  } else {
-    finalWinner.value = rounds.value[currentRoundIndex].matches[0][0];
-  }
-};
-
-// 선택된 기업을 반환하고 이긴 기업은 결과에 남기고 진 기업은 제거합니다.
-const selectWinner = (match) => {
-  return match.map((company, index) => {
-    if (index === 0) {
-      return company;
-    } else {
-      return null;
+// 대진 생성 함수
+const createMatches = () => {
+    console.log(companies[0].visualizationData);
+    console.log(chartCanvas1);
+    const newMatches = [];
+    for (let i = 0; i < companies.length; i += 2) {
+        newMatches.push([companies[i], companies[i + 1]]);
     }
-  }).filter(company => company !== null);
+    matches.value = newMatches; // 새 배열을 할당하여 Vue가 변경을 감지하도록 함
+
+    // 차트 렌더링
+    renderChart(chartCanvas1, companies[0].visualizationData);
+    renderChart(chartCanvas2, companies[1].visualizationData);
 };
 
-// 배열을 여러 개의 작은 배열로 나누는 함수입니다.
-const chunkArray = (arr, size) => {
-  return Array.from({ length: Math.ceil(arr.length / size) }, (_, i) => {
-    const start = i * size;
-    return arr.slice(start, start + size);
-  });
+// 차트 렌더링 함수
+const renderChart = (canvasRef, data) => {
+    if (canvasRef.value !== null) {
+        const ctx = canvasRef.value.getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: Object.keys(data),
+                datasets: [
+                    {
+                        label: '점수',
+                        data: Object.values(data),
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    r: {
+                        max: 9,
+                        min: -9,
+                        stepSize: 3,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    datalabels: {
+                        display: true, // 데이터 라벨 표시 여부
+                        color: '#000',
+                        font: {
+                            weight: 'bold',
+                        },
+                    },
+                },
+            },
+        });
+    }
+};
+const isTournamentStarted = ref(false);
+// 대진 시작 함수
+const startTournament = () => {
+    isTournamentStarted.value = true; // 대진 시작 시 true로 설정
+    if (!matches.value.length || currentRound.value === '16강') {
+        matches.value = [];
+        winners.value = [];
+        winner.value = '';
+        currentMatchIndex.value = 0;
+        currentRound.value = '16강';
+        createMatches(); // 대진 생성
+    }
+};
+
+// 대회를 재설정하는 함수
+const resetTournament = () => {
+    isTournamentStarted.value = false; // 대회 재설정 시 false로 설정하여 버튼을 다시 표시
+    matches.value = []; // 대진 배열을 비웁니다.
+    winners.value = []; // 우승자 배열을 비웁니다.
+    winner.value = ''; // 최종 우승자를 비웁니다.
+    currentMatchIndex.value = 0; // 현재 대진 인덱스를 초기화합니다.
+    currentRound.value = '16강'; // 현재 라운드를 '16강'으로 초기화합니다.
+    createMatches(); // 대진 생성
+};
+
+// 기업 선택하는 함수
+const selectWinner = (matchIndex, winnerIndex) => {
+    winners.value.push(matches.value[matchIndex][winnerIndex]);
+
+    // 선택 확인 딜레이 시작
+    selectionConfirmed.value = false;
+    setTimeout(() => {
+        selectionConfirmed.value = true;
+        // 다음 대진으로 이동
+        currentMatchIndex.value++;
+
+        // 모든 대진이 끝나면 다음 라운드로
+        if (currentMatchIndex.value >= matches.value.length) {
+            startNextRound();
+        }
+    }, 50); // 1초 딜레이
+};
+
+// 다음 라운드를 시작하는 함수
+const startNextRound = () => {
+    let nextRoundName; // 다음 라운드 이름을 임시 저장할 변수
+
+    // 다음 라운드 이름 결정
+    if (winners.value.length === 8) {
+        nextRoundName = '8강';
+    } else if (winners.value.length === 4) {
+        nextRoundName = '4강';
+    } else if (winners.value.length === 2) {
+        nextRoundName = '결승';
+    } else if (winners.value.length === 1) {
+        nextRoundName = '우승';
+    }
+
+    // 2초 동안 nextRoundName을 currentRound에 할당하여 표시
+    currentRound.value = nextRoundName;
+
+    setTimeout(() => {
+        // 2초 지연 후 로직 실행
+        if (winners.value.length === 1) {
+            winner.value = winners.value[0]; // 우승자 결정
+        } else {
+            matches.value = winners.value
+                .map((val, idx, arr) => (idx % 2 === 0 ? [val, arr[idx + 1]] : null))
+                .filter(Boolean); // 다음 라운드 대진 생성
+            winners.value = []; // 우승자 배열 초기화
+            currentMatchIndex.value = 0; // 대진 인덱스 초기화
+
+            // 실제 라운드명 업데이트
+            currentRound.value = nextRoundName;
+        }
+
+        // 애니메이션 재설정
+        isNextRound.value = true;
+        setTimeout(() => (isNextRound.value = false), 500);
+    }, 1000); // 2초 지연
 };
 </script>
 
 <style scoped>
-.matchup {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+@import url('@/assets/choice.css');
+/* 페이드 애니메이션 정의 */
+/* 페이드 아웃에서 인으로 애니메이션 정의 */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease;
 }
-
-.company-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.company-card img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-
-.company-card button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.company-card button:hover {
-  background-color: #0056b3;
+/* startNextRound 호출 시 적용될 애니메이션 스타일 */
+.fade-next-round-enter-active,
+.fade-next-round-leave-active {
+    transition: opacity 0.2s ease-out;
 }
 </style>
