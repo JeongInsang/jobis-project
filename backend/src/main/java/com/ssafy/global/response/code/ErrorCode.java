@@ -54,11 +54,11 @@ public enum ErrorCode implements ResponseCode {
 
     BASE_NOT_FOUND(HttpStatus.NOT_FOUND, "기업기본 정보가 없습니다."),
 
-    STATEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "재무제표 정보가 없습니다."),
+    STATEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "재무재표 정보가 없습니다."),
 
     RATE_NOT_FOUND(HttpStatus.NOT_FOUND, "재무비율 정보가 없습니다."),
 
-    YOUTHCOMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "청년친화기업 정보가 없습니다."),
+    COMPANYYOUTH_NOT_FOUND(HttpStatus.NOT_FOUND, "청년친화기업 정보가 없습니다."),
 
     COMPANYQUARTERINFO_NOT_FOUND(HttpStatus.NOT_FOUND, "기업분기 정보가 없습니다."),
 
