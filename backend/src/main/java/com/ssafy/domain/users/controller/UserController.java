@@ -19,7 +19,7 @@ public class UserController {
     @GetMapping("/test")
     public ResponseEntity<Integer> test() {
         log.info("test 메서드 호출");
-        return ResponseEntity.ok(authUtil.getLoginMemberId());
+        return ResponseEntity.ok(authUtil.getLoginUserId());
     }
 
 }

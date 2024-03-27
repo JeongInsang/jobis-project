@@ -1,4 +1,4 @@
-package com.ssafy.security.handler;
+package com.ssafy.global.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.global.response.code.ErrorCode;

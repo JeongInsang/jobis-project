@@ -1,4 +1,4 @@
-package com.ssafy.security.util;
+package com.ssafy.global.security.util;
 
 import com.ssafy.domain.users.dto.JwtDto;
 import com.ssafy.domain.users.exception.JwtInvalidException;

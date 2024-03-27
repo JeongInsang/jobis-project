@@ -38,4 +38,5 @@ out/
 
 ### secret key ###
 src/main/resources/application-secret.yml
+src/main/resources/application-oauth.yml
 src/main/resources/secret.properties
