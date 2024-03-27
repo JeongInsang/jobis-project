@@ -24,7 +24,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
 
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/auth/login";  // /auth/login으로 오는 요청을 처리
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/user/login";  // /auth/login으로 오는 요청을 처리
     private static final String HTTP_METHOD_POST = HttpMethod.POST.name();    //HTTP 메서드의 방식은 POST
 
     private static final AntPathRequestMatcher ANT_PATH_REQUEST_MATCHER =

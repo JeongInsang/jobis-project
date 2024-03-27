@@ -1,7 +1,10 @@
 package com.ssafy.global.oauth2.userinfo;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Map;
 
+@Slf4j
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
@@ -29,15 +32,21 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     private String getAttribute(Map<String, Object> attributes, String key, String subKey) {
+        log.info("kakao user login, key : {}, subkey : {}", key, subKey);
+
+
         Map<String, Object> account = (Map<String, Object>) attributes.get(key);
 
-        if (account != null) {
-            Map<String, Object> subMap = (Map<String, Object>) account.get(subKey);
-            if (subMap != null) {
-                return (String) subMap.get(subKey);
-            }
+        if(account == null) return null;
+
+        if(subKey.equals("email")) {
+            return (String) account.get("email");
         }
 
-        return null;
+        Map<String, Object> profile = (Map<String, Object>) account.get(subKey);
+
+        if(profile == null) return null;
+
+        return (String) profile.get(subKey);
     }
 }

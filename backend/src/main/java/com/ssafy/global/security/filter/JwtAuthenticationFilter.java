@@ -37,7 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 필터 적용하지 않을 경로
     private final String[] excludePath = {
             "/api/login/**",
-            "/api/auth/**",
+            "/api/user/login",
+            "/api/user/register",
             "/api/company/**",
             "/api/news/**",
             "/api/patent/**",
