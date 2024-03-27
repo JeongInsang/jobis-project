@@ -1,90 +1,36 @@
 <template>
     <div>
-        <div class="company-info">
+        <div v-if="companyData" class="company-info">
+            <!-- 기존의 company-info div 내용 -->
             <h1>기업 상세 정보</h1>
-            <div class="info-card">
+            <class class="info-card">
                 <div class="card-content">
-                    <img :src="companyData.logo" :alt="companyData.name" class="company-logo" />
                     <div class="details">
                         <h2>기업명: {{ companyData.name }}</h2>
                         <p>회사주소: {{ companyData.address }}</p>
-                        <div><strong>설립일자 :</strong> {{ companyData.industry }}</div>
-                        <div><strong>대표자명 :</strong> {{ companyData.founded }}</div>
-                        <div><strong>자본금 :</strong> {{ companyData.ceo }}</div>
-                        <div><strong>종업원수 :</strong> {{ companyData.ceo }}</div>
-                        <div><strong>업종 :</strong> {{ companyData.ceo }}</div>
-                        <div><strong>주요제품명 :</strong> {{ companyData.ceo }}</div>
-                        <div><strong>청년친화강소기업여부 :</strong> {{ companyData.ceo }}</div>
+                        <div><strong>설립일자 :</strong> {{ companyData.founded }}</div>
+                        <div><strong>대표자명 :</strong> {{ companyData.ceo }}</div>
+                        <div><strong>자본금 :</strong> {{ companyData.capital }}</div>
+                        <div><strong>종업원수 :</strong> {{ companyData.employees }}</div>
+                        <div><strong>업종 :</strong> {{ companyData.industry }}</div>
+                        <div><strong>주요제품명 :</strong> {{ companyData.products }}</div>
+                        <div>
+                            <strong>청년친화강소기업여부 :</strong> {{ companyData.youthFriendly }}
+                        </div>
                     </div>
                 </div>
-                <div class="financial-section">
-                    <h3>대차대조표</h3>
-                    <table class="financial-statements">
-                        <thead>
-                            <tr>
-                                <th>계정명</th>
-                                <th>유동자산</th>
-                                <th>비유동자산</th>
-                                <th>자산총계</th>
-                                <th>유동부채</th>
-                                <th>비유동부채</th>
-                                <th>부채총계</th>
-                                <th>자본금</th>
-                                <th>자본총계</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(item, index) in companyData.financialStatements"
-                                :key="index">
-                                <td>{{ item.accountName }}</td>
-                                <td>{{ item.currentAssets }}</td>
-                                <td>{{ item.nonCurrentAssets }}</td>
-                                <td>{{ item.totalAssets }}</td>
-                                <td>{{ item.currentLiabilities }}</td>
-                                <td>{{ item.nonCurrentLiabilities }}</td>
-                                <td>{{ item.totalLiabilities }}</td>
-                                <td>{{ item.capital }}</td>
-                                <td>{{ item.totalEquity }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="indicators-section">
-                    <h3>성장성 지표</h3>
-                    <table class="indicators">
-                        <thead>
-                            <tr>
-                                <th>구분</th>
-                                <th>계정명</th>
-                                <th>2019-12-31</th>
-                                <th>2020-12-31</th>
-                                <th>2021-12-31</th>
-                                <th>성장성지표(%)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(indicator, index) in companyData.growthIndicators"
-                                :key="'growth-' + index">
-                                <td>{{ indicator.type }}</td>
-                                <td>{{ indicator.accountName }}</td>
-                                <td>{{ indicator.year2019 }}</td>
-                                <td>{{ indicator.year2020 }}</td>
-                                <td>{{ indicator.year2021 }}</td>
-                                <td>{{ indicator.growthRate }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </class>
         </div>
+        <BalanceSheet />
+        <FrinancialRatio />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import BalanceSheet from '@/components/Company/BalanceSheet.vue';
+import FrinancialRatio from '@/components/Company/FinancialRatio.vue';
 
 const companyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
