@@ -69,6 +69,8 @@ public enum SuccessCode implements ResponseCode {
      */
     FIND_WORLDCUP_SUCCESS(HttpStatus.OK, "가상기업 목록 조회에 성공했습니다."),
 
+    FIND_RECOMMENDATION_SUCCESS(HttpStatus.OK, "추천기업 목록 조회에 성공했습니다."),
+
     /**
      * Token
      */
