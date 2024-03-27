@@ -46,11 +46,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
+                .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((authorize) ->
+                                authorize
+                                        .requestMatchers("/**","/css/**","/images/**","/js/**","/favicon.ico").permitAll()
+                                        .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 );
-//                .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults());
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(customExceptionHandleFilter, JwtAuthenticationFilter.class);

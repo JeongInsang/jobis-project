@@ -13,7 +13,7 @@ public class AuthUtil {
 
     private final UserRepository userRepository;
 
-    public Integer getLoginMemberId() {
+    public Integer getLoginUserId() {
         try {
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             return Integer.valueOf(userId);
