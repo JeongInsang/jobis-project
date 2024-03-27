@@ -51,9 +51,11 @@ public enum SuccessCode implements ResponseCode {
 
     FIND_RATE_SUCCESS(HttpStatus.OK, "기업재무비율 정보 조회에 성공했습니다."),
 
-    FIND_YOUTHCOMPANY_SUCCESS(HttpStatus.OK, "청년친화기업 정보 조회에 성공했습니다."),
+    FIND_COMPANYYOUTH_SUCCESS(HttpStatus.OK, "청년친화기업 정보 조회에 성공했습니다."),
 
     FIND_COMPANYQUARTERINFO_SUCCESS(HttpStatus.OK, "기업분기 정보 조회에 성공했습니다."),
+
+    CREATE_SCRAP_SUCCESS(HttpStatus.OK, "관심기업 저장에 성공했습니다."),
 
     /**
      * News
