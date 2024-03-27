@@ -6,6 +6,8 @@
         </div>
     </div>
     <div class="bottom-section">
+        <BalanceSheet />
+        <FrinancialRatio />
         <License />
         <News />
     </div>
@@ -19,6 +21,8 @@ import License from '@/components/Company/License.vue';
 import News from '@/components/Company/News.vue';
 import Visualization from '@/components/Company/Visualization.vue';
 import CompanyInformation from '@/components/Company/CompanyInformation.vue';
+import BalanceSheet from '@/components/Company/BalanceSheet.vue';
+import FrinancialRatio from '@/components/Company/FinancialRatio.vue';
 
 const store = useCounterStore();
 const accessToken = localStorage.getItem('accessToken');
@@ -46,6 +50,7 @@ const accessToken = localStorage.getItem('accessToken');
 }
 
 .bottom-section {
+    width: 85%;
     margin-left: 7rem;
     display: flex;
     flex-direction: column;
