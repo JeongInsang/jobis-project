@@ -1,17 +1,15 @@
-package com.ssafy.domain.news.dto.response;
+package com.ssafy.domain.news.dto;
+
+import org.springframework.data.redis.core.RedisHash;
 
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
-@Getter
-@Builder
-public class NewsResponse {
-
-    private String companyId;
+@RedisHash("NewsData")
+@Data
+public class NewsData {
 
     private List<Article> news;
 
