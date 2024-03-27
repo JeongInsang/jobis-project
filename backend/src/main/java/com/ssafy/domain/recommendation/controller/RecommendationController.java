@@ -32,7 +32,7 @@ public class RecommendationController {
 
         List<CompanyResponse> companyResponseList = recommendationService.findCompanyByRecommendationId(companyId);
 
-        return SuccessResponse.createSuccess(SuccessCode.FIND_RECOMMENDATION_SUCCESS);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_RECOMMENDATION_SUCCESS, companyResponseList);
     }
 
 }

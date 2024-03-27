@@ -21,9 +21,8 @@ public class RecommendationService {
 
     public List<CompanyResponse> findCompanyByRecommendationId(Integer id) {
         List<Company> getCompanyList = recommendationRepository.findCompanyByRecommendationId(id);
-        List<CompanyResponse> list = companyEntityListToDtoList(getCompanyList);
 
-        return list;
+        return companyEntityListToDtoList(getCompanyList);
     }
 
 }
