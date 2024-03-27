@@ -10,6 +10,7 @@ import logging
 import time
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(filename='news.log', level=logging.INFO)
 
 app = FastAPI()
 
@@ -28,7 +29,6 @@ MAX_ARTICLES = 3
 
 @app.get('/news/{name}')
 def call_perform_news_search(name: Optional[str] = None):
-    logging.basicConfig(filename='news.log', level=logging.INFO)
     logger.info("Started At: " + time.strftime('%c', time.localtime(time.time())))
     logger.info(f"Company name: {name}")
 
