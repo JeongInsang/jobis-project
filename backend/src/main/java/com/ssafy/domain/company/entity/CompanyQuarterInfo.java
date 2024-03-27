@@ -16,7 +16,7 @@ public class CompanyQuarterInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quarter_info_id")
-    private Long id;
+    private Integer id;
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
