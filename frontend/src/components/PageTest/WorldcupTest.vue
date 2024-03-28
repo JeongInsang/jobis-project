@@ -74,17 +74,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import 'chartjs-plugin-datalabels';
 
-// onMounted(() => {
-//     createMatches();
-// });
 const store = useCounterStore();
+onMounted(() => {
+    createMatches();
+});
 const isNextRound = ref(false);
 const companies = [
     {
@@ -259,44 +259,35 @@ const chartCanvas1 = ref(null);
 const chartCanvas2 = ref(null);
 // 차트 인스턴스를 저장할 변수 선언
 
-let chartInstances = [];
+let chartInstance1 = null;
+let chartInstance2 = null;
 
 // 대진 생성 함수 수정
 const createMatches = () => {
     const newMatches = [];
     for (let i = 0; i < companies.length; i += 2) {
         newMatches.push([companies[i], companies[i + 1]]);
+        console.log(newMatches);
     }
     matches.value = newMatches;
-};
-// 차트 인스턴스 생성 함수
-const createChartInstances = () => {
-    // 차트 인스턴스 배열 초기화
-    chartInstances = [];
-    // 각 기업에 대한 차트 인스턴스 생성 및 배열에 저장
-    for (let i = 0; i < companies.length; i++) {
-        const canvasRef = ref(null);
-        const chartInstance = renderChart(canvasRef, companies[i].visualizationData, null);
-        chartInstances.push(chartInstance);
+    // 첫 번째 대진에 대해 차트 그리기
+    if (newMatches.length > 0) {
+        console.log(newMatches[0][0]);
+        console.log(newMatches[0][1]);
+        console.log(newMatches[0][0].visualizationData);
+        console.log(newMatches[0][1].visualizationData);
+        chartInstance1 = renderChart(
+            chartCanvas1,
+            newMatches[0][0].visualizationData,
+            chartInstance1
+        );
+        chartInstance2 = renderChart(
+            chartCanvas2,
+            newMatches[0][1].visualizationData,
+            chartInstance2
+        );
     }
 };
-// 첫 번째 대진에 대해 차트 그리기
-// if (newMatches.length > 0) {
-//     // console.log(newMatches[0][0]);
-//     // console.log(newMatches[0][1]);
-//     // console.log(newMatches[0][0].visualizationData);
-//     // console.log(newMatches[0][1].visualizationData);
-//     chartInstance1 = renderChart(
-//         chartCanvas1,
-//         newMatches[0][0].visualizationData,
-//         chartInstance1
-//     );
-//     chartInstance2 = renderChart(
-//         chartCanvas2,
-//         newMatches[0][1].visualizationData,
-//         chartInstance2
-//     );
-// }
 
 // 차트 렌더링 함수 수정
 const renderChart = (canvasRef, data, chartInstance) => {
@@ -340,26 +331,22 @@ const renderChart = (canvasRef, data, chartInstance) => {
             },
         });
     }
-    // 캔버스 참조가 null이 아닌 경우에만 차트 인스턴스 반환
-    return chartInstance;
 };
 
 const isTournamentStarted = ref(false);
 // 대진 시작 함수
-// 대진 시작 함수 내부에서 차트 인스턴스 생성 함수 호출
 const startTournament = () => {
-    isTournamentStarted.value = true;
+    isTournamentStarted.value = true; // 대진 시작 시 true로 설정
     if (!matches.value.length || currentRound.value === '16강') {
         matches.value = [];
         winners.value = [];
         winner.value = '';
         currentMatchIndex.value = 0;
         currentRound.value = '16강';
-        createMatches();
-        createChartInstances(); // 차트 인스턴스 생성
-        nextMatch.value = matches.value[currentMatchIndex.value];
+        createMatches(); // 대진 생성
     }
 };
+
 // 대회를 재설정하는 함수
 const resetTournament = () => {
     isTournamentStarted.value = false; // 대회 재설정 시 false로 설정하여 버튼을 다시 표시
@@ -370,38 +357,65 @@ const resetTournament = () => {
     currentRound.value = '16강'; // 현재 라운드를 '16강'으로 초기화합니다.
     createMatches(); // 대진 생성
 };
-const nextMatch = ref(null);
+
 // 기업 선택하는 함수
 const selectWinner = (matchIndex, winnerIndex) => {
-    chartInstances.forEach((chartInstance) => {
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
-    });
     winners.value.push(matches.value[matchIndex][winnerIndex]);
-    console.log(matches.value[matchIndex][winnerIndex]);
-    console.log(matches.value);
+
     // 선택 확인 딜레이 시작
     selectionConfirmed.value = false;
     setTimeout(() => {
         selectionConfirmed.value = true;
         // 다음 대진으로 이동
         currentMatchIndex.value++;
-        console.log(currentMatchIndex.value);
+
         // 모든 대진이 끝나면 다음 라운드로
         if (currentMatchIndex.value >= matches.value.length) {
             startNextRound();
         } else {
             // 다음 대진의 시각화 그래프 생성
             const nextMatch = matches.value[currentMatchIndex.value];
-            console.log(matches.value[currentMatchIndex.value]);
-            // 새로운 차트 인스턴스 생성
-            const chartInstance1 = renderChart(chartCanvas1, nextMatch[0].visualizationData, null);
-            const chartInstance2 = renderChart(chartCanvas2, nextMatch[1].visualizationData, null);
-        }
-    }, 50); // 딜레이 시간을 조정할 수 있습니다. 1초라면 1000ms입니다.
-};
 
+            // 이전 차트 인스턴스가 존재하는지 확인하고 파괴합니다.
+            if (chartInstance1) {
+                chartInstance1.destroy();
+            }
+            if (chartInstance2) {
+                chartInstance2.destroy();
+            }
+
+            // 새로운 차트 인스턴스 생성
+            chartInstance1 = renderChart(
+                chartCanvas1,
+                nextMatch[0].visualizationData,
+                chartInstance1
+            );
+            chartInstance2 = renderChart(
+                chartCanvas2,
+                nextMatch[1].visualizationData,
+                chartInstance2
+            );
+        }
+    }, 50); // 1초 딜레이
+};
+// 다음 대진의 시각화 그래프를 그리는 함수
+const renderNextMatchCharts = () => {
+    const nextMatch = matches.value[currentMatchIndex.value];
+    const company1Data = nextMatch[0].visualizationData;
+    const company2Data = nextMatch[1].visualizationData;
+
+    // 차트를 그리기 전에 기존 차트 인스턴스를 파괴합니다.
+    if (chartInstance1) {
+        chartInstance1.destroy();
+    }
+    if (chartInstance2) {
+        chartInstance2.destroy();
+    }
+
+    // 차트를 그립니다.
+    chartInstance1 = renderChart(chartCanvas1, company1Data, null);
+    chartInstance2 = renderChart(chartCanvas2, company2Data, null);
+};
 // 다음 라운드를 시작하는 함수
 const startNextRound = () => {
     let nextRoundName; // 다음 라운드 이름을 임시 저장할 변수
@@ -436,11 +450,36 @@ const startNextRound = () => {
         }
 
         // 애니메이션 재설정
-        const isNextRound = ref(null);
         isNextRound.value = true;
         setTimeout(() => (isNextRound.value = false), 500);
     }, 1000); // 2초 지연
 };
+
+// 컴포넌트가 생성될 때 차트를 초기화하고 렌더링합니다.
+onMounted(() => {
+    if (matches.value.length > 0) {
+        chartInstance1 = renderChart(
+            chartCanvas1,
+            matches.value[0][0].visualizationData,
+            chartInstance1
+        );
+        chartInstance2 = renderChart(
+            chartCanvas2,
+            matches.value[0][1].visualizationData,
+            chartInstance2
+        );
+    }
+});
+
+// 컴포넌트가 제거될 때 이전 차트를 파기합니다.
+onUnmounted(() => {
+    if (chartInstance1) {
+        chartInstance1.destroy();
+    }
+    if (chartInstance2) {
+        chartInstance2.destroy();
+    }
+});
 </script>
 
 <style scoped>
@@ -449,11 +488,11 @@ const startNextRound = () => {
 /* 페이드 아웃에서 인으로 애니메이션 정의 */
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 5s ease;
+    transition: opacity 0.2s ease;
 }
 /* startNextRound 호출 시 적용될 애니메이션 스타일 */
 .fade-next-round-enter-active,
 .fade-next-round-leave-active {
-    transition: opacity 5s ease-out;
+    transition: opacity 0.2s ease-out;
 }
 </style>

@@ -10,7 +10,7 @@
                 <RouterLink style="text-decoration: none" :to="{ name: 'home' }">홈</RouterLink>
             </div>
             <div class="tab">
-                <RouterLink style="text-decoration: none" :to="{ name: 'companydetail' }"
+                <RouterLink style="text-decoration: none" :to="{ name: 'company' }"
                     >기업추천</RouterLink
                 >
             </div>
