@@ -3,6 +3,8 @@ package com.ssafy.domain.company.entity;
 import com.ssafy.domain.common.embeddable.Factor;
 import com.ssafy.domain.patent.entity.Patent;
 
+import com.ssafy.domain.users.entity.Users;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private Long id;
+    private Integer id;
 
     @NotNull
     @Column(name = "name")
@@ -79,5 +81,10 @@ public class Company {
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private CompanyQuarterInfo companyQuarterInfo;
+
+
+    public void companyViewsCnt (){
+        this.views++;
+    }
 
 }

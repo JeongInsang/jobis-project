@@ -27,9 +27,9 @@ public enum SuccessCode implements ResponseCode {
 
     FIND_SCRAP_SUCCESS(HttpStatus.OK, "기업 스크랩 목록 조회에 성공했습니다."),
 
-    FIND_TENDENCY_SUCCESS(HttpStatus.OK, "사용자성향 정보 조회에 성공했습니다."),
-
     APPLY_TENDENCY_SUCCESS(HttpStatus.OK, "사용자성향 정보 입력에 성공했습니다."),
+
+    FIND_TENDENCY_SUCCESS(HttpStatus.OK, "사용자성향 정보 조회에 성공했습니다."),
 
     FIND_ID_SUCCESS(HttpStatus.OK, "아이디 찾기에 성공했습니다."),
 
@@ -50,12 +50,17 @@ public enum SuccessCode implements ResponseCode {
 
     FIND_BASE_SUCCESS(HttpStatus.OK, "기업기본 정보 조회에 성공했습니다."),
 
+    FIND_STATEMENT_SUCCESS(HttpStatus.OK, "기업재무재표 정보 조회에 성공했습니다."),
 
-    FIND_STATEMENT_SUCCESS(HttpStatus.OK, "기업재무제표 정보 조회에 성공했습니다."),
+    FIND_RATE_SUCCESS(HttpStatus.OK, "기업재무비율 정보 조회에 성공했습니다."),
 
-    FIND_YOUTHCOMPANY_SUCCESS(HttpStatus.OK, "청년친화기업 정보 조회에 성공했습니다."),
+    FIND_COMPANYYOUTH_SUCCESS(HttpStatus.OK, "청년친화기업 정보 조회에 성공했습니다."),
 
     FIND_COMPANYQUARTERINFO_SUCCESS(HttpStatus.OK, "기업분기 정보 조회에 성공했습니다."),
+
+    CREATE_SCRAP_SUCCESS(HttpStatus.OK, "관심기업 저장에 성공했습니다."),
+
+    CANCEL_SCRAP_SUCCESS(HttpStatus.OK, "관심기업 취소에 성공했습니다."),
 
     /**
      * News

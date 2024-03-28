@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class CompanyYouthResponse {
 
-    private Long youthCompanyId;
+    private Integer youthCompanyId;
 
     private boolean flexibleWorkArrangement;
 
