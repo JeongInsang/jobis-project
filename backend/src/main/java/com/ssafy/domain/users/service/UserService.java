@@ -1,13 +1,21 @@
 package com.ssafy.domain.users.service;
 
+import com.ssafy.domain.users.dto.TendencyDtoMapper;
 import com.ssafy.domain.users.dto.UserDto;
 import com.ssafy.domain.users.dto.request.RegisterRequest;
+import com.ssafy.domain.users.dto.response.TendencyResponse;
+import com.ssafy.domain.users.entity.Tendency;
 import com.ssafy.domain.users.entity.Users;
+import com.ssafy.domain.users.exception.TendencyNotFoundException;
+import com.ssafy.domain.users.repository.TendencyReposiotry;
 import com.ssafy.domain.users.repository.UserRepository;
+import com.ssafy.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +24,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final TendencyReposiotry tendencyReposiotry;
+    private final AuthUtil authUtil;
 
     public String register(RegisterRequest request) {
 
@@ -45,4 +56,18 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("해당 유저가 없다"));
     }
 
+
+
+    // 회원 기업성향 입력
+//    public void applyUsersTendency(){
+//        userRepository.save(Tendency.createUsersTendency());
+//    }
+
+
+
+    // 회원 기업성향 조회
+    public List<TendencyResponse> findTendency() {
+        List<Tendency> tendencies = tendencyReposiotry.findAllByUsers(authUtil.getLoginUser());
+        return TendencyDtoMapper.tendencyToDtoList(tendencies);
+    }
 }

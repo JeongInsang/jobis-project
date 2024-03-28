@@ -29,6 +29,4 @@ public class UserAuthController {
         String res = userService.register(request);
         return ResponseEntity.ok(res);
     }
-
-
 }
