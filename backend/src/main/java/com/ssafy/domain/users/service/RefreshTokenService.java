@@ -21,7 +21,7 @@ public class RefreshTokenService {
     @Value("${jwt.refresh-expired}")
     private Long JWT_EXPIRED;
 
-    public void addRefreshToken(Long userId, String tokenValue) {
+    public void addRefreshToken(Integer userId, String tokenValue) {
         RefreshToken refreshToken =  RefreshToken.builder()
                 .id(userId.toString())
                 .refreshToken(tokenValue)

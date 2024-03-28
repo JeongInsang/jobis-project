@@ -1,10 +1,9 @@
-package com.ssafy.security.filter;
+package com.ssafy.global.security.filter;
 
 import com.ssafy.domain.users.dto.JwtDto;
-import com.ssafy.domain.users.entity.Users;
 import com.ssafy.domain.users.exception.UserNotFoundException;
 import com.ssafy.domain.users.repository.UserRepository;
-import com.ssafy.security.util.JwtUtil;
+import com.ssafy.global.security.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 필터 적용하지 않을 경로
     private final String[] excludePath = {
-            "/api/auth/**",
+            "/api/login/**",
+            "/api/user/login",
+            "/api/user/register",
             "/api/company/**",
             "/api/news/**",
             "/api/patent/**",
