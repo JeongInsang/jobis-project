@@ -1,22 +1,37 @@
 package com.ssafy.domain.news.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 @Getter
 @Builder
 public class NewsResponse {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Long newsId;
+    private String companyId;
 
-    private String title;
+    private List<Article> news;
 
-    private String content;
+    private List<Keyword> keywords;
 
-    private String date;
+    @Data
+    @AllArgsConstructor
+    public static class Article {
+        private String title;
+        private String content;
+        private String date;
+        private String link;
+    }
 
-    private String link;
+    @Data
+    @AllArgsConstructor
+    public static class Keyword {
+        private String keyword;
+        private int importance;
+        private boolean sentiment;
+    }
 
 }

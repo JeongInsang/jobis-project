@@ -29,7 +29,7 @@ public class PatentController {
 
     @GetMapping("/{companyId}")
     public ResponseEntity<Object> patentList(@PathVariable("companyId") Long companyId) {
-        logger.info("REQUEST: PatentList list: ", companyId);
+        logger.info("REQUEST: PatentList list: {}", companyId);
 
         List<PatentResponse> patentResponseList = patentService.findPatents(companyId);
 

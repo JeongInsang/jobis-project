@@ -1,6 +1,5 @@
 package com.ssafy.domain.users.service;
 
-import com.ssafy.domain.users.dto.UserDto;
 import com.ssafy.domain.users.dto.request.RegisterRequest;
 import com.ssafy.domain.users.entity.Users;
 import com.ssafy.domain.users.repository.UserRepository;
@@ -17,7 +16,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public String register(RegisterRequest request) {
+    public void register(RegisterRequest request) {
 
         String email = request.getEmail();
         String password = passwordEncoder.encode(request.getPassword());
@@ -30,7 +29,10 @@ public class UserService {
         Users user = Users.createUser(request);
         userRepository.save(user);
         log.info("가입할 유저이메일 = {}", user.getEmail());
-        return "가입성공";
+    }
+
+    public Users socialRegister(Users user) {
+        return userRepository.save(user);
     }
 
 //    private void validateDuplicateMember(UserDto user) {
