@@ -7,6 +7,7 @@ import MypageView from '@/views/Users/MypageView.vue';
 import SignupView from '@/views/Users/SignupView.vue';
 import LoginSuccessView from '@/views/Users/LoginSuccessView.vue';
 import Test from '@/views/Company/Test.vue';
+import CompanySearch from '@/views/Company/CompanySearch.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,11 @@ const router = createRouter({
             path: '/test',
             name: 'test',
             component: Test,
+        },
+        {
+            path: '/search',
+            name: 'search',
+            component: CompanySearch,
         },
     ],
 });

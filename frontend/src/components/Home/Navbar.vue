@@ -14,6 +14,11 @@
                     >기업추천</RouterLink
                 >
             </div>
+            <div class="tab">
+                <RouterLink style="text-decoration: none" :to="{ name: 'search' }"
+                    >기업검색</RouterLink
+                >
+            </div>
             <!-- <button class="primary" @click="goSignUp">
                 <div class="title2">회원가입</div>
             </button> -->
