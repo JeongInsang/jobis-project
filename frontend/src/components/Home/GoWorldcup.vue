@@ -23,7 +23,7 @@ const goCompany = () => {
     position: relative; /* 자식 요소의 위치를 설정하기 위해 부모 요소를 상대적으로 설정합니다. */
     height: 300px;
     width: 100%;
-    background-image: url('@/img/banner5.png');
+    background-image: url('@/assets/img/worldcup.png');
     background-size: contain; /* 혹은 background-size: cover; */
     background-position: center;
     background-repeat: no-repeat;

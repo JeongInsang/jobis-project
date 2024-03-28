@@ -3,8 +3,10 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 
 export const useCounterStore = defineStore('counter', () => {
+    // const API_URL = import.META.env.API_URL;
+
     const signUp = function (payload) {
-        const { username, password1, password2, nickname } = payload;
+        const { userId, password1, password2 } = payload;
         axios({
             method: 'post',
             url: `${API_URL}/signup/`, // 임시임
@@ -12,13 +14,12 @@ export const useCounterStore = defineStore('counter', () => {
                 userId,
                 password1,
                 password2,
-                nickname,
             },
         })
             .then((res) => {
                 // 회원가입 시 자동으로 로그인
                 const password = password1;
-                logIn({ username, password });
+                logIn({ userId, password });
             })
             .catch((err) => console.log(err));
     };

@@ -1,17 +1,13 @@
 <template>
-    <div>
-        <!-- <VsCompany /> -->
-        <!-- <Top10CompanyTable /> -->
-        <!-- <ImgTest /> -->
-        <Scroll />
-    </div>
+    <!-- <SearchList /> -->
+    <!-- <Search /> -->
+    <WorldCupTest />
 </template>
 
 <script setup>
-import VsCompany from '@/components/Company/VsCompany.vue';
-import Top10CompanyTable from '@/components/Home/Top10CompanyTable.vue';
-import ImgTest from '@/components/Home/ImgTest.vue';
-import Scroll from '@/components/PageTest/Scroll.vue';
+import SearchList from '@/components/Home/SearchList.vue';
+import Search from '@/components/PageTest/Search.vue';
+import WorldCupTest from '@/components/PageTest/WorldcupTest.vue';
 </script>
 
 <style scoped></style>

@@ -2,7 +2,7 @@
     <div>
         <TestTyping />
         <GoWorldcup
-            data-aos="fade-right"
+            data-aos="fade-down"
             data-aos-offset="10"
             data-aos-delay="50"
             data-aos-duration="1000"
@@ -11,7 +11,7 @@
             data-aos-once="false"
             data-aos-anchor-placement="top-center" />
         <Carousel2
-            data-aos="fade-left"
+            data-aos="fade-down"
             data-aos-offset="200"
             data-aos-delay="50"
             data-aos-duration="1000"
@@ -19,18 +19,19 @@
             data-aos-mirror="true"
             data-aos-once="false"
             data-aos-anchor-placement="top-bottom" />
-        <Top10ComapnyList />
+        <!-- <TestCarousel /> -->
+        <!-- <Top10ComapnyList /> -->
     </div>
 </template>
 
 <script setup>
-import Carousel from '@/components/Home/Carousel.vue';
+import TestCarousel from '@/components/PageTest/TestCarousel.vue';
 import Carousel2 from '@/components/Home/Carousel2.vue';
-import CompanyTop10 from '@/components/Home/CompanyTop10.vue';
+
 import Top10ComapnyList from '@/components/Home/Top10ComapnyList.vue';
-import SearchList from '@/components/Home/SearchList.vue';
+
 import TestTyping from '@/components/Home/TestTyping.vue';
-import Top10CompanyTable from './Top10CompanyTable.vue';
+
 import GoWorldcup from '@/components/Home/GoWorldcup.vue';
 </script>
 
