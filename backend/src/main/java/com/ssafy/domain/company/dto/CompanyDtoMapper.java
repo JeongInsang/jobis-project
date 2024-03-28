@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 
 public class CompanyDtoMapper {
 
-    public static CompanyResponse companyEntityToDto(final Company company){
+    public static CompanyResponse companyEntityToDto(final Company company) {
         return CompanyResponse.builder()
+                .companyId(company.getId())
                 .name(company.getName())
                 .foundAt(company.getFoundAt())
                 .owner(company.getOwner())

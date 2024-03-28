@@ -1,7 +1,6 @@
 package com.ssafy.domain.company.entity;
 
 import com.ssafy.domain.common.embeddable.Factor;
-import com.ssafy.domain.news.entity.News;
 import com.ssafy.domain.patent.entity.Patent;
 
 import com.ssafy.domain.users.entity.Users;

@@ -34,6 +34,7 @@ public enum ErrorCode implements ResponseCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 정보를 찾을 수 없습니다."),
 
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 패스워드입니다."),
+    ACCOUNT_MISMATCH(HttpStatus.UNAUTHORIZED, "계정 정보가 일치하지 않습니다."),
 
     DUPLICATED_PASSWORD(HttpStatus.CONFLICT, "현재 패스워드와 같습니다."),
 
@@ -82,9 +83,7 @@ public enum ErrorCode implements ResponseCode {
      */
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료 되었습니다."),
 
-    UNSUPPORTED_TOKEN(HttpStatus.FORBIDDEN, "잘못된 토큰입니다."),
-
-    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰입니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     ;
 
     private final HttpStatus httpStatus;

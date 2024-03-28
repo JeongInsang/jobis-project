@@ -41,7 +41,10 @@ public class UserService {
         Users user = Users.createUser(request);
         userRepository.save(user);
         log.info("가입할 유저이메일 = {}", user.getEmail());
-        return "가입성공";
+    }
+
+    public Users socialRegister(Users user) {
+        return userRepository.save(user);
     }
 
 //    private void validateDuplicateMember(UserDto user) {
