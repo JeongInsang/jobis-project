@@ -1,14 +1,12 @@
-package com.ssafy.security.filter;
+package com.ssafy.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.domain.users.dto.request.RegisterRequest;
-import com.ssafy.security.util.JwtUtil;
+import com.ssafy.global.security.util.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -16,9 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -28,7 +24,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
 
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/auth/login";  // /auth/login으로 오는 요청을 처리
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/user/login";  // /auth/login으로 오는 요청을 처리
     private static final String HTTP_METHOD_POST = HttpMethod.POST.name();    //HTTP 메서드의 방식은 POST
 
     private static final AntPathRequestMatcher ANT_PATH_REQUEST_MATCHER =
@@ -79,7 +75,6 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
                 registerRequest.getPassword()
         );
         log.info("authRequest {}", authRequest);
-        log.info("getAuthenticationManager().authenticate(authRequest) {}", getAuthenticationManager().authenticate(authRequest));
 
         // 인증 성공 시 Authentication 객체 반환
         // authenticationManager는 usersDetailsService를 통해 userDetails 객체를 가져오고

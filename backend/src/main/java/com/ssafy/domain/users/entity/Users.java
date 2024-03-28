@@ -2,6 +2,8 @@ package com.ssafy.domain.users.entity;
 
 import com.ssafy.domain.users.dto.UserDto;
 import com.ssafy.domain.users.dto.request.RegisterRequest;
+import com.ssafy.domain.users.dto.request.SocialRegisterRequest;
+import com.ssafy.global.oauth2.userinfo.OAuth2UserInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,11 +30,26 @@ public class Users implements UserDetails {
 
     private String password;
 
+    @Column(name = "social_type")
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+    @Column(name = "social_id")
+    private String socialId;
+
 
     public static Users createUser(RegisterRequest request) {
         Users user = new Users();
         user.email = request.getEmail();;
         user.password = request.getPassword();
+        return user;
+    }
+
+    public static Users createSocialUser(SocialType socialType, OAuth2UserInfo oauth2UserInfo) {
+        Users user = new Users();
+        user.email = oauth2UserInfo.getEmail();
+        user.socialType = socialType;
+        user.socialId = oauth2UserInfo.getId();
         return user;
     }
 
@@ -48,6 +65,7 @@ public class Users implements UserDetails {
         return null;
     }
 
+    // 여기서의 userName은 유저 이름이 아닌 UserDetails 객체의 식별자를 나타냄 - user pk로 사용
     @Override
     public String getUsername() {
         return id.toString();

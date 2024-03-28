@@ -3,6 +3,9 @@ server:
     context-path: /api
 
 spring:
+  profiles:
+    include: oauth, secret
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ssafy?autoReconnect=true
@@ -10,7 +13,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     defer-datasource-initialization: true

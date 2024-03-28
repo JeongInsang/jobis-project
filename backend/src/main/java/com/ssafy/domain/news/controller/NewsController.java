@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,16 +24,11 @@ public class NewsController {
 
     private final NewsService newsService;
 
-    @GetMapping
-    public String test() {
-        return "JOBIS TEST TEST TEST";
-    }
-
     @GetMapping("/{companyId}/{name}")
     public ResponseEntity<Object> getNews(@PathVariable("companyId") Long companyId, @PathVariable("name") String name) {
-        logger.info("REQUEST: news list: ", name);
+        logger.info("REQUEST: news list: {}", name);
 
-        List<NewsResponse> newsResponseList = newsService.findNews(companyId, name);
+        NewsResponse newsResponseList = newsService.findNews(companyId.toString(), name);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_NEWS_SUCCESS, newsResponseList);
     }

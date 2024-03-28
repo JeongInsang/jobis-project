@@ -1,7 +1,6 @@
 package com.ssafy.domain.company.entity;
 
 import com.ssafy.domain.common.embeddable.Factor;
-import com.ssafy.domain.news.entity.News;
 import com.ssafy.domain.patent.entity.Patent;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -74,9 +73,6 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Patent> patents;
-
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-    private List<News> news;
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private CompanyYouth companyYouth;
