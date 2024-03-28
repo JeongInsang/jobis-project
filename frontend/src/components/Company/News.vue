@@ -35,22 +35,27 @@ import { useCounterStore } from '@/stores/counter';
 
 const store = useCounterStore();
 const accessToken = localStorage.getItem('accessToken');
+const NewsList = ref([]);
 
 const getNewsData = function () {
     axios({
         method: 'get',
-        url: ``,
+        url: `${store.API_URL}/news/${store.companyId}/${store.name}`,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
     })
         .then((res) => {
+            NewsList.value = res.data;
             console.log(res.data);
         })
         .catch((err) => {
             console.log(err);
         });
 };
+onmounted(() => {
+    getLicenseData();
+})
 </script>
 
 <style scoped></style> -->

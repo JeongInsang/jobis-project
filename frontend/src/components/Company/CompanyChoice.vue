@@ -67,14 +67,13 @@
             </div>
             <div v-else>
                 <h2>축하합니다!</h2>
-                <p>{{ winner }}가 코드 선택 월드컵에서 우승했습니다!</p>
+                <p>{{ winner.name }}가 코드 선택 월드컵에서 우승했습니다!</p>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import Visualization from './Visualization.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
@@ -82,8 +81,11 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import 'chartjs-plugin-datalabels';
 
+// onMounted(() => {
+//     createMatches();
+// });
 const store = useCounterStore();
-
+const isNextRound = ref(false);
 const companies = [
     {
         name: '기업1',
@@ -98,151 +100,151 @@ const companies = [
     {
         name: '기업2',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
+            안정성: 1,
+            성장성: -2,
+            활동성: 3,
+            수익성: -4,
             가용성: 5,
         },
     },
     {
         name: '기업3',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 1,
+            성장성: -6,
+            활동성: 6,
+            수익성: 1,
+            가용성: -5,
         },
     },
     {
         name: '기업4',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: -9,
+            성장성: -1,
+            활동성: 5,
+            수익성: -5,
+            가용성: 1,
         },
     },
     {
         name: '기업5',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 4,
+            성장성: -3,
+            활동성: 1,
+            수익성: -3,
+            가용성: 4,
         },
     },
     {
         name: '기업6',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 6,
+            성장성: -5,
+            활동성: 3,
+            수익성: -1,
+            가용성: 4,
         },
     },
     {
         name: '기업7',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 5,
+            성장성: -2,
+            활동성: 3,
+            수익성: -7,
+            가용성: 1,
         },
     },
     {
         name: '기업8',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 7,
+            성장성: -4,
+            활동성: 3,
+            수익성: -1,
+            가용성: 4,
         },
     },
     {
         name: '기업9',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 8,
+            성장성: -1,
+            활동성: 3,
+            수익성: 0,
+            가용성: 2,
         },
     },
     {
         name: '기업10',
         visualizationData: {
             안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            성장성: 9,
+            활동성: 1,
+            수익성: -7,
+            가용성: -4,
         },
     },
     {
         name: '기업11',
         visualizationData: {
             안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            성장성: 0,
+            활동성: 7,
+            수익성: 2,
+            가용성: -5,
         },
     },
     {
         name: '기업12',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 5,
+            성장성: -3,
+            활동성: 1,
+            수익성: -3,
+            가용성: 0,
         },
     },
     {
         name: '기업13',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 1,
+            성장성: -3,
+            활동성: 5,
+            수익성: 7,
+            가용성: 8,
         },
     },
     {
         name: '기업14',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 3,
+            성장성: -2,
+            활동성: 5,
+            수익성: -6,
+            가용성: 2,
         },
     },
     {
         name: '기업15',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 3,
+            성장성: 2,
+            활동성: 3,
+            수익성: 1,
+            가용성: 2,
         },
     },
     {
         name: '기업16',
         visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
+            안정성: 4,
+            성장성: 1,
+            활동성: 3,
+            수익성: -1,
+            가용성: -2,
         },
     },
 ];
@@ -257,8 +259,7 @@ const chartCanvas1 = ref(null);
 const chartCanvas2 = ref(null);
 // 차트 인스턴스를 저장할 변수 선언
 
-let chartInstance1 = null;
-let chartInstance2 = null;
+let chartInstances = [];
 
 // 대진 생성 함수 수정
 const createMatches = () => {
@@ -267,29 +268,38 @@ const createMatches = () => {
         newMatches.push([companies[i], companies[i + 1]]);
     }
     matches.value = newMatches;
-    // 첫 번째 대진에 대해 차트 그리기
-    if (newMatches.length > 0) {
-        console.log(newMatches[0][0].visualizationData);
-        console.log(newMatches[0][1].visualizationData);
-        chartInstance1 = renderChart(
-            chartCanvas1,
-            newMatches[0][0].visualizationData,
-            chartInstance1
-        );
-        chartInstance2 = renderChart(
-            chartCanvas2,
-            newMatches[0][1].visualizationData,
-            chartInstance2
-        );
+};
+// 차트 인스턴스 생성 함수
+const createChartInstances = () => {
+    // 차트 인스턴스 배열 초기화
+    chartInstances = [];
+    // 각 기업에 대한 차트 인스턴스 생성 및 배열에 저장
+    for (let i = 0; i < companies.length; i++) {
+        const canvasRef = ref(null);
+        const chartInstance = renderChart(canvasRef, companies[i].visualizationData, null);
+        chartInstances.push(chartInstance);
     }
 };
+// 첫 번째 대진에 대해 차트 그리기
+// if (newMatches.length > 0) {
+//     // console.log(newMatches[0][0]);
+//     // console.log(newMatches[0][1]);
+//     // console.log(newMatches[0][0].visualizationData);
+//     // console.log(newMatches[0][1].visualizationData);
+//     chartInstance1 = renderChart(
+//         chartCanvas1,
+//         newMatches[0][0].visualizationData,
+//         chartInstance1
+//     );
+//     chartInstance2 = renderChart(
+//         chartCanvas2,
+//         newMatches[0][1].visualizationData,
+//         chartInstance2
+//     );
+// }
 
 // 차트 렌더링 함수 수정
 const renderChart = (canvasRef, data, chartInstance) => {
-    // 이전 차트 인스턴스가 존재하면 제거
-    if (chartInstance !== null) {
-        chartInstance.destroy();
-    }
     if (canvasRef.value !== null) {
         const ctx = canvasRef.value.getContext('2d');
         // 새 차트 인스턴스 생성 및 할당
@@ -330,22 +340,26 @@ const renderChart = (canvasRef, data, chartInstance) => {
             },
         });
     }
+    // 캔버스 참조가 null이 아닌 경우에만 차트 인스턴스 반환
+    return chartInstance;
 };
 
 const isTournamentStarted = ref(false);
 // 대진 시작 함수
+// 대진 시작 함수 내부에서 차트 인스턴스 생성 함수 호출
 const startTournament = () => {
-    isTournamentStarted.value = true; // 대진 시작 시 true로 설정
+    isTournamentStarted.value = true;
     if (!matches.value.length || currentRound.value === '16강') {
         matches.value = [];
         winners.value = [];
         winner.value = '';
         currentMatchIndex.value = 0;
         currentRound.value = '16강';
-        createMatches(); // 대진 생성
+        createMatches();
+        createChartInstances(); // 차트 인스턴스 생성
+        nextMatch.value = matches.value[currentMatchIndex.value];
     }
 };
-
 // 대회를 재설정하는 함수
 const resetTournament = () => {
     isTournamentStarted.value = false; // 대회 재설정 시 false로 설정하여 버튼을 다시 표시
@@ -356,23 +370,36 @@ const resetTournament = () => {
     currentRound.value = '16강'; // 현재 라운드를 '16강'으로 초기화합니다.
     createMatches(); // 대진 생성
 };
-
+const nextMatch = ref(null);
 // 기업 선택하는 함수
 const selectWinner = (matchIndex, winnerIndex) => {
+    chartInstances.forEach((chartInstance) => {
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+    });
     winners.value.push(matches.value[matchIndex][winnerIndex]);
-
+    console.log(matches.value[matchIndex][winnerIndex]);
+    console.log(matches.value);
     // 선택 확인 딜레이 시작
     selectionConfirmed.value = false;
     setTimeout(() => {
         selectionConfirmed.value = true;
         // 다음 대진으로 이동
         currentMatchIndex.value++;
-
+        console.log(currentMatchIndex.value);
         // 모든 대진이 끝나면 다음 라운드로
         if (currentMatchIndex.value >= matches.value.length) {
             startNextRound();
+        } else {
+            // 다음 대진의 시각화 그래프 생성
+            const nextMatch = matches.value[currentMatchIndex.value];
+            console.log(matches.value[currentMatchIndex.value]);
+            // 새로운 차트 인스턴스 생성
+            const chartInstance1 = renderChart(chartCanvas1, nextMatch[0].visualizationData, null);
+            const chartInstance2 = renderChart(chartCanvas2, nextMatch[1].visualizationData, null);
         }
-    }, 50); // 1초 딜레이
+    }, 50); // 딜레이 시간을 조정할 수 있습니다. 1초라면 1000ms입니다.
 };
 
 // 다음 라운드를 시작하는 함수
@@ -422,11 +449,11 @@ const startNextRound = () => {
 /* 페이드 아웃에서 인으로 애니메이션 정의 */
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.2s ease;
+    transition: opacity 5s ease;
 }
 /* startNextRound 호출 시 적용될 애니메이션 스타일 */
 .fade-next-round-enter-active,
 .fade-next-round-leave-active {
-    transition: opacity 0.2s ease-out;
+    transition: opacity 5s ease-out;
 }
 </style>
