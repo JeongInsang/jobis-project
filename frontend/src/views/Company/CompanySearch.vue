@@ -1,10 +1,8 @@
 <template>
-    <!-- <SearchList /> -->
     <Search />
 </template>
 
 <script setup>
-import SearchList from '@/components/Home/SearchList.vue';
 import Search from '@/components/PageTest/Search.vue';
 </script>
 
