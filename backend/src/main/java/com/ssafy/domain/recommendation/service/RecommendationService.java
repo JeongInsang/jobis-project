@@ -19,8 +19,8 @@ public class RecommendationService {
 
     private final RecommendationRepository recommendationRepository;
 
-    public List<CompanyResponse> findCompanyByRecommendationId(Integer id) {
-        List<Company> getCompanyList = recommendationRepository.findCompanyByRecommendationId(id);
+    public List<CompanyResponse> findCompanyByWorldcupId(Integer id) {
+        List<Company> getCompanyList = recommendationRepository.findCompanyByWorldcupId(id);
 
         return companyEntityListToDtoList(getCompanyList);
     }
