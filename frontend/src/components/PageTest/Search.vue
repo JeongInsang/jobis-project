@@ -5,12 +5,18 @@
         <div class="d-flex w-100">
             <div class="input-group mb-3 ms-3 w-25">
                 <input
+                    @keydown.enter="search"
+                    v-bind="keyword"
                     type="text"
                     class="form-control"
                     placeholder="회사명을 검색하세요"
                     aria-label="Recipient's username"
                     aria-describedby="button-addon2" />
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+                <button
+                    @click="search"
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="button-addon2">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
@@ -21,8 +27,13 @@
         </div>
         <!-- 지역 버튼 클릭 시 나오는 항목들 -->
         <div v-if="regionIsclick" class="d-flex col-9" v-bind="regionIsclick">
-            <button v-for="region in regions" class="buttonS m-1 w-100">
-                {{ region }}
+            <button
+                @click="toggleRegionButton(region.id)"
+                v-for="region in regions"
+                :key="region.id"
+                :class="{ buttonS: true, selected: isRegionSelected(region.id) }"
+                class="buttonS m-1 w-100">
+                {{ region.region }}
             </button>
         </div>
         <!-- 산업군 버튼 클릭 시 나오는 항목들 -->
@@ -31,6 +42,7 @@
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries1"
                 :key="industry.typeId"
+                :class="{ buttonS: true, selected: isTypeSelected(industry.typeId) }"
                 class="buttonS m-1 w-100">
                 {{ industry.industry }}
             </button>
@@ -40,6 +52,7 @@
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries2"
                 :key="industry.typeId"
+                :class="{ buttonS: true, selected: isTypeSelected(industry.typeId) }"
                 class="buttonS m-1 w-100">
                 {{ industry.industry }}
             </button>
@@ -61,7 +74,9 @@
                         </thead>
                         <tbody>
                             <tr v-for="(company, index) in paginatedData" :key="index">
-                                <td @click="goCompanyDeatil">{{ company.companyname }}</td>
+                                <td @click="goCompanyDeatil(company.companyId)">
+                                    {{ company.companyname }}
+                                </td>
                                 <td>{{ company.companytype }}</td>
                                 <td>{{ company.region }}</td>
                             </tr>
@@ -104,10 +119,43 @@
 
 <script setup>
 import router from '@/router';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import axios from 'axios';
 
-const pageSize = 10; // 한 페이지당 보여질 데이터 개수
-const currentPage = ref(0); // 현재 페이지
+// onMounted(() => {
+//     getCompanyList();
+// });
+
+// 회사명 검색 로직
+const keyword = ref(null);
+const search = function () {
+    axios({
+        method: 'get',
+        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${newRegionFilters}&type=${newTypeFilters}`,
+    })
+        .then((res) => {
+            comapnyDataList.value = res.data;
+        })
+        .catch((err) => {
+            console.error('회사명 검색 실패:', err);
+        });
+};
+
+const comapnyDataList = ref(null); // dummyData 대신에 axios로 얻은 리스트 여기다 담아서 사용하면 됨
+const getCompanyList = () => {
+    axios({
+        method: 'get',
+        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${newRegionFilters}&type=${newTypeFilters}`,
+    })
+        .then((res) => {
+            comapnyDataList.value = res.data;
+            console.log('회사 리트스들 확인용 : ', comapnyDataList.value);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
 const dummyData = [
     { companyname: '회사명 1', companytype: '제조업', region: '서울', companyId: 1 },
     { companyname: '회사명 2', companytype: '금융업', region: '부산', companyId: 2 },
@@ -159,24 +207,27 @@ const industries2 = [
 
 // 지역 필터 검색 버튼 리스트
 const regions = [
-    '서울',
-    '부산',
-    '대구',
-    '인천',
-    '광주',
-    '대전',
-    '울산',
-    '세종',
-    '경기',
-    '강원',
-    '충북',
-    '충남',
-    '전남',
-    '전북',
-    '경남',
-    '경북',
-    '제주',
+    { id: 1, region: '서울' },
+    { id: 2, region: '부산' },
+    { id: 3, region: '대구' },
+    { id: 4, region: '인천' },
+    { id: 5, region: '광주' },
+    { id: 6, region: '대전' },
+    { id: 7, region: '울산' },
+    { id: 8, region: '세종' },
+    { id: 9, region: '경기' },
+    { id: 10, region: '강원' },
+    { id: 11, region: '충북' },
+    { id: 12, region: '충남' },
+    { id: 13, region: '전남' },
+    { id: 14, region: '전북' },
+    { id: 15, region: '경남' },
+    { id: 16, region: '경북' },
+    { id: 17, region: '제주' },
 ];
+
+const pageSize = 10; // 한 페이지당 보여질 데이터 개수
+const currentPage = ref(0); // 현재 페이지
 
 // 페이지네이션 계산을 위한 computed property
 const paginatedData = computed(() => {
@@ -207,6 +258,9 @@ const changePage = (page) => {
     currentPage.value = page;
 };
 
+// watch로 현재 페이지 값이 바뀔 때 마다 회사리스트 가져오는 함수 실행
+// watch(currentPage.value, getCompanyList);
+
 // 산업군 별로 필터 로직
 const typeIsclick = ref(false);
 const clickType = () => {
@@ -221,29 +275,79 @@ const clickRiegon = () => {
 
 // 선택된 산업군 필터들
 const selectTypeFilter = ref([]);
-const isdouble = ref(false);
+const isCheckedType = ref(false);
 const toggleButton = (buttonId) => {
     for (let i = 0; i < selectTypeFilter.value.length; i++) {
         if (selectTypeFilter.value[i] === buttonId) {
             selectTypeFilter.value.splice(i, 1);
-            isdouble.value = true;
+            isCheckedType.value = true;
             break;
         }
     }
-    if (isdouble.value === false) {
+    if (isCheckedType.value === false) {
         selectTypeFilter.value.push(buttonId);
     }
+    isCheckedType.value = false;
     console.log('선택된 산업군 필터 항목들 : ', selectTypeFilter.value);
 };
 
+// 선택된 지역 필터들
+const selectRegionFilter = ref([]);
+const isCheckedRegion = ref(false);
+const toggleRegionButton = (buttonId) => {
+    for (let i = 0; i < selectRegionFilter.value.length; i++) {
+        if (selectRegionFilter.value[i] === buttonId) {
+            selectRegionFilter.value.splice(i, 1);
+            isCheckedRegion.value = true;
+            break;
+        }
+    }
+    if (isCheckedRegion.value === false) {
+        selectRegionFilter.value.push(buttonId);
+    }
+    isCheckedRegion.value = false;
+    console.log('선택된 지역 필터 항목들 : ', selectRegionFilter.value);
+};
+
+// 산업군 버튼 토글
+const isTypeSelected = (buttonId) => {
+    return selectTypeFilter.value.includes(buttonId);
+};
+
+// 지역 버튼 토글
+const isRegionSelected = (buttonId) => {
+    return selectRegionFilter.value.includes(buttonId);
+};
+
+// Filter가 선택 될 때 마다 필터된 요청 보내기
+watch(
+    [selectRegionFilter, selectTypeFilter],
+    ([newRegionFilters, newTypeFilters], [oldRegionFilters, oldTypeFilters]) => {
+        axios({
+            method: 'get', // GET 또는 POST에 따라 요청 방식을 변경
+            url: `${API_URL}/company/search?keyword=${keyword.value}&location=${newRegionFilters}&type=${newTypeFilters}`,
+        })
+            .then((response) => {
+                // 응답 받은 데이터를 저장
+                comapnyDataList.value = res.data;
+                console.log('필터링된 회사 리스트:', comapnyDataList.value);
+            })
+            .catch((error) => {
+                // 오류 처리
+                console.error('필터링된 회사를 가져오는 중 오류 발생:', error);
+            });
+    }
+);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // 기업 상세 페이지 가기 로직
-const companyId = ref(null);
-// const goCompanyDeatil = () => [
-//     router.push({
-//         name: 'comapnydeatil',
-//         params: { companyId: }
-//     })
-// ]
+const goCompanyDeatil = (comapnyId) => [
+    router.push({
+        name: 'companydetail',
+        params: { companyId: comapnyId },
+    }),
+];
 </script>
 
 <style scoped>
@@ -341,6 +445,6 @@ table.dataTable td {
 
 .selected {
     /* 선택된 버튼의 스타일 */
-    background-color: green;
+    background-color: greenyellow;
 }
 </style>
