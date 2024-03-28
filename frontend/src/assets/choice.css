@@ -84,6 +84,8 @@
     transform: translate(-50%, 0); /* 애니메이션에 맞춰 수정 */
     animation: shoes 1s ease infinite alternate;
     transition: all 0.5s ease-in;
+    visibility: visible; /* 항상 보이도록 설정 */
+    display: block; /* 애니메이션 후에도 보이도록 설정 */
 }
 
 @keyframes shoes {
