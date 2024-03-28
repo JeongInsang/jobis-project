@@ -23,6 +23,7 @@ function getImageUrl(name) {
 }
 
 setInterval(() => {
+    console.log(fname.value);
     if (fname.value === 'gif1') {
         fname.value = 'gif2';
     } else if (fname.value === 'gif2') {
