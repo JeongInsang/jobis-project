@@ -26,11 +26,11 @@ public class RecommendationController {
 
     private final RecommendationService recommendationService;
 
-    @GetMapping("/{companyId}")
-    public ResponseEntity<Object> recommendationList(@PathVariable("companyId") Integer companyId) {
-        logger.info("REQUEST: Recommendation list: {}", companyId);
+    @GetMapping("/{worldcupId}")
+    public ResponseEntity<Object> recommendationList(@PathVariable("worldcupId") Integer worldcupId) {
+        logger.info("REQUEST: Recommendation list: {}", worldcupId);
 
-        List<CompanyResponse> companyResponseList = recommendationService.findCompanyByRecommendationId(companyId);
+        List<CompanyResponse> companyResponseList = recommendationService.findCompanyByWorldcupId(worldcupId);
 
         return SuccessResponse.createSuccess(SuccessCode.FIND_RECOMMENDATION_SUCCESS, companyResponseList);
     }
