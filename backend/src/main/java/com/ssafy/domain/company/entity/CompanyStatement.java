@@ -16,7 +16,7 @@ public class CompanyStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "financial_statement_id")
-    private Long id;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
