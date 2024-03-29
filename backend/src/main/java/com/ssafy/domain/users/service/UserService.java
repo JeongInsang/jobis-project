@@ -28,7 +28,7 @@ public class UserService {
     private final TendencyReposiotry tendencyReposiotry;
     private final AuthUtil authUtil;
 
-    public String register(RegisterRequest request) {
+    public void register(RegisterRequest request) {
 
         String email = request.getEmail();
         String password = passwordEncoder.encode(request.getPassword());
