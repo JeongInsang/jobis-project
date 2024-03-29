@@ -41,8 +41,6 @@ public class UserService {
         Users user = Users.createUser(request);
         userRepository.save(user);
         log.info("가입할 유저이메일 = {}", user.getEmail());
-
-        return user.getEmail();
     }
 
     public Users socialRegister(Users user) {
