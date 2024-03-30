@@ -19,43 +19,23 @@
                                 height="100%"
                                 src="@/assets/img/jobis.png"
                                 alt="" />
+
                             <!-- 스크랩 버튼 -->
-                            <label
-                                class="container1 position-absolute top-0 end-0"
-                                @click="cancle(company.scrapId)">
-                                <input type="checkbox" />
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 75 100"
-                                    class="pin">
-                                    <line
-                                        stroke-width="12"
-                                        stroke="black"
-                                        y2="100"
-                                        x2="37"
-                                        y1="64"
-                                        x1="37"></line>
-                                    <path
-                                        stroke-width="10"
-                                        stroke="black"
-                                        d="M16.5 36V4.5H58.5V36V53.75V54.9752L59.1862 55.9903L66.9674 67.5H8.03256L15.8138 55.9903L16.5 54.9752V53.75V36Z"></path>
-                                </svg>
-                            </label>
-                            <!-- 스크랩 버튼 샘플 -->
-                            <!-- <button
+                            <button
                                 type="button"
-                                class="position-absolute top-0 end-0 border-0"
+                                class="position-absolute top-0 end-0 border-0 container1"
                                 @click="cancle(company.scrapId)">
-                                <i class="bi bi-bookmark-star"></i>
-                            </button> -->
+                                <!-- <i class="bi bi-bookmark-star"></i> -->
+                                <i class="bi bi-bookmark-check-fill"></i>
+                            </button>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
                                 {{ company.companyname }}
                             </p>
+                            <p>{{ company.companytype }}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-body-secondary">9 mins</small>
+                                <small class="text-body-secondary">{{ company.region }}</small>
                             </div>
                         </div>
                     </div>
@@ -63,17 +43,6 @@
             </div>
         </div>
     </main>
-
-    <label class="container1">
-        <input type="checkbox" />
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 75 100" class="pin">
-            <line stroke-width="12" stroke="black" y2="100" x2="37" y1="64" x1="37"></line>
-            <path
-                stroke-width="10"
-                stroke="black"
-                d="M16.5 36V4.5H58.5V36V53.75V54.9752L59.1862 55.9903L66.9674 67.5H8.03256L15.8138 55.9903L16.5 54.9752V53.75V36Z"></path>
-        </svg>
-    </label>
 </template>
 
 <script setup>
@@ -202,14 +171,7 @@ const cancle = (scrapId) => {
 
 <style scoped>
 /* 스크랩 버튼 */
-.container1 input {
-    display: none;
-}
-.pin {
-    width: 15px;
-    height: auto;
-    transform: rotate(35deg);
-}
+
 .container1 {
     width: 45px;
     height: 45px;
@@ -219,19 +181,11 @@ const cancle = (scrapId) => {
     justify-content: center;
     cursor: pointer;
     border-radius: 10px;
+    color: rgba(255, 255, 0, 0.744);
 }
-.container1 input:checked ~ .pin {
-    fill: rgb(179, 139, 255);
-    stroke: white;
-}
-.container1 input:checked ~ .pin line {
-    stroke: rgb(179, 139, 255);
-}
-.container1 input:checked ~ .pin path {
-    stroke: rgb(179, 139, 255);
-}
+
 .container1:hover {
-    background-color: rgb(244, 238, 255);
+    background-color: white;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.041);
 }
 .container1:active {
