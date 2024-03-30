@@ -27,11 +27,8 @@
 <script setup>
 import TestCarousel from '@/components/PageTest/TestCarousel.vue';
 import Carousel2 from '@/components/Home/Carousel2.vue';
-
 import Top10ComapnyList from '@/components/Home/Top10ComapnyList.vue';
-
 import TestTyping from '@/components/Home/TestTyping.vue';
-
 import GoWorldcup from '@/components/Home/GoWorldcup.vue';
 </script>
 
