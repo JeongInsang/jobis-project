@@ -67,12 +67,10 @@ public class CompanyService {
                 .map(CompanySearchDtoMapper::companySearchResponse)
                 .collect(Collectors.toList());
 
-        System.out.println("머야???");
-        System.out.println(company.name.contains(keyword) + " " + company.address.in(location) + " " + company.type.in(type));
+        log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
         long totalSize = companyList.size();
 
-        System.out.println("totalsize: " + totalSize);
-
+        log.info("totalsize = {}", totalSize);
         return new PageImpl<>(companyList, pageable, totalSize);
     }
 
