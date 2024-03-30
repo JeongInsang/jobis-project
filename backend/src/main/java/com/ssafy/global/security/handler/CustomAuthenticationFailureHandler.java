@@ -21,7 +21,7 @@ import java.io.OutputStream;
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.info("=== onAuthenticationFailure ===");
+        log.info("=== onAuthenticationFailure, failure request :  ===", exception);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try (OutputStream os = response.getOutputStream()) {
