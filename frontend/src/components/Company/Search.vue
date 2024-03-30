@@ -22,8 +22,12 @@
             </div>
         </div>
         <div class="d-flex">
-            <button class="button m-1" @click="clickType">산업군</button>
-            <button class="button m-1" @click="clickRiegon">지역</button>
+            <button class="button m-1" :class="{ selected: typeIsclick }" @click="clickType">
+                산업군
+            </button>
+            <button class="button m-1" :class="{ selected: regionIsclick }" @click="clickRiegon">
+                지역
+            </button>
         </div>
         <!-- 지역 버튼 클릭 시 나오는 항목들 -->
         <div v-if="regionIsclick" class="d-flex col-9" v-bind="regionIsclick">
@@ -264,13 +268,21 @@ const changePage = (page) => {
 // 산업군 별로 필터 로직
 const typeIsclick = ref(false);
 const clickType = () => {
-    typeIsclick.value = true;
+    if (typeIsclick.value === false) {
+        typeIsclick.value = true;
+    } else {
+        typeIsclick.value = false;
+    }
 };
 
 // 지역 별로 필터 로직
 const regionIsclick = ref(false);
 const clickRiegon = () => {
-    regionIsclick.value = true;
+    if (regionIsclick.value === false) {
+        regionIsclick.value = true;
+    } else {
+        regionIsclick.value = false;
+    }
 };
 
 // 선택된 산업군 필터들
