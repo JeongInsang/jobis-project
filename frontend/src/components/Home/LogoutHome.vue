@@ -2,16 +2,16 @@
     <div>
         <TestTyping />
         <GoWorldcup
-            data-aos="fade-down"
+            data-aos="fade-up"
             data-aos-offset="10"
             data-aos-delay="50"
             data-aos-duration="1000"
             data-aos-easing="ease-in-out"
             data-aos-mirror="true"
             data-aos-once="false"
-            data-aos-anchor-placement="top-center" />
+            data-aos-anchor-placement="top" />
         <Carousel2
-            data-aos="fade-down"
+            data-aos="fade-up"
             data-aos-offset="200"
             data-aos-delay="50"
             data-aos-duration="1000"
@@ -20,7 +20,7 @@
             data-aos-once="false"
             data-aos-anchor-placement="top-bottom" />
         <!-- <TestCarousel /> -->
-        <!-- <Top10ComapnyList /> -->
+        <Top10ComapnyList />
     </div>
 </template>
 

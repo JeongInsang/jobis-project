@@ -1,13 +1,9 @@
 <template>
-    <div>
-        마이페이지
-    </div>
+    <Mypage />
 </template>
 
 <script setup>
-
+import Mypage from '@/components/Users/Mypage.vue';
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
