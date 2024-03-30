@@ -2,12 +2,16 @@ package com.ssafy.domain.company.controller;
 
 
 import com.ssafy.domain.company.dto.response.*;
+import com.ssafy.domain.company.entity.Company;
 import com.ssafy.domain.company.service.CompanyService;
 import com.ssafy.global.response.code.SuccessCode;
 import com.ssafy.global.response.structure.SuccessResponse;
+import com.ssafy.global.util.AuthUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,17 +25,27 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final AuthUtil authUtil;
 
 
-    // 기업검색
-
-
-
-
-
-
-
-
+    /**
+     * 기업검색
+     * @param pageable
+     * @param keyword
+     * @param location
+     * @param type
+     * @return
+     */
+//    @GetMapping("/search")
+//    public ResponseEntity<Object> companySearch(Pageable pageable,
+//                                                @RequestParam(required = false) String keyword,
+//                                                @RequestParam(required = false) List<String> location,
+//                                                @RequestParam(required = false) List<String> type) {
+////        Page<Company> searchCompanies = companyService.getCompanies(pageable, keyword, location, type);
+////        log.info("검색된 회사 목록: {}", searchCompanies);
+//        return SuccessResponse.createSuccess(SuccessCode.SEARCH_COMPANY_SUCCESS,
+//                companyService.getCompanies(pageable, keyword, location, type));
+//    }
 
     /**
      * 기업 기본정보 조회
@@ -99,9 +113,10 @@ public class CompanyController {
      */
     @PostMapping("/scrap/{companyId}")
     public ResponseEntity<Object> companyScrapCreate(@PathVariable("companyId") Integer id) {
-        companyService.companyScrap(id, 1);  // 수정해야댐
+        companyService.companyScrap(id, authUtil.getLoginUserId());  // 수정해야댐
         return SuccessResponse.createSuccess(SuccessCode.CREATE_SCRAP_SUCCESS);
     }
+
 
 
     /**
@@ -109,10 +124,9 @@ public class CompanyController {
      * @param id
      * @return
      */
-    @DeleteMapping("/scrap/{companyScrapId}")
-    public ResponseEntity<Object> companyScrapDelete(@PathVariable("companyId") Integer id) {
-        companyService.companyScrapCancel(id, 1);   // 수정해야댇
+    @DeleteMapping("/scrap/{scrapId}")
+    public ResponseEntity<Object> companyScrapCancel(@PathVariable("scrapId") Integer id) {
+        companyService.companyScrapCancel(id, authUtil.getLoginUserId());   // 수정해야댇
         return SuccessResponse.createSuccess(SuccessCode.CANCEL_SCRAP_SUCCESS);
     }
-
 }
