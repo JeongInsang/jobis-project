@@ -1,6 +1,6 @@
 <template>
     <div class="container1">
-        <h2 class="title1">{{ 기업이름 }}으로 등록된 특허 목록</h2>
+        <h2 class="title1">{{ patents.name }}으로 등록된 특허 목록</h2>
         <h5 class="subtitle1" v-if="patents.length === 0">{{ patents.message }}</h5>
         <h5 class="subtitle1" v-else>특허 개수: {{ patents.length }}</h5>
         <ul class="patent-list">

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="card">
         <div v-if="companyData" class="company-info">
             <!-- 기존의 company-info div 내용 -->
             <div class="info-card">
@@ -9,16 +9,15 @@
                         <h2>{{ companyData.name }}</h2>
                         <p>회사주소: {{ companyData.address }}</p>
                         <div><strong>설립일자 :</strong> {{ companyData.foundAt }}</div>
-                        <div><strong>대표자명 :</strong> {{ companyData.Owner }}</div>
+                        <div><strong>대표자명 :</strong> {{ companyData.owner }}</div>
                         <div><strong>자본금 :</strong> {{ companyData.capital }}</div>
                         <div><strong>종업원수 :</strong> {{ companyData.employeeCnt }}</div>
                         <div><strong>업종 :</strong> {{ companyData.type }}</div>
                         <div><strong>주요제품명 :</strong> {{ companyData.productName }}</div>
-                        <div>
-                            <strong>청년친화강소기업여부 :</strong> {{ companyData.youthCompany }}
-                        </div>
                     </div>
                 </div>
+                <strong>청년친화강소기업여부 :</strong> {{ companyData.youthCompany }}
+                복지 그 외 정보들
             </div>
         </div>
         <BalanceSheet />

@@ -1,6 +1,16 @@
 <template>
     <div>
-        <canvas ref="chartCanvas"></canvas>
+        <canvas class="chart-canvas" ref="chartCanvas"></canvas>
+        <div v-if="visualizationData !== null">
+            <div>
+                활동성 : {{ visualizationData.activity }} 안정성 :
+                {{ visualizationData.stability }} 효율성 : {{ visualizationData.efficiency }}
+                <div>
+                    성장성 : {{ visualizationData.growth }} 수익성 :
+                    {{ visualizationData.profitability }}
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -9,19 +19,38 @@ import { ref, onMounted } from 'vue';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import 'chartjs-plugin-datalabels';
+import axios from 'axios';
+import { useCounterStore } from '@/stores/counter';
 
 const chartCanvas = ref(null);
-const visualizationData = ref({
-    안정성: 9,
-    성장성: -9,
-    활동성: 4,
-    수익성: -2,
-    가용성: 5,
-});
+const visualizationData = ref(null);
+const accessToken = localStorage.getItem('accessToken');
+const store = useCounterStore();
 
-onMounted(() => {
+const API_URL = store.API_URL;
+const getcompanyInformation = function () {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/company/info/1`,
+    })
+        .then((res) => {
+            visualizationData.value = res.data.data.factor;
+            console.log(visualizationData.value);
+            console.log('데이터 받음');
+            renderChart(); // 데이터를 받은 후에 차트를 렌더링
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log('실패');
+        });
+};
+
+const renderChart = () => {
     const ctx = chartCanvas.value.getContext('2d');
-    // console.log(visualizationData.value),
+    const dataValues = Object.values(visualizationData.value);
+    const maxDataValue = Math.max(...dataValues); // 데이터의 최대값 계산
+    const normalizedData = dataValues.map((value) => Math.min(value, 11)); // 최대값을 9로 제한
+
     new Chart(ctx, {
         type: 'radar',
         data: {
@@ -29,7 +58,7 @@ onMounted(() => {
             datasets: [
                 {
                     label: '점수',
-                    data: Object.values(visualizationData.value),
+                    data: normalizedData,
                     backgroundColor: 'rgba(0, 123, 255, 0.7)',
                     borderColor: 'rgba(0, 123, 255, 1)',
                     borderWidth: 1,
@@ -39,8 +68,8 @@ onMounted(() => {
         options: {
             scales: {
                 r: {
-                    max: 9,
-                    min: -9,
+                    max: 9, // 최대 값 설정
+                    min: -9, // 최소 값 설정
                     stepSize: 3,
                 },
             },
@@ -58,6 +87,10 @@ onMounted(() => {
             },
         },
     });
+};
+
+onMounted(() => {
+    getcompanyInformation();
 });
 </script>
 
