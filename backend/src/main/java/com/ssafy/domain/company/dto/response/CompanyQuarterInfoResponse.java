@@ -13,7 +13,7 @@ public class CompanyQuarterInfoResponse {
 
     private String firstQuarterDate;
 
-    private String secoundQuarterDate;
+    private String secondQuarterDate;
 
     private String thirdQuarterDate;
 
