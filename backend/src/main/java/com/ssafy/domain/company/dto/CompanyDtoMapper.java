@@ -2,7 +2,6 @@ package com.ssafy.domain.company.dto;
 
 import com.ssafy.domain.company.dto.response.CompanyResponse;
 import com.ssafy.domain.company.entity.Company;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,13 +20,14 @@ public class CompanyDtoMapper {
                 .productName(company.getProductName())
                 .address(company.getAddress())
                 .factor(company.getFactor())
+                .youthCompany(company.isYouthCompany())
+                .views(company.getViews())
                 .build();
     }
 
-    public static List<CompanyResponse> companyEntityListToDtoList(final List<Company> companyList) {
+    public static List<CompanyResponse> companyEntityToDtoList(final List<Company> companyList){
         return companyList.stream()
                 .map(CompanyDtoMapper::companyEntityToDto)
                 .collect(Collectors.toList());
     }
-
 }

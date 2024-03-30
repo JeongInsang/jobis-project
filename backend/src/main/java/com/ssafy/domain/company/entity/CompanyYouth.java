@@ -16,7 +16,7 @@ public class CompanyYouth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "youth_company_id")
-    private Long id;
+    private Integer id;
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)

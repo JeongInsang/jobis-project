@@ -46,6 +46,4 @@ public class UserAuthController {
             return SuccessResponse.createSuccess(SuccessCode.CHECK_EMAIL_BAD, false);
         }
     }
-
-
 }
