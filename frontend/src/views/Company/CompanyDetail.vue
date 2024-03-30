@@ -10,7 +10,7 @@
     </div>
     <div class="bottom-section">
         <BalanceSheet />
-        <FrinancialRatio />
+        <FinancialRatio />
         <License />
         <News />
     </div>
@@ -25,13 +25,13 @@ import News from '@/components/Company/News.vue';
 import CompanyVisualization from '@/components/Company/CompanyVisualization.vue';
 import CompanyInformation from '@/components/Company/CompanyInformation.vue';
 import BalanceSheet from '@/components/Company/BalanceSheet.vue';
-import FrinancialRatio from '@/components/Company/FinancialRatio.vue';
+import FinancialRatio from '@/components/Company/FinancialRatio.vue';
 
 // params로 쏜 CompanyId 받음 => 추후에 axios 쏠 때 이 companyId 값으로 쏘면 됨
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const companyId = ref(route.params);
-console.log(companyId.value);
+// const companyId = ref(route.params);
+// console.log(companyId.value);
 const store = useCounterStore();
 const accessToken = localStorage.getItem('accessToken');
 </script>
