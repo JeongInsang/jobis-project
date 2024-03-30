@@ -20,18 +20,20 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useCounterStore } from '@/stores/counter';
 
 const patents = ref([]);
 const visiblePatents = ref([]);
 const batchSize = 3; // 한 번에 보여줄 특허 수
 const isExpanded = ref(false); // 리스트가 확장되었는지 여부를 추적
+const store = useCounterStore();
+const API_URL = store.API_URL;
 
 onMounted(() => {
     console.log('특허 요청');
     getLicenseData();
 });
 
-const API_URL = 'https://j10b309.p.ssafy.io';
 const getLicenseData = function () {
     axios({
         method: 'get',
