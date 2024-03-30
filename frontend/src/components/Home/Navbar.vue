@@ -19,6 +19,11 @@
                     >기업검색</RouterLink
                 >
             </div>
+            <div class="tab">
+                <RouterLink style="text-decoration: none" :to="{ name: 'mypage' }"
+                    >Scrap</RouterLink
+                >
+            </div>
             <!-- <button class="primary" @click="goSignUp">
                 <div class="title2">회원가입</div>
             </button> -->

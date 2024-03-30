@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import Search from '@/components/PageTest/Search.vue';
+import Search from '@/components/Company/Search.vue';
 </script>
 
 <style scoped></style>
