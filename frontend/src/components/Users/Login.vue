@@ -4,12 +4,12 @@
             <div class="title">로그인</div>
             <form @submit.prevent="">
                 <div class="input">
-                    <div class="title2">ID</div>
+                    <div class="title2">email</div>
                     <input
                         class="textfield"
                         type="text"
                         placeholder="ID를 입력하세요"
-                        v-model="userId" />
+                        v-model="email" />
                 </div>
                 <div class="input">
                     <div class="title2">Password</div>
@@ -137,12 +137,13 @@ import { ref } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import { RouterLink } from 'vue-router';
 const store = useCounterStore();
-const userId = ref('');
+const email = ref('');
 const password = ref('');
 
 const logIn = () => {
+    console.log("login")
     const payload = {
-        userId: userId.value,
+        email: email.value,
         password: password.value,
     };
     store.logIn(payload);
