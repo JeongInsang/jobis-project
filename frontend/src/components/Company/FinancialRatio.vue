@@ -1,5 +1,5 @@
 <template>
-    <div class="indicators-section">
+    <div class="indicators-section card">
         <table class="indicators">
             <thead v-if="quarter !== null">
                 <tr>
@@ -156,14 +156,14 @@ onMounted(() => {
 const getCompanyRatio = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/rate/10`,
+        url: `${API_URL}/api/company/rate/1006`,
         // headers: {
         //     Authorization: `Bearer ${accessToken}`,
         // },
     })
         .then((res) => {
             companyRate.value = res.data.data;
-            console.log(companyRate.value);
+            // console.log(companyRate.value);
         })
         .catch((err) => {
             console.error(err);
@@ -173,14 +173,14 @@ const getCompanyRatio = () => {
 const getCompanyQuarter = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/quarter/10`,
+        url: `${API_URL}/api/company/quarter/1006`,
         // headers: {
         //     Authorization: `Bearer ${accessToken}`,
         // },
     })
         .then((res) => {
             quarter.value = res.data.data;
-            console.log(quarter.value);
+            // console.log(quarter.value);
         })
         .catch((err) => {
             console.error(err);

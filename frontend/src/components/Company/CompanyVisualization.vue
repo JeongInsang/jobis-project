@@ -3,11 +3,12 @@
         <canvas class="chart-canvas" ref="chartCanvas"></canvas>
         <div v-if="visualizationData !== null">
             <div>
-                활동성 : {{ visualizationData.activity }} 안정성 :
-                {{ visualizationData.stability }} 효율성 : {{ visualizationData.efficiency }}
+                활동성 : {{ visualizationData.activity.toFixed(4) }} 안정성 :
+                {{ visualizationData.stability.toFixed(4) }} 효율성 :
+                {{ visualizationData.efficiency.toFixed(4) }}
                 <div>
-                    성장성 : {{ visualizationData.growth }} 수익성 :
-                    {{ visualizationData.profitability }}
+                    성장성 : {{ visualizationData.growth.toFixed(4) }} 수익성 :
+                    {{ visualizationData.profitability.toFixed(4) }}
                 </div>
             </div>
         </div>
@@ -31,12 +32,12 @@ const API_URL = store.API_URL;
 const getcompanyInformation = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/info/1`,
+        url: `${API_URL}/api/company/info/1006`,
     })
         .then((res) => {
             visualizationData.value = res.data.data.factor;
             console.log(visualizationData.value);
-            console.log('데이터 받음');
+            // console.log('데이터 받음');
             renderChart(); // 데이터를 받은 후에 차트를 렌더링
         })
         .catch((err) => {
@@ -49,7 +50,7 @@ const renderChart = () => {
     const ctx = chartCanvas.value.getContext('2d');
     const dataValues = Object.values(visualizationData.value);
     const maxDataValue = Math.max(...dataValues); // 데이터의 최대값 계산
-    const normalizedData = dataValues.map((value) => Math.min(value, 11)); // 최대값을 9로 제한
+    const normalizedData = dataValues.map((value) => Math.min(value, 9)); // 최대값을 9로 제한
 
     new Chart(ctx, {
         type: 'radar',
@@ -69,7 +70,7 @@ const renderChart = () => {
             scales: {
                 r: {
                     max: 9, // 최대 값 설정
-                    min: -9, // 최소 값 설정
+                    min: -6, // 최소 값 설정
                     stepSize: 3,
                 },
             },

@@ -5,17 +5,18 @@
     cursor: pointer;
     margin-top: 10px;
     width: 100%;
-    height: 35rem;
+    height: 100%;
     background: rgb(255, 255, 255);
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 255, 0.2);
     transition: all 0.2s;
     box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
+    margin-bottom: 2rem;
 }
 
-.card:hover {
+/* .card:hover {
     box-shadow: -12px 12px 2px -1px rgba(0, 0, 255, 0.2);
-}
+} */
 .info-card {
     margin-top: 10px;
     border-radius: 10px;
@@ -71,9 +72,9 @@
 }
 
 /* 테이블의 첫 번째 열(계정명)을 왼쪽 정렬합니다. */
-.financial-statements td:first-child,
-.indicators td:first-child {
-    text-align: left;
+.financial-statements td,
+.indicators td {
+    text-align: center;
 }
 
 /* 로딩 중 메시지 스타일 */

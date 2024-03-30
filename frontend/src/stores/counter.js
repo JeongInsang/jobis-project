@@ -8,7 +8,7 @@ export const useCounterStore = defineStore('counter', () => {
         const { userId, password1, password2 } = payload;
         axios({
             method: 'post',
-            url: `${API_URL}/api/user/regist`, // 임시임
+            url: `${API_URL}/signup/`, // 임시임
             data: {
                 userId,
                 password1,
