@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class CompanyResponse {
 
-    private Long companyId;
+    private Integer companyId;
 
     private String name;
 
