@@ -1,20 +1,15 @@
 <template>
+    <h1 class="text-center m-5">#실시간 상위 기업</h1>
     <div class="move">
         <div class="card1">
             <div class="card">1</div>
             <div class="card">2</div>
             <div class="card">3</div>
-            <div class="card">4</div>
-            <div class="card">5</div>
-            <div class="card">6</div>
         </div>
         <div class="card2">
             <div class="card">21</div>
             <div class="card">22</div>
             <div class="card">23</div>
-            <div class="card">24</div>
-            <div class="card">25</div>
-            <div class="card">26</div>
         </div>
     </div>
 </template>
@@ -38,7 +33,7 @@
 .card1,
 .card2 {
     display: flex;
-    animation-duration: 20s;
+    animation-duration: 5s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
 }

@@ -22,8 +22,12 @@
             </div>
         </div>
         <div class="d-flex">
-            <button class="button m-1" @click="clickType">산업군</button>
-            <button class="button m-1" @click="clickRiegon">지역</button>
+            <button class="button m-1" :class="{ selected: typeIsclick }" @click="clickType">
+                산업군
+            </button>
+            <button class="button m-1" :class="{ selected: regionIsclick }" @click="clickRiegon">
+                지역
+            </button>
         </div>
         <!-- 지역 버튼 클릭 시 나오는 항목들 -->
         <div v-if="regionIsclick" class="d-flex col-9" v-bind="regionIsclick">
@@ -121,17 +125,19 @@
 import router from '@/router';
 import { ref, computed, onMounted, watch } from 'vue';
 import axios from 'axios';
-
-// onMounted(() => {
-//     getCompanyList();
-// });
+import { useCounterStore } from '@/stores/counter';
+const store = useCounterStore();
+const API_URL = store.API_URL;
+onMounted(() => {
+    getCompanyList();
+});
 
 // 회사명 검색 로직
-const keyword = ref(null);
+const keyword = ref('');
 const search = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${newRegionFilters}&type=${newTypeFilters}`,
+        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${selectRegionFilter.value}&type=${selectTypeFilter.value}`,
     })
         .then((res) => {
             comapnyDataList.value = res.data;
@@ -145,7 +151,7 @@ const comapnyDataList = ref(null); // dummyData 대신에 axios로 얻은 리스
 const getCompanyList = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${newRegionFilters}&type=${newTypeFilters}`,
+        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${selectRegionFilter.value}&type=${selectTypeFilter.value}`,
     })
         .then((res) => {
             comapnyDataList.value = res.data;
@@ -264,13 +270,21 @@ const changePage = (page) => {
 // 산업군 별로 필터 로직
 const typeIsclick = ref(false);
 const clickType = () => {
-    typeIsclick.value = true;
+    if (typeIsclick.value === false) {
+        typeIsclick.value = true;
+    } else {
+        typeIsclick.value = false;
+    }
 };
 
 // 지역 별로 필터 로직
 const regionIsclick = ref(false);
 const clickRiegon = () => {
-    regionIsclick.value = true;
+    if (regionIsclick.value === false) {
+        regionIsclick.value = true;
+    } else {
+        regionIsclick.value = false;
+    }
 };
 
 // 선택된 산업군 필터들

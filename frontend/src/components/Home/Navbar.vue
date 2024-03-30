@@ -1,5 +1,5 @@
 <template>
-    <div class="top-bar">
+    <nav class="top-bar">
         <Logo />
         <!-- <div class="rectangle-4137"><Logo /></div> -->
         <div class="title">
@@ -27,19 +27,32 @@
             <!-- <button class="primary" @click="goSignUp">
                 <div class="title2">회원가입</div>
             </button> -->
-            <button class="primary" @click="goLogin">
-                <div class="title2">로그인</div>
-            </button>
+            <div class="tab" v-if="store.isLogin">
+                <button class="primary" @click="logout">
+                    <div class="title2">로그아웃</div>
+                </button>
+            </div>
+            <div class="tab" v-else>
+                <button class="primary" @click="goLogin">
+                    <div class="title2">로그인</div>
+                </button>
+            </div>
         </div>
-    </div>
+    </nav>
 </template>
 
 <script setup>
 import router from '@/router';
 import { RouterLink } from 'vue-router';
+import { ref, watch, computed } from 'vue';
+import { useCounterStore } from '@/stores/counter';
+
 import Logo from './Logo.vue';
 import TestLogin from '../Users/TestLogin.vue';
 
+const store = useCounterStore();
+// 로그인 유무 확인
+console.log(store.isLogin);
 const goSignUp = () => {
     router.push({
         name: 'signup',
@@ -50,6 +63,10 @@ const goLogin = () => {
     router.push({
         name: 'login',
     });
+};
+
+const logout = () => {
+    // 로그아웃 로직
 };
 </script>
 
