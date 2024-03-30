@@ -1,6 +1,6 @@
 <template>
     <div class="container1">
-        <h2 class="title1">{{ 기업이름 }}으로 등록된 특허 목록</h2>
+        <h2 class="title1">{{ patents.name }}으로 등록된 특허 목록</h2>
         <h5 class="subtitle1" v-if="patents.length === 0">{{ patents.message }}</h5>
         <h5 class="subtitle1" v-else>특허 개수: {{ patents.length }}</h5>
         <ul class="patent-list">
@@ -30,20 +30,20 @@ const store = useCounterStore();
 const API_URL = store.API_URL;
 
 onMounted(() => {
-    console.log('특허 요청');
+    // console.log('특허 요청');
     getLicenseData();
 });
 
 const getLicenseData = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/api/patent/10`,
+        url: `${API_URL}/api/patent/1006`,
     })
         .then((res) => {
             patents.value = res.data.data;
             visiblePatents.value = patents.value.slice(0, batchSize);
-            console.log(patents.value);
-            console.log('데이터 받음');
+            // console.log(patents.value);
+            // console.log('데이터 받음');
         })
         .catch((err) => {
             console.log(err);

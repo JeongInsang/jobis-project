@@ -1,0 +1,142 @@
+.card {
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    height: 38rem;
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 255, 0.2);
+    transition: all 0.2s;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
+}
+.card1 {
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    height: 38rem;
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 255, 0.2);
+    transition: all 0.2s;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
+}
+.card:hover {
+    box-shadow: -12px 12px 2px -1px rgba(0, 0, 255, 0.2);
+}
+.info-card {
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 20px;
+}
+.company-info {
+    text-align: center;
+    padding: 10px;
+}
+.financial-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.indicators {
+    width: 100%; /* 표 너비 조정 */
+    border-collapse: collapse;
+    margin-top: 10px;
+    /* 필요한 경우 표 행 높이 조정 */
+}
+.card-content {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.company-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+.financial-section,
+.indicators-section {
+    text-align: left;
+    width: 80rem;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.financial-statements,
+.indicators {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.financial-statements th,
+.financial-statements td,
+.indicators th,
+.indicators td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: right;
+}
+
+.financial-statements th,
+.indicators th {
+    background-color: #f2f2f2;
+}
+
+/* 테이블의 첫 번째 열(계정명)을 왼쪽 정렬합니다. */
+.financial-statements td,
+.indicators td {
+    text-align: center;
+}
+
+/* 로딩 중 메시지 스타일 */
+.loading-message {
+    font-size: 18px;
+    color: #666;
+}
+.company-info {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.financial-statements,
+.income-statements {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.financial-statements th,
+.financial-statements td,
+.income-statements th,
+.income-statements td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: right;
+}
+
+.financial-statements th,
+.income-statements th {
+    background-color: #f2f2f2;
+}
+
+.financial-statements td,
+.income-statements td {
+    text-align: center;
+}
+
+.loading-message {
+    font-size: 18px;
+    color: #666;
+}
