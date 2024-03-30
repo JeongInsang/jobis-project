@@ -3,8 +3,7 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 
 export const useCounterStore = defineStore('counter', () => {
-    // const API_URL = import.META.env.API_URL;
-
+    const API_URL = 'https://j10b309.p.ssafy.io';
     const signUp = function (payload) {
         const { userId, password1, password2 } = payload;
         axios({
@@ -89,5 +88,5 @@ export const useCounterStore = defineStore('counter', () => {
         }
     });
 
-    return { signUp, logIn, logOut, isLogin };
+    return { API_URL, signUp, logIn, logOut, isLogin };
 });

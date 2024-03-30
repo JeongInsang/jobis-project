@@ -29,15 +29,16 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useCounterStore } from '@/stores/counter';
 
 const companyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
-
+const store = useCounterStore();
 onMounted(() => {
     getcompanyInformation();
 });
 
-const API_URL = 'https://j10b309.p.ssafy.io';
+const API_URL = store.API_URL;
 const getcompanyInformation = function () {
     axios({
         method: 'get',
