@@ -1,9 +1,9 @@
 <template>
-    <Mypage />
+    <Scrap />
 </template>
 
 <script setup>
-import Mypage from '@/components/Users/Mypage.vue';
+import Scrap from '@/components/Company/Scrap.vue';
 </script>
 
 <style scoped></style>
