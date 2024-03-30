@@ -4,7 +4,7 @@
             <div class="pinkbox" :style="{ transform: pinkboxTransform }">
                 <div class="signup" :class="{ nodisplay: !showSignup }">
                     <h1>회원가입</h1>
-                    <form autocomplete="off" @submit.prevent="signUp">
+                    <form autocomplete="off" @submit.prevent="formSignUp">
                         <input type="text" placeholder="이메일" v-model="userEmail" />
                         <span
                             v-if="!emailValid"
@@ -23,26 +23,31 @@
                             class="error-message animate__animated animate__shakeX"
                             >비밀번호가 일치하지 않습니다.</span
                         >
-                        <button class="button submit" @click="signUp">계정 만들기</button>
+                        <button class="button submit">계정 만들기</button>
                     </form>
                 </div>
                 <div class="signin" :class="{ nodisplay: !showSignin }">
                     <h1>로그인</h1>
-                    <form class="more-padding" autocomplete="off" @submit.prevent="logIn">
-                        <input type="text" placeholder="이메일" />
+                    <form class="more-padding" autocomplete="off" @submit.prevent="formLogIn">
+                        <input type="text" placeholder="이메일" v-model="loginEmail"/>
                         <span
                             v-if="!loginEmailValid"
                             class="error-message animate__animated animate__shakeX"
                             >이메일을 입력하세요.</span
                         >
-                        <input type="password" placeholder="비밀번호" />
+                        <input type="password" placeholder="비밀번호" v-model="password"/>
                         <span
                             v-if="!loginPasswordValid"
                             class="error-message animate__animated animate__shakeX"
                             >비밀번호를 입력하세요.</span
                         >
-                        <button class="button submit" @submit="logIn">로그인</button>
+                        <button class="button submit">로그인</button>
                     </form>
+                    <div>
+                        <button @click="snsLogin('kakao')">
+                            <h5>카카오</h5>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="leftbox">
@@ -68,6 +73,8 @@ import { ref, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import LoginLogo from '@/components/Users/LoginLogo.vue';
 import { watch } from 'vue';
+import { signUp, logIn } from '@/apis/api/user';
+import router from '@/router';
 
 // 회원가입 로직
 const store = useCounterStore();
@@ -78,11 +85,10 @@ const emailValid = ref(true);
 const passwordValid = ref(true);
 const passwordSamevalid = ref(true);
 
-const signUp = () => {
+const formSignUp = () => {
     const payload = {
-        userEmail: userEmail.value,
-        password1: password1.value,
-        password2: password2.value,
+        email: userEmail.value,
+        password: password1.value,
     };
     // email 유효성 검사
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -93,14 +99,23 @@ const signUp = () => {
     passwordSamevalid.value = password1.value === password2.value;
     if (
         // emailValid.value == true &&
-        // passwordValid.value == true &&
-        // passwordSamevalid.value == true
+        passwordValid.value == true &&
+        passwordSamevalid.value == true &&
         emailValid.value == true
     ) {
         // store.signUp(payload);
         if (passwordValid.value == true) {
             if (passwordSamevalid.value == true) {
-                store.signUp(payload);
+                signUp(payload, 
+                ({res}) => {
+                    // 회원가입 성공
+                    console.log(res);
+                    showSignIn();
+                },
+                (error) => {
+                    // 회원가입 실패
+                    console.log(error)
+                })
             }
         }
     }
@@ -125,9 +140,9 @@ const password = ref('');
 const loginEmailValid = ref(true);
 const loginPasswordValid = ref(true);
 
-const logIn = () => {
+const formLogIn = () => {
     const payload = {
-        userId: loginEmail.value,
+        email: loginEmail.value,
         password: password.value,
     };
     // email 유효성 검사
@@ -139,7 +154,22 @@ const logIn = () => {
     if (loginEmailValid.value == true) {
         // store.signUp(payload);
         if (loginPasswordValid.value == true) {
-            store.logIn(payload);
+            console.log(payload)
+            logIn(payload, 
+            (res) => {
+                // 로그인 성공
+                const accessToken = res.headers.get('authorization');
+                const refreshToken = res.headers.get('refresh-token');
+                console.log(res.headers)
+                console.log(refreshToken)
+
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken)
+                router.push({ name: 'home' });
+            }),
+            (error) => {
+                console.log(error)
+            }
         }
     }
 };
@@ -160,6 +190,13 @@ const showSignIn = () => {
 const showSignUp = () => {
     showSignup.value = true;
     showSignin.value = false;
+};
+
+// 소셜로그인
+const snsLogin = (type) => {
+    const redirect_uri = window.location.origin + '';
+    console.log(redirect_uri)
+    window.location.href = `${import.meta.env.VITE_APP_API_URL}/user/login/${type}?redirect_uri=${redirect_uri}/`;
 };
 </script>
 

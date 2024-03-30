@@ -1,61 +1,70 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
-    // const API_URL = import.META.env.API_URL;
-
+    const API_URL = import.meta.env.VITE_APP_API_URL;
+    // const API_URL = "http://127.0.0.1:8080/api"
     const signUp = function (payload) {
-        const { userId, password1, password2 } = payload;
+        const { email, password } = payload;
         axios({
             method: 'post',
-            url: `${API_URL}/signup/`, // 임시임
+            url: `${API_URL}/user/register`, 
             data: {
-                userId,
-                password1,
-                password2,
+                email,
+                password
             },
         })
             .then((res) => {
+                console.log("회원가입 성공, ", res)
                 // 회원가입 시 자동으로 로그인
-                const password = password1;
-                logIn({ userId, password });
+                // const password = password;
+                // logIn({ email, password });
             })
             .catch((err) => console.log(err));
     };
 
     const logIn = function (payload) {
-        const userId = payload.userId;
+        const email = payload.email;
         const password = payload.password;
 
         axios({
             method: 'post',
-            url: `${API_URL}/login/`, // 임시임
+            url: `${API_URL}/user/login`, 
             data: {
-                userId,
+                email,
                 password,
             },
         })
             .then((res) => {
-                token.value = res.data.key;
+                const accessToken = res.headers.get('authorization');
+                const refreshToken = res.headers.get('refresh-token');
+                console.log(res.headers)
+                console.log(refreshToken)
+
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
+                console.log(localStorage.getItem("accessToken"))
+                // console.log(token)
                 // Login 시 메인 페이지로 이동
-                axios({
-                    method: 'post',
-                    url: `http://127.0.0.1:8000/api/v1/CurrentUser/`, //임시임
-                    headers: {
-                        Authorization: `Token ${token.value}`,
-                    },
-                })
-                    .then((res) => {
-                        currentUser.value = res.data;
+                // axios({
+                //     method: 'post',
+                //     url: `${API_URL}/v1/CurrentUser/`, //임시임
+                //     headers: {
+                //         Authorization: `Token ${token.value}`,
+                //     },
+                // })
+                //     .then((res) => {
+                //         currentUser.value = res.data;
 
-                        // console.log(res)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                //         // console.log(res)
+                //     })
+                //     .catch((err) => {
+                //         console.log(err);
+                //     });
 
-                router.push({ name: 'main' });
+                router.push({ name: 'home' });
 
                 // 현재 로그인한 유저 정보 받아오기
             })
