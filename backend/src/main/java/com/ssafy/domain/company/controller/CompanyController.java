@@ -2,7 +2,6 @@ package com.ssafy.domain.company.controller;
 
 
 import com.ssafy.domain.company.dto.response.*;
-import com.ssafy.domain.company.entity.Company;
 import com.ssafy.domain.company.service.CompanyService;
 import com.ssafy.global.response.code.SuccessCode;
 import com.ssafy.global.response.structure.SuccessResponse;
@@ -36,16 +35,14 @@ public class CompanyController {
      * @param type
      * @return
      */
-//    @GetMapping("/search")
-//    public ResponseEntity<Object> companySearch(Pageable pageable,
-//                                                @RequestParam(required = false) String keyword,
-//                                                @RequestParam(required = false) List<String> location,
-//                                                @RequestParam(required = false) List<String> type) {
-////        Page<Company> searchCompanies = companyService.getCompanies(pageable, keyword, location, type);
-////        log.info("검색된 회사 목록: {}", searchCompanies);
-//        return SuccessResponse.createSuccess(SuccessCode.SEARCH_COMPANY_SUCCESS,
-//                companyService.getCompanies(pageable, keyword, location, type));
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<Object> companySearch(Pageable pageable,
+                                                @RequestParam(required = false) String keyword,
+                                                @RequestParam(required = false) List<String> location,
+                                                @RequestParam(required = false) List<String> type) {
+        Page<CompanySearchResponse> companySearchResponseList = companyService.getCompanies(pageable, keyword, location, type);
+        return SuccessResponse.createSuccess(SuccessCode.SEARCH_COMPANY_SUCCESS, companySearchResponseList);
+    }
 
     /**
      * 기업 기본정보 조회

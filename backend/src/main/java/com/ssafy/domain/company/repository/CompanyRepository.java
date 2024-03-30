@@ -1,13 +1,12 @@
 package com.ssafy.domain.company.repository;
 
 import com.ssafy.domain.company.entity.Company;
-import com.ssafy.domain.company.repository.companySearch.CompanySearchRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 
-public interface CompanyRepository extends JpaRepository<Company, Integer>, CompanySearchRepositoryCustom {
+public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
 
     // 기업 기본정보 조회
