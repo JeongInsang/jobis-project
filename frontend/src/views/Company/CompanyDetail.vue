@@ -4,7 +4,7 @@
             <CompanyInformation class="company-info" />
             <div class="visualization">
                 <h3>기업 지표 시각화 그래프</h3>
-                <Visualization />
+                <CompanyVisualization />
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@ import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import License from '@/components/Company/License.vue';
 import News from '@/components/Company/News.vue';
-import Visualization from '@/components/Company/Visualization.vue';
+import CompanyVisualization from '@/components/Company/CompanyVisualization.vue';
 import CompanyInformation from '@/components/Company/CompanyInformation.vue';
 import BalanceSheet from '@/components/Company/BalanceSheet.vue';
 import FrinancialRatio from '@/components/Company/FinancialRatio.vue';
