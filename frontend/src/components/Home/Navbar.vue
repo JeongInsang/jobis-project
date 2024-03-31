@@ -9,7 +9,7 @@
             <div class="tab">
                 <RouterLink style="text-decoration: none" :to="{ name: 'home' }">홈</RouterLink>
             </div>
-            <div class="tab">
+            <div class="tab" v-if="store.isLogin">
                 <RouterLink style="text-decoration: none" :to="{ name: 'company' }"
                     >기업추천</RouterLink
                 >
@@ -19,7 +19,7 @@
                     >기업검색</RouterLink
                 >
             </div>
-            <div class="tab">
+            <div class="tab" v-if="store.isLogin">
                 <RouterLink style="text-decoration: none" :to="{ name: 'mypage' }"
                     >Scrap</RouterLink
                 >
@@ -53,11 +53,6 @@ import TestLogin from '../Users/TestLogin.vue';
 const store = useCounterStore();
 // 로그인 유무 확인
 console.log(store.isLogin);
-const goSignUp = () => {
-    router.push({
-        name: 'signup',
-    });
-};
 
 const goLogin = () => {
     router.push({
@@ -67,6 +62,7 @@ const goLogin = () => {
 
 const logout = () => {
     // 로그아웃 로직
+    store.logOut();
 };
 </script>
 
