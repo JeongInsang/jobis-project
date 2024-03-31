@@ -1,10 +1,10 @@
 services:
-  #spring-boot-app:
-  #  container_name: backend
-  #  image: jobis-backend  # Docker에서 빌드한 Spring Boot 애플리케이션 이미지 이름
-  #  restart: unless-stopped
-  #  ports:
-  #    - 8081:8081
+  spring-boot-app:
+    container_name: backend
+    image: jobis-backend  # Docker에서 빌드한 Spring Boot 애플리케이션 이미지 이름
+    restart: unless-stopped
+    ports:
+      - 8081:8081
 
   vue-app:
     container_name: frontend
