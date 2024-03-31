@@ -29,13 +29,13 @@
                 <div class="signin" :class="{ nodisplay: !showSignin }">
                     <h1>로그인</h1>
                     <form class="more-padding" autocomplete="off" @submit.prevent="formLogIn">
-                        <input type="text" placeholder="이메일" v-model="loginEmail"/>
+                        <input type="text" placeholder="이메일" v-model="loginEmail" />
                         <span
                             v-if="!loginEmailValid"
                             class="error-message animate__animated animate__shakeX"
                             >이메일을 입력하세요.</span
                         >
-                        <input type="password" placeholder="비밀번호" v-model="password"/>
+                        <input type="password" placeholder="비밀번호" v-model="password" />
                         <span
                             v-if="!loginPasswordValid"
                             class="error-message animate__animated animate__shakeX"
@@ -106,16 +106,18 @@ const formSignUp = () => {
         // store.signUp(payload);
         if (passwordValid.value == true) {
             if (passwordSamevalid.value == true) {
-                signUp(payload, 
-                ({res}) => {
-                    // 회원가입 성공
-                    console.log(res);
-                    showSignIn();
-                },
-                (error) => {
-                    // 회원가입 실패
-                    console.log(error)
-                })
+                signUp(
+                    payload,
+                    ({ res }) => {
+                        // 회원가입 성공
+                        console.log(res);
+                        showSignIn();
+                    },
+                    (error) => {
+                        // 회원가입 실패
+                        console.log(error);
+                    }
+                );
             }
         }
     }
@@ -139,6 +141,7 @@ const loginEmail = ref('');
 const password = ref('');
 const loginEmailValid = ref(true);
 const loginPasswordValid = ref(true);
+const login = store.isLogin;
 
 const formLogIn = () => {
     const payload = {
@@ -154,22 +157,22 @@ const formLogIn = () => {
     if (loginEmailValid.value == true) {
         // store.signUp(payload);
         if (loginPasswordValid.value == true) {
-            console.log(payload)
-            logIn(payload, 
-            (res) => {
+            console.log(payload);
+            logIn(payload, (res) => {
                 // 로그인 성공
                 const accessToken = res.headers.get('authorization');
                 const refreshToken = res.headers.get('refresh-token');
-                console.log(res.headers)
-                console.log(refreshToken)
+                console.log(res.headers);
+                console.log(refreshToken);
 
-                localStorage.setItem("accessToken", accessToken);
-                localStorage.setItem("refreshToken", refreshToken)
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                store.isLogin = true;
                 router.push({ name: 'home' });
             }),
-            (error) => {
-                console.log(error)
-            }
+                (error) => {
+                    console.log(error);
+                };
         }
     }
 };
@@ -195,7 +198,7 @@ const showSignUp = () => {
 // 소셜로그인
 const snsLogin = (type) => {
     const redirect_uri = window.location.origin + '';
-    console.log(redirect_uri)
+    console.log(redirect_uri);
     window.location.href = `${import.meta.env.VITE_APP_API_URL}/user/login/${type}?redirect_uri=${redirect_uri}/`;
 };
 </script>
