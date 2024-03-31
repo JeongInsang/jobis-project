@@ -4,9 +4,14 @@ import axios from 'axios';
 import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
+<<<<<<< HEAD
     // const API_URL = import.meta.env.VITE_APP_API_URL;
     // const API_URL = "http://127.0.0.1:8080/api"
     const API_URL = 'https://j10b309.p.ssafy.io';
+=======
+    const isLogin = ref(false);
+    const API_URL = 'https://j10b309.p.ssafy.io/api';
+>>>>>>> cfbd61e8c1ce5b4013b2ecd9c36b0d2c0f90375f
     const token = localStorage.getItem('accessToken');
     const signUp = function (payload) {
         const { email, password } = payload;
@@ -20,9 +25,6 @@ export const useCounterStore = defineStore('counter', () => {
         })
             .then((res) => {
                 console.log('회원가입 성공, ', res);
-                // 회원가입 시 자동으로 로그인
-                // const password = password;
-                // logIn({ email, password });
             })
             .catch((err) => console.log(err));
     };
@@ -47,24 +49,7 @@ export const useCounterStore = defineStore('counter', () => {
 
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
-                console.log(localStorage.getItem('accessToken'));
-                // console.log(token)
-                // Login 시 메인 페이지로 이동
-                // axios({
-                //     method: 'post',
-                //     url: `${API_URL}/v1/CurrentUser/`, //임시임
-                //     headers: {
-                //         Authorization: `Token ${token.value}`,
-                //     },
-                // })
-                //     .then((res) => {
-                //         currentUser.value = res.data;
-
-                //         // console.log(res)
-                //     })
-                //     .catch((err) => {
-                //         console.log(err);
-                //     });
+                isLogin = true;
 
                 router.push({ name: 'home' });
 
@@ -77,28 +62,23 @@ export const useCounterStore = defineStore('counter', () => {
     };
 
     const logOut = function () {
-        axios({
-            method: 'post',
-            url: `${API_URL}/logout/`, // 임시임
-        })
-            .then((res) => {
-                token.value = null;
-                currentUser.value = null;
-                localStorage.clear();
-                router.push({ name: 'main' });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // axios({
+        //     method: 'post',
+        //     url: `${API_URL}/logout/`, // 임시임
+        // })
+        //     .then((res) => {
+        //         token.value = null;
+        //         currentUser.value = null;
+        //         localStorage.clear();
+        //         router.push({ name: 'main' });
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
+        localStorage.clear();
+        isLogin.value = false;
+        router.push({ name: 'home' });
     };
-
-    const isLogin = computed(() => {
-        if (token === null) {
-            return false;
-        } else {
-            return true;
-        }
-    });
 
     return { API_URL, signUp, logIn, logOut, isLogin, token };
 });
