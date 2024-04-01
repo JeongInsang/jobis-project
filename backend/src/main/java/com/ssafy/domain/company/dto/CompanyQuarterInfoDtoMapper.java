@@ -13,7 +13,7 @@ public class CompanyQuarterInfoDtoMapper {
                 .quarterInfoId(companyQuarterInfo.getId())
                 .companyId(companyQuarterInfo.getCompany().getId())
                 .firstQuarterDate(companyQuarterInfo.getFirstQuarterDate())
-                .secoundQuarterDate(companyQuarterInfo.getSecondQuarterDate())
+                .secondQuarterDate(companyQuarterInfo.getSecondQuarterDate())
                 .thirdQuarterDate(companyQuarterInfo.getThirdQuarterDate())
                 .build();
 

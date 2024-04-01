@@ -8,7 +8,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssafy?autoReconnect=true?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/ssafy?autoReconnect=true
     username: ssafy
     password: 1234
   jpa:
@@ -30,6 +30,10 @@ spring:
 #          min-idle: 2
       host: ${redis.host}
       port: ${redis.port}
+
+#    web:
+#      pageable:
+#        default-page-size: 10
 
 
 logging:

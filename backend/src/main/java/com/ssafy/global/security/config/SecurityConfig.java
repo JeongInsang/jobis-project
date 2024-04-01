@@ -2,7 +2,9 @@ package com.ssafy.global.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.domain.users.repository.UserRepository;
+import com.ssafy.global.oauth2.handler.OAuth2LoginFailureHandler;
 import com.ssafy.global.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.ssafy.global.oauth2.service.CustomOAuth2UserService;
 import com.ssafy.global.security.handler.CustomAuthenticationFailureHandler;
 import com.ssafy.global.security.handler.CustomAuthenticationSuccessHandler;
 import com.ssafy.global.security.util.JwtUtil;
@@ -37,6 +39,8 @@ public class SecurityConfig {
     private final CustomExceptionHandleFilter customExceptionHandleFilter;
 
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+//    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,6 +55,8 @@ public class SecurityConfig {
                 .oauth2Login((httpSecurityOAuth2LoginConfigurer ->
                         httpSecurityOAuth2LoginConfigurer
                                 .successHandler(oAuth2LoginSuccessHandler)
+                                .failureHandler(oAuth2LoginFailureHandler)
+//                                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
                         ))
         ;
 

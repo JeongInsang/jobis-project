@@ -1,6 +1,7 @@
 package com.ssafy.domain.users.entity;
 
 import com.ssafy.domain.common.embeddable.Factor;
+import com.ssafy.domain.users.dto.request.TendencyRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -25,5 +26,12 @@ public class Tendency {
 
     @Embedded
     private Factor factor;
+
+    public static Tendency createUserTendency(Users users, TendencyRequest tendencyRequest){
+        Tendency tendency = new Tendency();
+        tendency.users = users;
+        tendency.factor = Factor.createFactor(tendencyRequest);
+        return tendency;
+    }
 
 }

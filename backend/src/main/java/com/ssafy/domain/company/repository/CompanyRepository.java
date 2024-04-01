@@ -12,4 +12,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     // 기업 기본정보 조회
     List<Company> findCompanyById(Integer id);
 
+
+
 }
