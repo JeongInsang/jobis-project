@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div style="font-family: 'Pretendard-Bold'" class="container">
         <h2>기업 리스트</h2>
         <!-- <SearchButton /> -->
         <div class="d-flex w-100">
@@ -22,11 +22,11 @@
             </div>
         </div>
         <div class="d-flex">
-            <button class="button m-1" :class="{ selected: typeIsclick }" @click="clickType">
-                산업군
-            </button>
             <button class="button m-1" :class="{ selected: regionIsclick }" @click="clickRiegon">
                 지역
+            </button>
+            <button class="button m-1" :class="{ selected: typeIsclick }" @click="clickType">
+                산업군
             </button>
         </div>
         <!-- 지역 버튼 클릭 시 나오는 항목들 -->
@@ -78,7 +78,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(company, index) in paginatedData" :key="index">
-                                <td @click="goCompanyDeatil(company.companyId)">
+                                <td @click="goCompanyDeatil(company.companyId)" class="cursor">
                                     {{ company.companyname }}
                                 </td>
                                 <td>{{ company.companytype }}</td>
@@ -460,5 +460,9 @@ table.dataTable td {
 .selected {
     /* 선택된 버튼의 스타일 */
     background-color: greenyellow;
+}
+/* 마우스 커서 모양 */
+.cursor {
+    cursor: pointer;
 }
 </style>

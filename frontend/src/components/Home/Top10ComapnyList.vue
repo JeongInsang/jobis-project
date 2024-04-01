@@ -1,10 +1,11 @@
 <template>
-    <h1 class="container" style="margin-bottom: 5rem">#조회수 상위</h1>
+    <h1 class="container" style="margin-bottom: 5rem; font-family: 'Pretendard-Black'">
+        # 조회수 상위
+    </h1>
     <div class="container">
         <Swiper
             :loop="true"
-            :speed="20000"
-            :slides-per-view="auto"
+            :speed="15000"
             :free-mode="true"
             :modules="[EffectCards, Autoplay]"
             :autoplay="{
@@ -20,7 +21,9 @@
                                     style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
                                     src="@/assets/img/jobis.png"
                                     alt="" />
-                                <h5 class="card-title">{{ comapny }}</h5>
+                                <h5 style="font-family: Pretendard-Bold" class="card-title">
+                                    {{ comapny }}
+                                </h5>
                             </div>
                         </div>
                     </div>
@@ -35,7 +38,9 @@
                                     style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
                                     src="@/assets/img/jobis.png"
                                     alt="" />
-                                <h5 class="card-title">{{ company }}</h5>
+                                <h5 style="font-family: Pretendard-Bold" class="card-title">
+                                    {{ company }}
+                                </h5>
                             </div>
                         </div>
                     </div>
@@ -49,6 +54,29 @@
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { EffectCards, Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import axios from 'axios';
+import { useCounterStore } from '@/stores/counter';
+import { onMounted, ref } from 'vue';
+
+const store = useCounterStore();
+const companyList1 = ref(null);
+
+onMounted(() => {
+    getTopViewList();
+});
+const getTopViewList = () => {
+    axios({
+        method: 'get',
+        url: `${store.API_URL}/company/popular`,
+    })
+        .then((res) => {
+            companyList1.value = res.data;
+            console.log('상위 조회수 리스트 조회', companyList1.value);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 
 const companyList = ['상위1', '상위2', '상위3', '상위4', '상위5'];
 const companyList2 = ['상위6', '상위7', '상위8', '상위9', '상위10'];
