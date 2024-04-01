@@ -5,7 +5,7 @@ import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
     const isLogin = ref(false);
-    const API_URL = 'https://j10b309.p.ssafy.io/api';
+    const API_URL = 'https://j10b309.p.ssafy.io';
     const token = localStorage.getItem('accessToken');
     const signUp = function (payload) {
         const { email, password } = payload;
