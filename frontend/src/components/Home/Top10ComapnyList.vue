@@ -1,66 +1,84 @@
 <template>
-    <h1 class="text-center m-5">#실시간 상위 기업</h1>
-    <div class="move">
-        <div class="card1">
-            <div class="card">1</div>
-            <div class="card">2</div>
-            <div class="card">3</div>
-        </div>
-        <div class="card2">
-            <div class="card">21</div>
-            <div class="card">22</div>
-            <div class="card">23</div>
-        </div>
+    <h1 class="container" style="margin-bottom: 5rem">#조회수 상위</h1>
+    <div class="container">
+        <Swiper
+            :loop="true"
+            :speed="20000"
+            :slides-per-view="auto"
+            :free-mode="true"
+            :modules="[EffectCards, Autoplay]"
+            :autoplay="{
+                delay: 1,
+                disableOnInteraction: false,
+            }">
+            <SwiperSlide>
+                <div class="swiper-slide">
+                    <div class="card-container" v-for="comapny in companyList">
+                        <div class="card card-size">
+                            <div class="card-body">
+                                <img
+                                    style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
+                                    src="@/assets/img/jobis.png"
+                                    alt="" />
+                                <h5 class="card-title">{{ comapny }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </SwiperSlide>
+            <SwiperSlide>
+                <div class="swiper-slide">
+                    <div class="card-container" v-for="company in companyList2">
+                        <div class="card card-size">
+                            <div class="card-body">
+                                <img
+                                    style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
+                                    src="@/assets/img/jobis.png"
+                                    alt="" />
+                                <h5 class="card-title">{{ company }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </SwiperSlide>
+        </Swiper>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { EffectCards, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+
+const companyList = ['상위1', '상위2', '상위3', '상위4', '상위5'];
+const companyList2 = ['상위6', '상위7', '상위8', '상위9', '상위10'];
+</script>
 
 <style scoped>
-.move {
-    display: flex;
-    overflow: hidden;
+.swiper {
+    width: 100%;
+    height: 80%;
+    margin-left: 1.5rem;
 }
+.swiper-slide {
+    text-align: center;
 
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+}
 .card {
-    width: 190px;
-    height: 254px;
-    background: rgb(223, 225, 235);
-    border-radius: 50px;
-    margin-right: 10px;
+    border: none;
 }
 
-.card1,
-.card2 {
-    display: flex;
-    animation-duration: 5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+.card-container {
+    width: 20rem;
+    height: 10rem;
 }
-
-.card1 {
-    animation-name: move-left1;
-}
-
-.card2 {
-    animation-name: move-left2;
-}
-
-@keyframes move-left1 {
-    from {
-        transform: translateX(0%);
-    }
-    to {
-        transform: translateX(-100%);
-    }
-}
-
-@keyframes move-left2 {
-    from {
-        transform: translateX(0%);
-    }
-    to {
-        transform: translateX(-100%);
-    }
+.card-size {
+    width: 10rem;
+    height: 10rem;
 }
 </style>
