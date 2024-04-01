@@ -5,8 +5,22 @@ services:
     restart: unless-stopped
     ports:
       - 8081:8081
-    env_file:
-      - .env
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ACCESS_EXPIRED: ${JWT_ACCESS_EXPIRED}
+      JWT_REFRESH_EXPIRED: ${JWT_REFRESH_EXPIRED}
+      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
+      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
+      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+      KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
 
   vue-app:
     container_name: frontend
@@ -14,5 +28,5 @@ services:
     restart: unless-stopped
     ports:
       - 3000:3000
-    env_file:
-      - .env
+    environment:
+      VITE_APP_API_URL: ${VITE_APP_API_URL}
