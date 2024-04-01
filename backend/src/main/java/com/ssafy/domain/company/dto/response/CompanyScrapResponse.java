@@ -1,17 +1,22 @@
 package com.ssafy.domain.company.dto.response;
 
-import com.ssafy.global.entity.BaseTime;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
-public class CompanyScrapResponse extends BaseTime {
+public class CompanyScrapResponse{
 
     private Integer scrapId;
 
     private Integer usersId;
 
     private Integer companyId;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

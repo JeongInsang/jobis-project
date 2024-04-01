@@ -1,10 +1,9 @@
 package com.ssafy.domain.company.entity;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.domain.common.embeddable.Factor;
 import com.ssafy.domain.patent.entity.Patent;
 
-import com.ssafy.domain.users.entity.Users;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
@@ -85,6 +84,13 @@ public class Company {
 
     public void companyViewsCnt (){
         this.views++;
+    }
+
+    @QueryProjection
+    public Company(String keyword, String location, String type){
+        this.name = keyword;
+        this.address = location;
+        this.type = type;
     }
 
 }

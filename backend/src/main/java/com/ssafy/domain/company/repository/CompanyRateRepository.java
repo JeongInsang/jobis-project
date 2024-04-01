@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CompanyRateRepository extends JpaRepository<CompanyRate, Integer> {
 
-    // 기업 청년친화 조회
+    // 기업 재무비율 조회
     List<CompanyRate> findAllByCompany(Company company);
 }
