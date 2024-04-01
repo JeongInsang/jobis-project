@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="font-family: 'Pretendard-Bold'">
         <div class="welcome">
             <div class="pinkbox" :style="{ transform: pinkboxTransform }">
                 <div class="signup" :class="{ nodisplay: !showSignup }">

@@ -105,6 +105,7 @@ button.learn-more .button-text {
     line-height: 1.6;
     text-align: center;
     text-transform: uppercase;
+    font-family: 'Pretendard-Bold';
 }
 
 button:hover .circle {
