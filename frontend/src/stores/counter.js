@@ -6,26 +6,32 @@ import router from '@/router';
 export const useCounterStore = defineStore('counter', () => {
     const isLogin = ref(false);
     // const API_URL = 'https://j10b309.p.ssafy.io/api';
-    const token = localStorage.getItem('accessToken');
+    const token = ref(localStorage.getItem('accessToken'));
 
     const logOut = function () {
-        // axios({
-        //     method: 'post',
-        //     url: `${API_URL}/logout/`, // 임시임
-        // })
-        //     .then((res) => {
-        //         token.value = null;
-        //         currentUser.value = null;
-        //         localStorage.clear();
-        //         router.push({ name: 'main' });
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-        localStorage.clear();
-        isLogin.value = false;
+        axios({
+            method: 'post',
+            url: `${import.meta.env.VITE_APP_API_URL}/logout`, // 임시임
+        })
+            .then((res) => {
+                token.value = null;
+                // currentUser.value = null;
+                localStorage.clear();
+                isLogin.value = false;
+                localStorage.clear();
+
+                router.push({ name: 'home' });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         router.push({ name: 'home' });
     };
 
-    return { logOut, isLogin, token };
-});
+    const setIsLogin = (value) => {
+        isLogin.value = value;
+      };
+
+    return { logOut, isLogin, token, setIsLogin };
+},
+{persist:true});
