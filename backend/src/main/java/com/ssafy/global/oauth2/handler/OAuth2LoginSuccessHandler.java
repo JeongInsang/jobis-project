@@ -2,8 +2,8 @@ package com.ssafy.global.oauth2.handler;
 
 import com.ssafy.domain.users.dto.JwtDto;
 import com.ssafy.domain.users.service.RefreshTokenService;
-import com.ssafy.domain.users.service.UserService;
-import com.ssafy.global.oauth2.CustomOAuth2User;
+import com.ssafy.global.oauth2.util.CustomOAuth2User;
+import com.ssafy.global.oauth2.util.RedirectUriStorage;
 import com.ssafy.global.security.util.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +24,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
+    private final RedirectUriStorage redirectUriStorage;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -43,5 +44,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // 헤더에 토큰 담아 전송
         jwtUtil.setAccessAndRefreshToken(response, jwtDto);
+
+        String act = jwtDto.getType()+" "+jwtDto.getAccessToken();
+        String rft = jwtDto.getRefreshToken();
+        response.sendRedirect(redirectUriStorage.getRedirectUri() + "/" + act + "/" + rft);
     }
 }
