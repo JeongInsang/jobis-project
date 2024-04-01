@@ -1,13 +1,9 @@
 <template>
-    <div>
-        마이페이지
-    </div>
+    <Scrap />
 </template>
 
 <script setup>
-
+import Scrap from '@/components/Company/Scrap.vue';
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

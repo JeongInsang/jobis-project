@@ -1,61 +1,51 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
-    // const API_URL = import.META.env.API_URL;
-
+    const isLogin = ref(false);
+    const API_URL = 'https://j10b309.p.ssafy.io';
+    const token = localStorage.getItem('accessToken');
     const signUp = function (payload) {
-        const { userId, password1, password2 } = payload;
+        const { email, password } = payload;
         axios({
             method: 'post',
-            url: `${API_URL}/signup/`, // 임시임
+            url: `${API_URL}/user/register`,
             data: {
-                userId,
-                password1,
-                password2,
+                email,
+                password,
             },
         })
             .then((res) => {
-                // 회원가입 시 자동으로 로그인
-                const password = password1;
-                logIn({ userId, password });
+                console.log('회원가입 성공, ', res);
             })
             .catch((err) => console.log(err));
     };
 
     const logIn = function (payload) {
-        const userId = payload.userId;
+        const email = payload.email;
         const password = payload.password;
 
         axios({
             method: 'post',
-            url: `${API_URL}/login/`, // 임시임
+            url: `${API_URL}/user/login`,
             data: {
-                userId,
+                email,
                 password,
             },
         })
             .then((res) => {
-                token.value = res.data.key;
-                // Login 시 메인 페이지로 이동
-                axios({
-                    method: 'post',
-                    url: `http://127.0.0.1:8000/api/v1/CurrentUser/`, //임시임
-                    headers: {
-                        Authorization: `Token ${token.value}`,
-                    },
-                })
-                    .then((res) => {
-                        currentUser.value = res.data;
+                const accessToken = res.headers.get('authorization');
+                const refreshToken = res.headers.get('refresh-token');
+                console.log(res.headers);
+                console.log(refreshToken);
 
-                        // console.log(res)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                isLogin = true;
 
-                router.push({ name: 'main' });
+                router.push({ name: 'home' });
 
                 // 현재 로그인한 유저 정보 받아오기
             })
@@ -66,28 +56,23 @@ export const useCounterStore = defineStore('counter', () => {
     };
 
     const logOut = function () {
-        axios({
-            method: 'post',
-            url: `${API_URL}/logout/`, // 임시임
-        })
-            .then((res) => {
-                token.value = null;
-                currentUser.value = null;
-                localStorage.clear();
-                router.push({ name: 'main' });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // axios({
+        //     method: 'post',
+        //     url: `${API_URL}/logout/`, // 임시임
+        // })
+        //     .then((res) => {
+        //         token.value = null;
+        //         currentUser.value = null;
+        //         localStorage.clear();
+        //         router.push({ name: 'main' });
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
+        localStorage.clear();
+        isLogin.value = false;
+        router.push({ name: 'home' });
     };
 
-    const isLogin = computed(() => {
-        if (token.value === null) {
-            return false;
-        } else {
-            return true;
-        }
-    });
-
-    return { signUp, logIn, logOut, isLogin };
+    return { API_URL, signUp, logIn, logOut, isLogin, token };
 });

@@ -4,13 +4,13 @@
             <CompanyInformation class="company-info" />
             <div class="visualization">
                 <h3>기업 지표 시각화 그래프</h3>
-                <Visualization />
+                <CompanyVisualization />
             </div>
         </div>
     </div>
     <div class="bottom-section">
         <BalanceSheet />
-        <FrinancialRatio />
+        <FinancialRatio />
         <License />
         <News />
     </div>
@@ -22,11 +22,16 @@ import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import License from '@/components/Company/License.vue';
 import News from '@/components/Company/News.vue';
-import Visualization from '@/components/Company/Visualization.vue';
+import CompanyVisualization from '@/components/Company/CompanyVisualization.vue';
 import CompanyInformation from '@/components/Company/CompanyInformation.vue';
 import BalanceSheet from '@/components/Company/BalanceSheet.vue';
-import FrinancialRatio from '@/components/Company/FinancialRatio.vue';
+import FinancialRatio from '@/components/Company/FinancialRatio.vue';
 
+// params로 쏜 CompanyId 받음 => 추후에 axios 쏠 때 이 companyId 값으로 쏘면 됨
+import { useRoute } from 'vue-router';
+const route = useRoute();
+// const companyId = ref(route.params);
+// console.log(companyId.value);
 const store = useCounterStore();
 const accessToken = localStorage.getItem('accessToken');
 </script>
