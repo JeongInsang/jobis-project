@@ -44,7 +44,7 @@
                         <button class="button submit">로그인</button>
                     </form>
                     <div>
-                        <button @click="snsLogin('kakao')">
+                        <button @click="socialLogin('kakao')">
                             <h5>카카오</h5>
                         </button>
                     </div>
@@ -75,6 +75,8 @@ import LoginLogo from '@/components/Users/LoginLogo.vue';
 import { watch } from 'vue';
 import { signUp, logIn } from '@/apis/api/user';
 import router from '@/router';
+import base64 from "base-64";
+
 
 // 회원가입 로직
 const store = useCounterStore();
@@ -162,6 +164,9 @@ const formLogIn = () => {
                 const refreshToken = res.headers.get('refresh-token');
                 console.log(res.headers)
                 console.log(refreshToken)
+                let payload = accessToken.substring(accessToken.indexOf('.')+1,accessToken.lastIndexOf('.'));
+                const dec = base64.decode(payload)
+                console.log(dec)
 
                 localStorage.setItem("accessToken", accessToken);
                 localStorage.setItem("refreshToken", refreshToken)
@@ -193,10 +198,10 @@ const showSignUp = () => {
 };
 
 // 소셜로그인
-const snsLogin = (type) => {
+const socialLogin = (type) => {
     const redirect_uri = window.location.origin + '';
     console.log(redirect_uri)
-    window.location.href = `${import.meta.env.VITE_APP_API_URL}/user/login/${type}?redirect_uri=${redirect_uri}/`;
+    window.location.href = `${import.meta.env.VITE_APP_API_URL}/user/login/${type}?redirect_uri=${redirect_uri}`;
 };
 </script>
 
