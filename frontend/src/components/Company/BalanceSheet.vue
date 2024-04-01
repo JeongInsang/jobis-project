@@ -259,7 +259,7 @@ const getCompanySheet = () => {
     })
         .then((res) => {
             financialStatements.value = res.data.data;
-            // console.log(financialStatements.value);
+            console.log(financialStatements.value);
         })
         .catch((err) => {
             console.error(err);

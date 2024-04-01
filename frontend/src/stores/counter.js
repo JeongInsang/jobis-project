@@ -4,14 +4,8 @@ import axios from 'axios';
 import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
-<<<<<<< HEAD
-    // const API_URL = import.meta.env.VITE_APP_API_URL;
-    // const API_URL = "http://127.0.0.1:8080/api"
-    const API_URL = 'https://j10b309.p.ssafy.io';
-=======
     const isLogin = ref(false);
-    const API_URL = 'https://j10b309.p.ssafy.io/api';
->>>>>>> cfbd61e8c1ce5b4013b2ecd9c36b0d2c0f90375f
+    const API_URL = 'https://j10b309.p.ssafy.io';
     const token = localStorage.getItem('accessToken');
     const signUp = function (payload) {
         const { email, password } = payload;
