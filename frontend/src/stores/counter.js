@@ -29,5 +29,5 @@ export const useCounterStore = defineStore('counter', () => {
         router.push({ name: 'home' });
     };
 
-    return { logOut, isLogin, token };
+    return { logOut, isLogin, token, API_URL, currentPage };
 });
