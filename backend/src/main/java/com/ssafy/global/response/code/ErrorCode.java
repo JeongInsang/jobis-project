@@ -35,6 +35,7 @@ public enum ErrorCode implements ResponseCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 정보를 찾을 수 없습니다."),
 
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 패스워드입니다."),
+
     ACCOUNT_MISMATCH(HttpStatus.UNAUTHORIZED, "계정 정보가 일치하지 않습니다."),
 
     DUPLICATED_PASSWORD(HttpStatus.CONFLICT, "현재 패스워드와 같습니다."),
@@ -47,7 +48,7 @@ public enum ErrorCode implements ResponseCode {
 
     TENDENCY_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자성향 정보가 없습니다."),
 
-    APPLY_TENDENCY_FAIL(HttpStatus.BAD_REQUEST, "사용자성향 정보 입력 오류"),
+    APPLY_TENDENCY_FAIL(HttpStatus.BAD_REQUEST, "사용자성향 정보 입력이 안됩니다."),
 
     /**
      * Company
@@ -63,6 +64,8 @@ public enum ErrorCode implements ResponseCode {
     COMPANYYOUTH_NOT_FOUND(HttpStatus.NOT_FOUND, "청년친화기업 정보가 없습니다."),
 
     COMPANYQUARTERINFO_NOT_FOUND(HttpStatus.NOT_FOUND, "기업분기 정보가 없습니다."),
+
+    COMPANYPOPULAR_NOT_FOUND(HttpStatus.NOT_FOUND, "조회수 top10 기업정보가 없습니다."),
 
     /**
      * News
