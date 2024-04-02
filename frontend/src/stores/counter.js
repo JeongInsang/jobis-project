@@ -10,23 +10,24 @@ export const useCounterStore = defineStore('counter', () => {
     const currentPage = ref(0);
 
     const logOut = function () {
-        // axios({
-        //     method: 'post',
-        //     url: `${API_URL}/logout/`, // 임시임
-        // })
-        //     .then((res) => {
-        //         token.value = null;
-        //         currentUser.value = null;
-        //         localStorage.clear();
-        //         router.push({ name: 'main' });
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-        localStorage.clear();
-        isLogin.value = false;
+        axios({
+            method: 'post',
+            url: `${import.meta.env.VITE_APP_API_URL}/logout`, // 임시임
+        })
+            .then((res) => {
+                token.value = null;
+                // currentUser.value = null;
+                localStorage.clear();
+                isLogin.value = false;
+                localStorage.clear();
+
+                router.push({ name: 'home' });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         router.push({ name: 'home' });
     };
 
-    return { logOut, isLogin, token, API_URL, currentPage };
+    return { logOut, isLogin, token };
 });

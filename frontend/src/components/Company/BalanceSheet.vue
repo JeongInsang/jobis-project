@@ -9,7 +9,7 @@
                             <tr>
                                 <th>항목</th>
                                 <th>{{ quarter[0].firstQuarterDate }}</th>
-                                <th>{{ quarter[0].secoundQuarterDate }}</th>
+                                <th>{{ quarter[0].secondQuarterDate }}</th>
                                 <th>{{ quarter[0].thirdQuarterDate }}</th>
                             </tr>
                         </thead>
@@ -80,15 +80,19 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div>
+                    <div>
+                        <div class="card1" v-if="financialStatements && quarter !== null">
+                            <!-- Your existing HTML code -->
+                        </div>
+                        <canvas id="salesChart"></canvas>
+                    </div>
                     <h3>손익계산서</h3>
                     <table class="indicators">
                         <thead>
                             <tr>
                                 <th>항목</th>
                                 <th>{{ quarter[0].firstQuarterDate }}</th>
-                                <th>{{ quarter[0].secoundQuarterDate }}</th>
+                                <th>{{ quarter[0].secondQuarterDate }}</th>
                                 <th>{{ quarter[0].thirdQuarterDate }}</th>
                             </tr>
                         </thead>
@@ -241,6 +245,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import Chart from 'chart.js/auto';
 
 const store = useCounterStore();
 const API_URL = store.API_URL;
@@ -253,37 +258,72 @@ onMounted(() => {
 });
 
 const getCompanySheet = () => {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/statement/1006`,
-    })
+    axios
+        .get(`${API_URL}/api/company/statement/1006`)
         .then((res) => {
             financialStatements.value = res.data.data;
-            console.log(financialStatements.value);
+            console.log('Financial Statements:', financialStatements.value);
+            renderChart();
         })
         .catch((err) => {
-            console.error(err);
+            console.error('Error fetching financial statements:', err);
         });
 };
 
 const getCompanyQuarter = () => {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/quarter/1006`,
-    })
+    axios
+        .get(`${API_URL}/api/company/quarter/1006`)
         .then((res) => {
             quarter.value = res.data.data;
+            console.log('Quarter:', quarter.value);
         })
         .catch((err) => {
-            console.error(err);
+            console.error('Error fetching quarter:', err);
         });
 };
 
 const formatNumber = (value) => {
     return value ? parseFloat(value).toLocaleString() : '-';
 };
-</script>
 
+const renderChart = () => {
+    if (!financialStatements.value || !quarter.value) {
+        console.error('Financial statements or quarter data is not available');
+        return;
+    }
+
+    const salesData = financialStatements.value.map((item) => parseFloat(item.firstQuarter));
+    const labels = quarter.value.map((item) => item.firstQuarterDate);
+
+    const ctx = document.getElementById('salesChart');
+    if (!ctx) {
+        console.error('Canvas element not found');
+        return;
+    }
+
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: '매출액',
+                    data: salesData,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+};
+</script>
 <style scoped>
 @import url('@/assets/sheet.css');
 </style>

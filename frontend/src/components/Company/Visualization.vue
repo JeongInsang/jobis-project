@@ -12,16 +12,18 @@ import 'chartjs-plugin-datalabels';
 
 const chartCanvas = ref(null);
 const visualizationData = ref({
-    안정성: 9,
-    성장성: -9,
-    활동성: 4,
-    수익성: -2,
-    가용성: 5,
+    성장성: 1.6481,
+    활동성: 1.3759,
+    수익성: 3.5884,
+    안정성: 2.784,
+    효율성: 3.226,
 });
 
 onMounted(() => {
     const ctx = chartCanvas.value.getContext('2d');
+    const dataValues = Object.values(visualizationData.value);
     // console.log(visualizationData.value),
+    const normalizedData = dataValues.map((value) => Math.min(value, 9)); // 최대값을 9로 제한
     new Chart(ctx, {
         type: 'radar',
         data: {
@@ -29,7 +31,7 @@ onMounted(() => {
             datasets: [
                 {
                     label: '점수',
-                    data: Object.values(visualizationData.value),
+                    data: normalizedData,
                     backgroundColor: 'rgba(0, 123, 255, 0.7)',
                     borderColor: 'rgba(0, 123, 255, 1)',
                     borderWidth: 1,
@@ -40,7 +42,7 @@ onMounted(() => {
             scales: {
                 r: {
                     max: 9,
-                    min: -9,
+                    min: -6,
                     stepSize: 3,
                 },
             },

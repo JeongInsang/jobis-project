@@ -18,7 +18,14 @@ function logIn(payload, success, fail) {
     .catch(fail);
 }
 
+function utest(success, fail) {
+  local.get(`${url}/test`)
+    .then(success)
+    .catch(fail);
+}
+
 export {
   signUp,
   logIn,
+  utest,
 }
