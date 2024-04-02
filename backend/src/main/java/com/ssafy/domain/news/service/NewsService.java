@@ -41,7 +41,7 @@ public class NewsService {
             } else {
                 log.info("{} ({}) 기사를 외부 API에서도 찾을 수 없습니다.", name, companyId);
 
-                throw new RuntimeException(ErrorCode.NEWS_NOT_FOUND.getMessage());
+                throw new RestApiException(ErrorCode.NEWS_NOT_FOUND);
             }
         } else {
             return NewsDtoMapper.newsRedisToDto(newsRedis.get());
