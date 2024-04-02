@@ -18,7 +18,12 @@
                 </div>
                 <!-- <strong v-if="companyData.youthCompany">청년친화강소기업여부 :</strong> -->
                 <div v-if="companyData.youthCompany">
-                    <youthCompany />
+                    <div>고용률 : {{ youthCompanyData[0].employmentRate }}</div>
+                    <div>연봉 : {{ youthCompanyData[0].salary }}</div>
+                    <div>청년비율 : {{ youthCompanyData[0].youthRate }}</div>
+                    <div>청년고용률: {{ youthCompanyData[0].youthHireRate }}</div>
+                    <div>청년고용증가인원 : {{ youthCompanyData[0].youthHireIncreasingCnt }}</div>
+                    <div>청년고용증가율 : {{ youthCompanyData[0].youthHireIncreasingRate }}</div>
                 </div>
             </div>
         </div>
@@ -29,9 +34,9 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
-import youthCompany from '@/components/Company/youthCompany.vue';
 
 const companyData = ref(null);
+const youthCompanyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
 onMounted(() => {
@@ -64,6 +69,7 @@ const getYouthCompanyInformation = () => {
         .then((res) => {
             // 청년친화강소기업 정보를 가져와서 처리
             console.log(res.data);
+            youthCompanyData.value = res.data.data;
         })
         .catch((err) => {
             console.log(err);

@@ -6,7 +6,7 @@
                     <th>구분</th>
                     <th>계정명</th>
                     <th>{{ quarter[0].firstQuarterDate }}</th>
-                    <th>{{ quarter[0].secoundQuarterDate }}</th>
+                    <th>{{ quarter[0].secondQuarterDate }}</th>
                     <th>{{ quarter[0].thirdQuarterDate }}</th>
                 </tr>
             </thead>
