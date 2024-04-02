@@ -34,7 +34,7 @@ public class NewsService {
 
             NewsData externalNews = fetchNewsFromExternalApi(name);
 
-            if (externalNews != null) {
+            if (externalNews.getNews() != null && externalNews.getKeywords() != null) {
                 log.info("{} ({}) 기사를 Redis에 저장합니다...", name, companyId);
 
                 return saveNewsToRedisAndReturnResponse(companyId, externalNews);
