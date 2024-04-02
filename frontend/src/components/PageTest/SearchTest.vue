@@ -18,7 +18,7 @@ import { useCounterStore } from '@/stores/counter';
 // 기업 리스트 받을 변수
 const data = ref([]);
 const store = useCounterStore();
-const page = ref(0);
+const page = ref(store.currentPage);
 const size = ref(null);
 const keyword = ref('');
 const type = ref('');
@@ -26,6 +26,8 @@ const location = ref('');
 const API_URL = store.API_URL;
 
 const fetchData = async () => {
+    console.log(page.value);
+    console.log(store.currentPage);
     try {
         const response = await axios.get(
             `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`
@@ -40,11 +42,13 @@ const fetchData = async () => {
 const previousPage = () => {
     if (page.value > 0) {
         page.value--;
+        store.currentPage--;
     }
 };
 
 const nextPage = () => {
     page.value++;
+    store.currentPage++;
 };
 
 onMounted(fetchData);
