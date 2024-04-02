@@ -1,7 +1,11 @@
 package com.ssafy.domain.company.service;
 
 import static com.ssafy.domain.company.entity.QCompany.company;
+import static com.ssafy.domain.company.entity.QCompanyScrap.companyScrap;
 
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.domain.company.dto.*;
 import com.ssafy.domain.company.dto.response.*;
@@ -11,13 +15,11 @@ import com.ssafy.domain.company.repository.*;
 import com.ssafy.domain.users.entity.Users;
 import com.ssafy.domain.users.exception.UserNotFoundException;
 import com.ssafy.domain.users.repository.UserRepository;
-import jakarta.persistence.EntityManager;
+import com.ssafy.global.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +40,8 @@ public class CompanyService {
     private final CompanyScrapRepository companyScrapRepository;
     private final UserRepository userRepository;
     private final JPAQueryFactory jpaQueryFactory;
-    private final EntityManager entityManager;
+    private final AuthUtil authUtil;
+
 
     /**
      * 기업 검색
@@ -50,11 +53,14 @@ public class CompanyService {
      * @return
      */
 
+
     public Page<CompanySearchResponse> getCompanies(Pageable pageable, String keyword, List<String> location, List<String> type) {
         log.info("pageable = {} keyword = {} location = {} type = {}", pageable, keyword, location, type);
 
 
-        List<CompanySearchResponse> companyList = jpaQueryFactory
+        // 비회원이 기업 검색 조회할 때 (스크랩 여부 포함 x)
+        if(!authUtil.isAuthenticated()){
+            List<CompanySearchResponse> companyList = jpaQueryFactory
                 .selectFrom(company)
                 .where(
                         containsKeyword(keyword),
@@ -66,6 +72,35 @@ public class CompanyService {
                 .stream()
                 .map(CompanySearchDtoMapper::companySearchResponse)
                 .collect(Collectors.toList());
+
+            log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
+            long totalSize = companyList.size();
+
+            log.info("totalsize = {}", totalSize);
+            return new PageImpl<>(companyList, pageable, totalSize);
+        }
+
+        // 비회원이 기업 검색할 때 (스크랩 여부 포함 o)
+        List<CompanySearchResponse> companyList = jpaQueryFactory
+                .select(Projections.bean(CompanySearchResponse.class,
+                        company.id,
+                        company.name,
+                        company.address,
+                        company.type,
+
+                        // isScrapped는 엔티티안에 없어서 서브쿼리 날려줘야함
+                        ExpressionUtils.as(JPAExpressions.selectOne()
+                                .from(companyScrap)
+                                .where(companyScrap.company.eq(company).and(companyScrap.user.id.eq(authUtil.getLoginUserId())))
+                                .exists(), "isScraped"))) // isScraped 필드 추가
+                .from(company)
+                .where(
+                        containsKeyword(keyword),
+                        inLocation(location),
+                        inType(type))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
         log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
         long totalSize = companyList.size();
@@ -112,6 +147,7 @@ public class CompanyService {
                 .orElseThrow(CompanyNotFoundException::new);
         List<CompanyStatement> companyStatements = companyStatementRepository.findAllByCompany(company);
         log.info("== statement : {}", companyStatements.size());
+        log.info("어라??");
         return CompanyStatementDtoMapper.companyStatementEntityToDtoList(companyStatements);
     }
 
@@ -156,6 +192,19 @@ public class CompanyService {
 
 
     /**
+     * 기업 top10 정보 조회
+     * @return
+     */
+
+    public List<CompanyResponse> getPopularCompanies() {
+        List<Company> popularCompanyInfo = companyRepository.findByOrderByViewsDesc(Limit.of(10));
+        return CompanyDtoMapper.companyEntityToDtoList(popularCompanyInfo);
+    }
+
+
+
+
+    /**
      * 관심기업 스크랩
      * @param companyId
      * @param userId
@@ -183,6 +232,17 @@ public class CompanyService {
                 .orElseThrow(UserNotFoundException::new);
 
         companyScrapRepository.deleteCompanyScrapByUserAndCompany(user, company);
+    }
+
+
+
+    // ToDo: 스크랩 여부 조회
+    public void IsCompanyScraped(Integer companyId, Integer userId){
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(CompanyNotFoundException::new);
+        Users user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
     }
 
 }

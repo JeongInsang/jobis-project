@@ -2,7 +2,11 @@ package com.ssafy.domain.company.controller;
 
 
 import com.ssafy.domain.company.dto.response.*;
+import com.ssafy.domain.company.entity.Company;
+import com.ssafy.domain.company.exception.CompanyNotFoundException;
 import com.ssafy.domain.company.service.CompanyService;
+import com.ssafy.domain.users.entity.Users;
+import com.ssafy.domain.users.exception.UserNotFoundException;
 import com.ssafy.global.response.code.SuccessCode;
 import com.ssafy.global.response.structure.SuccessResponse;
 import com.ssafy.global.util.AuthUtil;
@@ -65,6 +69,7 @@ public class CompanyController {
     @GetMapping("/statement/{companyId}")
     public ResponseEntity<Object> companyStatement(@PathVariable("companyId") Integer id){
         List<CompanyStatementResponse> companyStatementResponseList = companyService.findCompanyStatement(id);
+        log.info("69 line, CompanyController, 재무재표");
         return SuccessResponse.createSuccess(SuccessCode.FIND_STATEMENT_SUCCESS, companyStatementResponseList);
     }
 
@@ -99,7 +104,17 @@ public class CompanyController {
     @GetMapping("/quarter/{companyId}")
     public ResponseEntity<Object> companyQuarterInfo(@PathVariable("companyId") Integer id) {
         List<CompanyQuarterInfoResponse> companyQuarterInfoResponseList = companyService.findCompanyQuarterInfo(id);
-        return SuccessResponse.createSuccess(SuccessCode.FIND_COMPANYQUARTERINFO_SUCCESS, companyQuarterInfoResponseList);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_COMPANYYQUARTERINFO_SUCCESS, companyQuarterInfoResponseList);
+    }
+
+    /**
+     * 기업 top10 정보 조회
+     * @return
+     */
+    @GetMapping("/popular")
+    public ResponseEntity<Object> getPopularCompanies() {
+        List<CompanyResponse> popularCompanyResponseList = companyService.getPopularCompanies();
+        return SuccessResponse.createSuccess(SuccessCode.FIND_COMPANYPOPULAR_SUCCESS, popularCompanyResponseList);
     }
 
 
@@ -126,4 +141,5 @@ public class CompanyController {
         companyService.companyScrapCancel(id, authUtil.getLoginUserId());   // 수정해야댇
         return SuccessResponse.createSuccess(SuccessCode.CANCEL_SCRAP_SUCCESS);
     }
+
 }

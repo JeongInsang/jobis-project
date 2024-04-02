@@ -10,6 +10,7 @@ public class CompanySearchDtoMapper {
 
     public static CompanySearchResponse companySearchResponse(final Company company){
         return CompanySearchResponse.builder()
+                .companyId(company.getId())
                 .name(company.getName())
                 .address(company.getAddress())
                 .type(company.getType())
@@ -21,4 +22,5 @@ public class CompanySearchDtoMapper {
                 .map(CompanySearchDtoMapper::companySearchResponse)
                 .collect(Collectors.toList());
     }
+
 }
