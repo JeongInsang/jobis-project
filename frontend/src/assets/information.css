@@ -22,7 +22,6 @@
     border-radius: 10px;
     padding: 20px;
 }
-
 .card-content {
     display: flex;
     align-items: center;
@@ -63,7 +62,7 @@
 .indicators td {
     border: 1px solid #ccc;
     padding: 8px;
-    text-align: right;
+    text-align: center;
 }
 
 .financial-statements th,

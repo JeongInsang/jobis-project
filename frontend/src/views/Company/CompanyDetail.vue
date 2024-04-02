@@ -9,6 +9,7 @@
         </div>
     </div>
     <div class="bottom-section">
+        <youthCompany />
         <BalanceSheet />
         <FinancialRatio />
         <License />
@@ -26,14 +27,36 @@ import CompanyVisualization from '@/components/Company/CompanyVisualization.vue'
 import CompanyInformation from '@/components/Company/CompanyInformation.vue';
 import BalanceSheet from '@/components/Company/BalanceSheet.vue';
 import FinancialRatio from '@/components/Company/FinancialRatio.vue';
-
+import youthCompany from '@/components/Company/youthCompany.vue';
 // params로 쏜 CompanyId 받음 => 추후에 axios 쏠 때 이 companyId 값으로 쏘면 됨
 import { useRoute } from 'vue-router';
+
+const youthCompanyData = ref(null);
+const accessToken = localStorage.getItem('accessToken');
+const store = useCounterStore();
+const API_URL = store.API_URL;
+
+onMounted(() => {
+    getYouthCompanyInformation();
+});
+
+const getYouthCompanyInformation = () => {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/company/youthcompany/1006`,
+    })
+        .then((res) => {
+            // 청년친화강소기업 정보를 가져와서 처리
+            console.log(res.data);
+            youthCompanyData.value = res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 const route = useRoute();
 // const companyId = ref(route.params);
 // console.log(companyId.value);
-const store = useCounterStore();
-const accessToken = localStorage.getItem('accessToken');
 </script>
 
 <style scoped>
