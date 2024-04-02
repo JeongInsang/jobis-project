@@ -58,7 +58,7 @@ public class NewsService {
     }
 
     private NewsData fetchNewsFromExternalApi(String name) {
-        WebClient webClient = WebClient.builder().baseUrl("http://localhost:8000").build();
+        WebClient webClient = WebClient.builder().baseUrl("http://j10b309.p.ssafy.io:8000").build();
 
         return webClient.get()
                 .uri("/news/{name}", name)
