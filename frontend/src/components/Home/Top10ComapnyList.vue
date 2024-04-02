@@ -1,53 +1,63 @@
 <template>
-    <h1 class="container" style="margin-bottom: 5rem; font-family: 'Pretendard-Black'">
-        # 조회수 상위
+    <h1
+        style="
+            margin-bottom: 5rem;
+            font-family: 'Pretendard-Light';
+            text-align: start;
+            margin-left: 1em;
+            margin-bottom: 40px;
+            margin-top: 80px;
+        ">
+        # 조회수 많은 기업
     </h1>
-    <div class="container">
-        <Swiper
-            :loop="true"
-            :speed="15000"
-            :free-mode="true"
-            :modules="[EffectCards, Autoplay]"
-            :autoplay="{
-                delay: 1,
-                disableOnInteraction: false,
-            }">
-            <SwiperSlide>
-                <div class="swiper-slide">
-                    <div class="card-container" v-for="comapny in companyList">
-                        <div class="card card-size">
-                            <div class="card-body">
-                                <img
-                                    style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
-                                    src="@/assets/img/jobis.png"
-                                    alt="" />
-                                <h5 style="font-family: Pretendard-Bold" class="card-title">
-                                    {{ comapny }}
-                                </h5>
+    <section style="background-color: rgb(241, 241, 241); height: 50vh" class="d-flex">
+        <div class="container" style="align-items: center; justify-content: center">
+            <Swiper
+                :loop="true"
+                :speed="15000"
+                :free-mode="true"
+                :modules="[EffectCards, Autoplay]"
+                :autoplay="{
+                    delay: 1,
+                    disableOnInteraction: false,
+                }">
+                <SwiperSlide>
+                    <div class="swiper-slide">
+                        <div class="card-container" v-for="comapny in companyList">
+                            <div class="card card-size">
+                                <div class="card-body">
+                                    <img
+                                        style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
+                                        src="@/assets/img/jobis.png"
+                                        alt="" />
+                                    <h5 style="font-family: Pretendard-Light" class="card-title">
+                                        {{ comapny }}
+                                    </h5>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </SwiperSlide>
-            <SwiperSlide>
-                <div class="swiper-slide">
-                    <div class="card-container" v-for="company in companyList2">
-                        <div class="card card-size">
-                            <div class="card-body">
-                                <img
-                                    style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
-                                    src="@/assets/img/jobis.png"
-                                    alt="" />
-                                <h5 style="font-family: Pretendard-Bold" class="card-title">
-                                    {{ company }}
-                                </h5>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <div class="swiper-slide">
+                        <div class="card-container" v-for="company in companyList2">
+                            <div class="card card-size">
+                                <div class="card-body">
+                                    <img
+                                        style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
+                                        src="@/assets/img/jobis.png"
+                                        alt="" />
+                                    <h5 style="font-family: Pretendard-Light" class="card-title">
+                                        {{ company }}
+                                    </h5>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </SwiperSlide>
-        </Swiper>
-    </div>
+                </SwiperSlide>
+            </Swiper>
+        </div>
+    </section>
 </template>
 
 <script setup>
@@ -67,7 +77,7 @@ onMounted(() => {
 const getTopViewList = () => {
     axios({
         method: 'get',
-        url: `${store.API_URL}/company/popular`,
+        url: `${store.API_URL}/api/company/popular`,
     })
         .then((res) => {
             companyList1.value = res.data;
@@ -91,7 +101,7 @@ const companyList2 = ['상위6', '상위7', '상위8', '상위9', '상위10'];
 .swiper-slide {
     text-align: center;
 
-    background: #fff;
+    background: rgb(241, 241, 241);
     display: flex;
     justify-content: center;
     align-items: center;
