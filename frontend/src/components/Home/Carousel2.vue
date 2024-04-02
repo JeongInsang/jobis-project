@@ -2,13 +2,13 @@
     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner" style="height: 300px">
             <div class="carousel-item active" data-bs-interval="3000">
-                <img src="@/assets/img/banner1.png" class="d-block w-100" alt="..." />
+                <img src="@/assets/img/banner1.png" class="d-block w-100 border" alt="..." />
             </div>
             <div class="carousel-item" data-bs-interval="3000">
-                <img src="@/assets/img/banner2.png" class="d-block w-100" alt="..." />
+                <img src="@/assets/img/banner2.png" class="d-block w-100 border" alt="..." />
             </div>
             <div class="carousel-item" data-bs-interval="3000">
-                <img src="@/assets/img/banner3.png" class="d-block w-100" alt="..." />
+                <img src="@/assets/img/banner3.png" class="d-block w-100 border" alt="..." />
             </div>
         </div>
         <button
@@ -32,4 +32,8 @@
 
 <script setup></script>
 
-<style scoped></style>
+<style scoped>
+.border {
+    border-radius: 1em;
+}
+</style>

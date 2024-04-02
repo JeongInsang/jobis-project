@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="font-family: 'Pretendard-Bold'">
         <div class="welcome">
             <div class="pinkbox" :style="{ transform: pinkboxTransform }">
                 <div class="signup" :class="{ nodisplay: !showSignup }">
@@ -43,9 +43,18 @@
                         >
                         <button class="button submit">로그인</button>
                     </form>
-                    <div>
-                        <button @click="snsLogin('kakao')">
-                            <h5>카카오</h5>
+                    <div class="social-buttons-container">
+                        <!-- 카카오 로그인 버튼 -->
+                        <button @click="snsLogin('kakao')" class="sns-button">
+                            <img src="@/img/kakao.png" alt="Kakao" class="sns-icon">
+                        </button>
+                        <!-- 구글 로그인 버튼 -->
+                        <button @click="snsLogin('google')" class="sns-button">
+                            <img src="@/img/google.png" alt="Google" class="sns-icon">
+                        </button>
+                        <!-- 네이버 로그인 버튼 -->
+                        <button @click="snsLogin('naver')" class="sns-button">
+                            <img src="@/img/naver.png" alt="Naver" class="sns-icon">
                         </button>
                     </div>
                 </div>
@@ -157,17 +166,17 @@ const formLogIn = () => {
     if (loginEmailValid.value == true) {
         // store.signUp(payload);
         if (loginPasswordValid.value == true) {
-            console.log(payload);
             logIn(payload, (res) => {
                 // 로그인 성공
                 const accessToken = res.headers.get('authorization');
                 const refreshToken = res.headers.get('refresh-token');
-                console.log(res.headers);
-                console.log(refreshToken);
+                // console.log(res.headers);
+                // console.log(refreshToken);
 
-                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('accessToken', accessToken.replace('Bearer ', ''));
                 localStorage.setItem('refreshToken', refreshToken);
-                store.isLogin = true;
+                store.setIsLogin(true);
+
                 router.push({ name: 'home' });
             }),
                 (error) => {
@@ -199,7 +208,7 @@ const showSignUp = () => {
 const snsLogin = (type) => {
     const redirect_uri = window.location.origin + '';
     console.log(redirect_uri);
-    window.location.href = `${import.meta.env.VITE_APP_API_URL}/user/login/${type}?redirect_uri=${redirect_uri}/`;
+    window.location.href = `${import.meta.env.VITE_APP_API_URL}/user/login/${type}?redirect_uri=${redirect_uri}`;
 };
 </script>
 

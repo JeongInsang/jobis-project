@@ -34,6 +34,7 @@
     position: relative;
     flex: 1;
     margin: 0px;
+    font-family: 'Pretendard-Bold';
 }
 .navigation {
     background: #ffffff;
@@ -53,6 +54,7 @@
     line-height: 24px;
     font-weight: 400;
     position: relative;
+    font-family: 'Pretendard-Bold';
 }
 .primary {
     background: #007bff;
@@ -74,7 +76,6 @@
 .title2 {
     color: #ffffff;
     text-align: left;
-    font-family: 'Roboto-Medium', sans-serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 500;

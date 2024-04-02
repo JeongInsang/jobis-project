@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CompanyQuarterInfoRepository extends JpaRepository<CompanyQuarterInfo, Integer> {
 
-    // 기업 청년친화 조회
+    // 기업 분기정보 조회
     List<CompanyQuarterInfo> findAllByCompany(Company company);
 }

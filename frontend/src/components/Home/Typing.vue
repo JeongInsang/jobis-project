@@ -3,7 +3,7 @@
         <div class="background-image">
             <img :src="getImageUrl(fname)" class="background-image" />
         </div>
-        <div class="title1">당신은</div>
+        <div class="title1">우리는</div>
         <div class="typing-animation" id="typing-animation"></div>
         <div class="title2">될 수 있습니다.</div>
     </div>
@@ -31,7 +31,7 @@ setInterval(() => {
 }, 5000);
 
 // 타이핑할 문자열 배열
-const texts = ['Engineer', 'Programmer', 'Doctor'];
+const texts = ['개발자', '엔지니어', '기획자'];
 
 // 현재 텍스트 인덱스
 let textIndex = 0;
@@ -102,24 +102,14 @@ onMounted(() => {
     z-index: -2;
     /* 가로세로 비율 유지 */
     object-fit: cover;
-    /* 애니메이션 효과 추가 */
-    /* animation: fadeIn 1s; */
 }
-/* @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-} */
 
 .typing-animation {
     font-size: 3em;
     color: yellow;
-    font-family: Arial, sans-serif;
+    font-family: 'Pretendard-Bold';
     position: absolute;
-    top: 50%;
+    top: 46%;
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: hidden; /* 텍스트 넘치는 부분 숨기기 */
@@ -131,7 +121,7 @@ onMounted(() => {
 
 .typing-animation::after {
     content: '';
-    border-left: 2px solid white; /* 커서 선 스타일 및 색상 설정 */
+    border-left: 2px solid yellow; /* 커서 선 스타일 및 색상 설정 */
     margin-left: 5px; /* 커서와 텍스트 사이의 간격 조정 */
     animation: blink-caret 0.75s step-end infinite; /* 커서 깜빡임 애니메이션 적용 */
 }
@@ -151,10 +141,11 @@ onMounted(() => {
         border-color: transparent;
     }
     50% {
-        border-color: white; /* 흰색으로 변경 */
+        border-color: yellow; /* 커서 색상 */
     }
 }
 .title1 {
+    font-family: 'Pretendard-Black';
     font-size: 4em;
     color: white;
     position: absolute;
@@ -167,6 +158,7 @@ onMounted(() => {
 }
 
 .title2 {
+    font-family: 'Pretendard-Black';
     font-size: 4em;
     color: white;
     position: absolute;

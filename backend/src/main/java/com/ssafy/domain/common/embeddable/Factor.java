@@ -2,6 +2,7 @@ package com.ssafy.domain.common.embeddable;
 
 import java.util.Objects;
 
+import com.ssafy.domain.users.dto.request.TendencyRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -47,6 +48,16 @@ public class Factor {
     @Override
     public int hashCode() {
         return Objects.hash(stability, profitability, activity, growth, efficiency);
+    }
+
+    public static Factor createFactor(TendencyRequest tendencyRequest){
+        Factor factor = new Factor();
+        factor.stability = tendencyRequest.getStability();
+        factor.profitability = tendencyRequest.getStability();
+        factor.activity = tendencyRequest.getActivity();
+        factor.growth = tendencyRequest.getGrowth();
+        factor.efficiency = tendencyRequest.getEfficiency();
+        return factor;
     }
 
 }

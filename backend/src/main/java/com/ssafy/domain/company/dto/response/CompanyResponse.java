@@ -35,4 +35,6 @@ public class CompanyResponse {
 
     private Long views;
 
+    private boolean isScraped;
+
 }
