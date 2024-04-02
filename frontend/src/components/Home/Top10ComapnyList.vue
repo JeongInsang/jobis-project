@@ -23,15 +23,15 @@
                 }">
                 <SwiperSlide>
                     <div class="swiper-slide">
-                        <div class="card-container" v-for="comapny in companyList">
+                        <div class="card-container" v-for="comapny in companyList1">
                             <div class="card card-size">
                                 <div class="card-body">
                                     <img
-                                        style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
+                                    class="img-size"
                                         src="@/assets/img/jobis.png"
                                         alt="" />
-                                    <h5 style="font-family: Pretendard-Light" class="card-title">
-                                        {{ comapny }}
+                                    <h5 class="card-title font">
+                                        {{ comapny.name }}
                                     </h5>
                                 </div>
                             </div>
@@ -44,11 +44,11 @@
                             <div class="card card-size">
                                 <div class="card-body">
                                     <img
-                                        style="height: 7rem; width: 7rem; margin-bottom: 0.5rem"
+                                        class="img-size"
                                         src="@/assets/img/jobis.png"
                                         alt="" />
-                                    <h5 style="font-family: Pretendard-Light" class="card-title">
-                                        {{ company }}
+                                    <h5 class="card-title font">
+                                        {{ company.name }}
                                     </h5>
                                 </div>
                             </div>
@@ -69,7 +69,9 @@ import { useCounterStore } from '@/stores/counter';
 import { onMounted, ref } from 'vue';
 
 const store = useCounterStore();
-const companyList1 = ref(null);
+const companyList = ref(null);
+const companyList1 = ref([])
+const companyList2 = ref([])
 
 onMounted(() => {
     getTopViewList();
@@ -80,16 +82,20 @@ const getTopViewList = () => {
         url: `${store.API_URL}/api/company/popular`,
     })
         .then((res) => {
-            companyList1.value = res.data;
-            console.log('상위 조회수 리스트 조회', companyList1.value);
+            companyList.value = res.data.data;
+            console.log('상위 조회수 리스트 조회 : ', companyList.value);
+            // companyList를 반으로 나누어 companyList1과 companyList2에 할당
+            const halfIndex = Math.ceil(companyList.value.length / 2);
+            companyList1.value = companyList.value.slice(0, halfIndex);
+            companyList2.value = companyList.value.slice(halfIndex);
+         
         })
         .catch((err) => {
             console.log(err);
         });
 };
 
-const companyList = ['상위1', '상위2', '상위3', '상위4', '상위5'];
-const companyList2 = ['상위6', '상위7', '상위8', '상위9', '상위10'];
+
 </script>
 
 <style scoped>
@@ -118,5 +124,14 @@ const companyList2 = ['상위6', '상위7', '상위8', '상위9', '상위10'];
 .card-size {
     width: 10rem;
     height: 10rem;
+}
+.img-size {
+    height: 7rem;
+    width: 7rem;
+    margin-bottom: 0.5rem;
+}
+.font {
+    font-family: 'Pretendard-Light';
+    font-size: 0.8rem;
 }
 </style>
