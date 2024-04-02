@@ -5,74 +5,33 @@ import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
     const isLogin = ref(false);
-    const API_URL = 'https://j10b309.p.ssafy.io';
-    const token = localStorage.getItem('accessToken');
-    const signUp = function (payload) {
-        const { email, password } = payload;
+    // const API_URL = 'https://j10b309.p.ssafy.io/api';
+    const token = ref(localStorage.getItem('accessToken'));
+
+    const logOut = function () {
         axios({
             method: 'post',
-            url: `${API_URL}/user/register`,
-            data: {
-                email,
-                password,
-            },
+            url: `${import.meta.env.VITE_APP_API_URL}/logout`, // 임시임
         })
             .then((res) => {
-                console.log('회원가입 성공, ', res);
-            })
-            .catch((err) => console.log(err));
-    };
-
-    const logIn = function (payload) {
-        const email = payload.email;
-        const password = payload.password;
-
-        axios({
-            method: 'post',
-            url: `${API_URL}/user/login`,
-            data: {
-                email,
-                password,
-            },
-        })
-            .then((res) => {
-                const accessToken = res.headers.get('authorization');
-                const refreshToken = res.headers.get('refresh-token');
-                console.log(res.headers);
-                console.log(refreshToken);
-
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken);
-                isLogin = true;
+                token.value = null;
+                // currentUser.value = null;
+                localStorage.clear();
+                isLogin.value = false;
+                localStorage.clear();
 
                 router.push({ name: 'home' });
-
-                // 현재 로그인한 유저 정보 받아오기
             })
             .catch((err) => {
                 console.log(err);
-                alert('비밀번호가 틀렸거나, 가입되지 않은 사용자입니다.');
             });
-    };
-
-    const logOut = function () {
-        // axios({
-        //     method: 'post',
-        //     url: `${API_URL}/logout/`, // 임시임
-        // })
-        //     .then((res) => {
-        //         token.value = null;
-        //         currentUser.value = null;
-        //         localStorage.clear();
-        //         router.push({ name: 'main' });
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-        localStorage.clear();
-        isLogin.value = false;
         router.push({ name: 'home' });
     };
 
-    return { API_URL, signUp, logIn, logOut, isLogin, token };
-});
+    const setIsLogin = (value) => {
+        isLogin.value = value;
+      };
+
+    return { logOut, isLogin, token, setIsLogin };
+},
+{persist:true});
