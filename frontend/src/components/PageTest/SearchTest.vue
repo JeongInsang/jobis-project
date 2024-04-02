@@ -18,7 +18,7 @@ import { useCounterStore } from '@/stores/counter';
 // 기업 리스트 받을 변수
 const data = ref([]);
 const store = useCounterStore();
-const page = store.currentPage;
+const page = ref(0);
 const size = ref(null);
 const keyword = ref('');
 const type = ref('');
