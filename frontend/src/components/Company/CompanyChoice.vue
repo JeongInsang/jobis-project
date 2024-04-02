@@ -81,184 +81,36 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import 'chartjs-plugin-datalabels';
 
-// onMounted(() => {
-//     createMatches();
-// });
+onMounted(() => {
+    createMatches();
+    companiesInfo();
+});
 const store = useCounterStore();
 const isNextRound = ref(false);
-const companies = [
-    {
-        name: '기업1',
-        visualizationData: {
-            안정성: 9,
-            성장성: -9,
-            활동성: 4,
-            수익성: -2,
-            가용성: 5,
-        },
-    },
-    {
-        name: '기업2',
-        visualizationData: {
-            안정성: 1,
-            성장성: -2,
-            활동성: 3,
-            수익성: -4,
-            가용성: 5,
-        },
-    },
-    {
-        name: '기업3',
-        visualizationData: {
-            안정성: 1,
-            성장성: -6,
-            활동성: 6,
-            수익성: 1,
-            가용성: -5,
-        },
-    },
-    {
-        name: '기업4',
-        visualizationData: {
-            안정성: -9,
-            성장성: -1,
-            활동성: 5,
-            수익성: -5,
-            가용성: 1,
-        },
-    },
-    {
-        name: '기업5',
-        visualizationData: {
-            안정성: 4,
-            성장성: -3,
-            활동성: 1,
-            수익성: -3,
-            가용성: 4,
-        },
-    },
-    {
-        name: '기업6',
-        visualizationData: {
-            안정성: 6,
-            성장성: -5,
-            활동성: 3,
-            수익성: -1,
-            가용성: 4,
-        },
-    },
-    {
-        name: '기업7',
-        visualizationData: {
-            안정성: 5,
-            성장성: -2,
-            활동성: 3,
-            수익성: -7,
-            가용성: 1,
-        },
-    },
-    {
-        name: '기업8',
-        visualizationData: {
-            안정성: 7,
-            성장성: -4,
-            활동성: 3,
-            수익성: -1,
-            가용성: 4,
-        },
-    },
-    {
-        name: '기업9',
-        visualizationData: {
-            안정성: 8,
-            성장성: -1,
-            활동성: 3,
-            수익성: 0,
-            가용성: 2,
-        },
-    },
-    {
-        name: '기업10',
-        visualizationData: {
-            안정성: 9,
-            성장성: 9,
-            활동성: 1,
-            수익성: -7,
-            가용성: -4,
-        },
-    },
-    {
-        name: '기업11',
-        visualizationData: {
-            안정성: 9,
-            성장성: 0,
-            활동성: 7,
-            수익성: 2,
-            가용성: -5,
-        },
-    },
-    {
-        name: '기업12',
-        visualizationData: {
-            안정성: 5,
-            성장성: -3,
-            활동성: 1,
-            수익성: -3,
-            가용성: 0,
-        },
-    },
-    {
-        name: '기업13',
-        visualizationData: {
-            안정성: 1,
-            성장성: -3,
-            활동성: 5,
-            수익성: 7,
-            가용성: 8,
-        },
-    },
-    {
-        name: '기업14',
-        visualizationData: {
-            안정성: 3,
-            성장성: -2,
-            활동성: 5,
-            수익성: -6,
-            가용성: 2,
-        },
-    },
-    {
-        name: '기업15',
-        visualizationData: {
-            안정성: 3,
-            성장성: 2,
-            활동성: 3,
-            수익성: 1,
-            가용성: 2,
-        },
-    },
-    {
-        name: '기업16',
-        visualizationData: {
-            안정성: 4,
-            성장성: 1,
-            활동성: 3,
-            수익성: -1,
-            가용성: -2,
-        },
-    },
-];
+const companies = [];
 const matches = ref([]);
 const winners = ref([]);
 const winner = ref('');
 const currentMatchIndex = ref(0);
 let currentRound = ref('16강');
 const selectionConfirmed = ref(false);
-
+const API_URL = store.API_URL;
 const chartCanvas1 = ref(null);
 const chartCanvas2 = ref(null);
 // 차트 인스턴스를 저장할 변수 선언
-
+const companiesInfo = function () {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/worldcup`,
+    })
+        .then((res) => {
+            console.log(res.data);
+            companies.value = res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 let chartInstances = [];
 
 // 대진 생성 함수 수정

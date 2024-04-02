@@ -1,6 +1,6 @@
 <template>
     <CompanyChoice />
-    <WorldCupTest />
+    <!-- <WorldCupTest /> -->
 </template>
 
 <script setup>
