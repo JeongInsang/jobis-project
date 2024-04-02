@@ -9,8 +9,6 @@ function isTokenValid(token) {
     const payload = JSON.parse(base64.decode(token.split('.')[1])); // base-64 디코딩
     const expirationTime = payload.exp * 1000;
     const currentTime = Date.now();
-    console.log(expirationTime+' '+currentTime);
-    console.log(expirationTime - currentTime);
     return expirationTime - currentTime > 600000;
 }
 

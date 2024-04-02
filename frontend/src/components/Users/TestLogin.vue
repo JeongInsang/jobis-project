@@ -166,7 +166,6 @@ const formLogIn = () => {
     if (loginEmailValid.value == true) {
         // store.signUp(payload);
         if (loginPasswordValid.value == true) {
-            console.log(payload);
             logIn(payload, (res) => {
                 // 로그인 성공
                 const accessToken = res.headers.get('authorization');
