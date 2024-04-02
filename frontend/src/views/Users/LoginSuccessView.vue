@@ -1,30 +1,27 @@
-<script>
+<script setup>
 import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import router from '@/router';
+import { useCounterStore } from '@/stores/counter';
 
-export default {
-    name: 'LoginSuccess',
-    components: [],
-    setup() {
-        const route = useRoute();
+const store = useCounterStore();
 
-        onMounted(() => {
-            const accessToken = route.params.atk;
-            const refreshToken = route.params.rtk;
+const route = useRoute();
 
-            // Store the tokens in localStorage
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
+onMounted(() => {
+    const accessToken = route.params.atk;
+    const refreshToken = route.params.rtk;
 
-            // Redirect to the root path
+    // 로컬스토리지에 토큰 저장
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    store.setIsLogin(true);
 
-            window.location.href = '/';
-        });
-    },
-};
+    // Redirect to the root path
+    router.push({ name: 'home' });
+});
 </script>
 
 <style scoped>
-/* Your styles here */
+
 </style>
