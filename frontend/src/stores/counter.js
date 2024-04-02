@@ -5,8 +5,9 @@ import router from '@/router';
 
 export const useCounterStore = defineStore('counter', () => {
     const isLogin = ref(false);
-    // const API_URL = 'https://j10b309.p.ssafy.io/api';
+    const API_URL = 'https://j10b309.p.ssafy.io';
     const token = localStorage.getItem('accessToken');
+    const currentPage = ref(0);
 
     const logOut = function () {
         // axios({
@@ -27,5 +28,5 @@ export const useCounterStore = defineStore('counter', () => {
         router.push({ name: 'home' });
     };
 
-    return { logOut, isLogin, token };
+    return { logOut, isLogin, token, API_URL, currentPage };
 });

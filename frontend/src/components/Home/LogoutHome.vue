@@ -1,6 +1,7 @@
 <template>
     <div>
         <Typing />
+        <Top10ComapnyList />
         <GoWorldcup
             data-aos="fade-up"
             data-aos-offset="10"
@@ -19,8 +20,6 @@
             data-aos-mirror="true"
             data-aos-once="false"
             data-aos-anchor-placement="top-bottom" />
-
-        <Top10ComapnyList />
     </div>
 </template>
 

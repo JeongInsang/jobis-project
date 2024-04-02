@@ -1,6 +1,6 @@
 <template>
-    <div style="font-family: 'Pretendard-Bold'" class="container">
-        <h2>기업 리스트</h2>
+    <div style="font-family: 'Pretendard-Light'" class="container">
+        <h2 style="font-family: 'Pretendard-Bold'">기업 리스트</h2>
         <!-- <SearchButton /> -->
         <div class="d-flex w-100">
             <div class="input-group mb-3 ms-3 w-25">
@@ -128,63 +128,32 @@ import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 const store = useCounterStore();
 const API_URL = store.API_URL;
+
+const page = ref(1);
+const size = ref(null);
+const keyword = ref('');
+const type = ref('');
+const location = ref('');
+const comapnyDataList = ref([]);
 onMounted(() => {
-    getCompanyList();
+    // getCompanyList();
+    search();
 });
 
 // 회사명 검색 로직
-const keyword = ref('');
 const search = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${selectRegionFilter.value}&type=${selectTypeFilter.value}`,
+        url: `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`,
     })
         .then((res) => {
             comapnyDataList.value = res.data;
+            console.log(comapnyDataList.value);
         })
         .catch((err) => {
             console.error('회사명 검색 실패:', err);
         });
 };
-
-const comapnyDataList = ref(null); // dummyData 대신에 axios로 얻은 리스트 여기다 담아서 사용하면 됨
-const getCompanyList = () => {
-    axios({
-        method: 'get',
-        url: `${API_URL}/company/search?keyword=${keyword.value}&location=${selectRegionFilter.value}&type=${selectTypeFilter.value}`,
-    })
-        .then((res) => {
-            comapnyDataList.value = res.data;
-            console.log('회사 리트스들 확인용 : ', comapnyDataList.value);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-};
-
-const dummyData = [
-    { companyname: '회사명 1', companytype: '제조업', region: '서울', companyId: 1 },
-    { companyname: '회사명 2', companytype: '금융업', region: '부산', companyId: 2 },
-    { companyname: '회사명 3', companytype: '서비스업', region: '대구', companyId: 3 },
-    { companyname: '회사명 4', companytype: 'IT업', region: '인천', companyId: 4 },
-    { companyname: '회사명 5', companytype: '제조업', region: '광주', companyId: 5 },
-    { companyname: '회사명 6', companytype: '금융업', region: '대전', companyId: 6 },
-    { companyname: '회사명 7', companytype: '서비스업', region: '울산', companyId: 7 },
-    { companyname: '회사명 8', companytype: 'IT업', region: '세종', companyId: 8 },
-    { companyname: '회사명 9', companytype: '제조업', region: '경기', companyId: 9 },
-    { companyname: '회사명 10', companytype: '금융업', region: '강원', companyId: 10 },
-    { companyname: '회사명 11', companytype: '서비스업', region: '충청', companyId: 11 },
-    { companyname: '회사명 12', companytype: 'IT업', region: '전라', companyId: 12 },
-    { companyname: '회사명 13', companytype: '제조업', region: '경상', companyId: 13 },
-    { companyname: '회사명 14', companytype: '금융업', region: '제주', companyId: 14 },
-    { companyname: '회사명 15', companytype: '서비스업', region: '전남', companyId: 15 },
-    { companyname: '회사명 16', companytype: 'IT업', region: '전북', companyId: 16 },
-    { companyname: '회사명 17', companytype: '제조업', region: '충남', companyId: 17 },
-    { companyname: '회사명 18', companytype: '금융업', region: '경북', companyId: 18 },
-    { companyname: '회사명 19', companytype: '서비스업', region: '경남', companyId: 19 },
-    { companyname: '회사명 20', companytype: 'IT업', region: '강서', companyId: 20 },
-    { companyname: '회사명 21', companytype: 'IT업', region: '강서', companyId: 21 },
-];
 
 // 산업군 필터 검색 버튼 리스트
 const industries1 = [
@@ -231,38 +200,6 @@ const regions = [
     { id: 16, region: '경북' },
     { id: 17, region: '제주' },
 ];
-
-const pageSize = 10; // 한 페이지당 보여질 데이터 개수
-const currentPage = ref(0); // 현재 페이지
-
-// 페이지네이션 계산을 위한 computed property
-const paginatedData = computed(() => {
-    const startIndex = currentPage.value * pageSize;
-    const endIndex = startIndex + pageSize;
-    return dummyData.slice(startIndex, endIndex);
-});
-
-// 총 페이지 수 계산
-const totalPages = Math.ceil(dummyData.length / pageSize);
-
-// 이전 페이지로 이동하는 함수
-const prevPage = () => {
-    if (currentPage.value > 0) {
-        currentPage.value--;
-    }
-};
-
-// 다음 페이지로 이동하는 함수
-const nextPage = () => {
-    if (currentPage.value < totalPages - 1) {
-        currentPage.value++;
-    }
-};
-
-// 특정 페이지로 이동하는 함수
-const changePage = (page) => {
-    currentPage.value = page;
-};
 
 // watch로 현재 페이지 값이 바뀔 때 마다 회사리스트 가져오는 함수 실행
 // watch(currentPage.value, getCompanyList);
