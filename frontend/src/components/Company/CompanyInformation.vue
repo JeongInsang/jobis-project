@@ -65,17 +65,19 @@ onMounted(() => {
 
 const API_URL = store.API_URL;
 const getCompanyInformation = () => {
+    
     axios({
         method: 'get',
         url: `${API_URL}/api/company/info/${companyId.value}`,
     })
         .then((res) => {
             companyData.value = res.data.data;
-            scraped.value = res.data.data.scraped;
             if (companyData.value.youthCompany) {
                 getYouthCompanyInformation(); // 청년친화강소기업 여부가 true면 정보를 가져옴
             }
             console.log(companyData.value, 'companyData 입니다.');
+            getScrap()
+            scraped.value = res.data.data.isScraped;
             console.log(scraped.value, 'scraped입니다.');
         })
         .catch((err) => {
@@ -122,7 +124,26 @@ const scrap = () => {
         }
     }
 };
+// scrap true/false 유무 확인하는 로직
+const getScrap = () => {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/company/scrap/${companyId.value}`,
+        headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+    })
+    .then((res) => {
+                    console.log('스크랩 true/false 가져옵니다.', res);
+                    scraped.value = res.data.data   
+                })
+                .catch((err) => {
+                    console.log('스크랩 true/false 가져오기 실패', err);
+                });
+}
+
 const cancleScrap = () => {
+    console.log(scraped.value)
     axios({
         method: 'delete',
         url: `${API_URL}/api/company/scrap/${companyId.value}`,
@@ -132,6 +153,7 @@ const cancleScrap = () => {
     })
         .then((res) => {
             console.log('scrap 취소 성공', res);
+            getCompanyInformation();
         })
         .catch((err) => {
             console.log('scrap 취소 실패', err);
