@@ -28,7 +28,7 @@
                 <div class="title2">회원가입</div>
             </button> -->
             <div class="tab" v-if="store.isLogin">
-                <button class="primary" @click="logout">
+                <button class="primary" @click="formLogout">
                     <div class="title2">로그아웃</div>
                 </button>
             </div>
@@ -46,6 +46,8 @@ import router from '@/router';
 import { RouterLink } from 'vue-router';
 import { ref, watch, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
+import { logOut } from '@/apis/api/user';
+
 
 import Logo from './Logo.vue';
 import TestLogin from '../Users/TestLogin.vue';
@@ -60,9 +62,21 @@ const goLogin = () => {
     });
 };
 
-const logout = () => {
+const formLogout = () => {
     // 로그아웃 로직
-    store.logOut();
+    console.log("logout")
+    logOut(
+        (res) => {
+        console.log(res);
+        store.setIsLogin(false);
+        localStorage.clear();
+        router.push({ name: 'home' });
+        
+    },
+    (err) => {
+        console.log(err);
+    })
+    // store.logOut();
 };
 </script>
 
