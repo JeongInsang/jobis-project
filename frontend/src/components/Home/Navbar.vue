@@ -48,10 +48,6 @@ import { ref, watch, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import { logOut } from '@/apis/api/user';
 
-
-import Logo from './Logo.vue';
-import TestLogin from '../Users/TestLogin.vue';
-
 const store = useCounterStore();
 // 로그인 유무 확인
 console.log(store.isLogin);
