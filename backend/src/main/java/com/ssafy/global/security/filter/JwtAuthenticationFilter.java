@@ -84,19 +84,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("=== 토큰 재발급 메서드 ===");
         String accessToken = jwtUtil.extractAccessToken(request);
 
-        if (jwtUtil.validateToken(accessToken)) {
-            String id = jwtUtil.extractId(accessToken);
-            log.info("=== 토큰으로 가져온 유저아이디 : {} ===", id);
-            String myRefreshToken = jwtUtil.getRedisRefreshToken(id);
-            log.info(" 아이디로 가져온 리프레시토큰 : {}", myRefreshToken);
+//        if (jwtUtil.validateToken(accessToken)) {
+        String id = jwtUtil.extractId(accessToken);
+        log.info("=== 토큰으로 가져온 유저아이디 : {} ===", id);
+        String myRefreshToken = jwtUtil.getRedisRefreshToken(id);
+        log.info(" 아이디로 가져온 리프레시토큰 : {}", myRefreshToken);
 
-            if (refreshToken.equals(myRefreshToken)) {
-                log.info("일치하는 리프레시토큰 존재, 엑세스 + 리프레시토큰 재발급");
-                JwtDto reIssueJwt = jwtUtil.generateJwtDto(id);
+        if (refreshToken.equals(myRefreshToken)) {
+            log.info("일치하는 리프레시토큰 존재, 엑세스 + 리프레시토큰 재발급");
+            JwtDto reIssueJwt = jwtUtil.generateJwtDto(id);
 //                Users user = userRepository.findById(Integer.parseInt(id))
 //                        .orElseThrow(UserNotFoundException::new);
-                jwtUtil.setAccessAndRefreshToken(response, reIssueJwt);
-            }
+            jwtUtil.setAccessAndRefreshToken(response, reIssueJwt);
+
         }
         filterChain.doFilter(request, response);
     }
