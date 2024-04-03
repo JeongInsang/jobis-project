@@ -2,11 +2,13 @@ package com.ssafy.domain.company.dto.response;
 
 import com.ssafy.domain.common.embeddable.Factor;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 public class CompanyResponse {
 
     private Integer companyId;
@@ -35,6 +37,6 @@ public class CompanyResponse {
 
     private Long views;
 
-    private boolean isScraped;
+    private Boolean isScraped;
 
 }

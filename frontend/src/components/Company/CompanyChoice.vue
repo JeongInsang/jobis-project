@@ -50,6 +50,9 @@
                                     </div>
 
                             </div>
+                            <span>전체 분석 내용</span>
+                            <p style="width: 380px">{{ match.description }}</p>
+                        </div>
                         </div>
                     </div>
                 </transition>
@@ -199,17 +202,17 @@ const resetTournament = () => {
 // 다음 경기 시작
 const nextMatch = ref(null);
 const selectWinner = (matchIndex, winnerIndex) => {
-    const selectedMatch = matches.value[matchIndex][winnerIndex];
-    winners.value.push(selectedMatch);
-    styles.value = calculateStyles(selectedMatch); // 스타일 업데이트
-    selectionConfirmed.value = false;
-    setTimeout(() => {
-        selectionConfirmed.value = true;
-        currentMatchIndex.value++;
-        if (currentMatchIndex.value >= matches.value.length) {
-            startNextRound();
-        }
-    }, 50);
+  const selectedMatch = matches.value[matchIndex][winnerIndex];
+  winners.value.push(selectedMatch);
+
+  selectionConfirmed.value = false;
+  setTimeout(() => {
+    selectionConfirmed.value = true;
+    currentMatchIndex.value++;
+    if (currentMatchIndex.value >= matches.value.length) {
+      startNextRound();
+    }
+  }, 50);
 };
 
 // 다음 라운드 시작
@@ -252,33 +255,35 @@ watch(winner, (newValue) => {
     }
 });
 
-// 기업 수치에 따른 스타일 계산
-const calculateStyles = (match) => {
-  // 각 수치와 관련된 키를 배열로 저장합니다.
-  const factors = ['activity', 'efficiency', 'growth', 'profitability', 'stability'];
-  
-  // 각 수치를 값과 함께 객체 배열로 변환합니다.
-  const valuesWithKeys = factors.map(key => ({ key, value: match[key] }));
+const getStyle = (match, factor) => {
+  const values = [match.activity, match.efficiency, match.growth, match.profitability, match.stability];
+  const sortedValues = [...values].sort((a, b) => b - a);
+  const highestValue = sortedValues[0];
+  const secondHighestValue = sortedValues[1];
 
-  // 수치를 기준으로 내림차순 정렬합니다.
-  const sortedValues = valuesWithKeys.sort((a, b) => b.value - a.value);
+  if (match[factor] === highestValue) {
+    return { color: 'red' };
+  } else if (match[factor] === secondHighestValue) {
+    return { color: 'blue' };
+  }
 
-  // 가장 큰 값과 두 번째로 큰 값을 찾습니다.
-  const highestValueKey = sortedValues[0].key;
-  const secondHighestValueKey = sortedValues[1].key;
-
-  // 결과적으로 적용할 스타일 객체를 반환합니다.
-  return factors.reduce((styles, key) => {
-    if (key === highestValueKey) {
-      styles[key] = { color: 'red' };
-    } else if (key === secondHighestValueKey) {
-      styles[key] = { color: 'blue' };
-    } else {
-      styles[key] = {}; // 기본 스타일
-    }
-    return styles;
-  }, {});
+  return {}; // 기본 스타일
 };
+
+const matchStyles = computed(() => {
+  return matches.value.map(match => {
+    return {
+      match: match,
+      styles: {
+        activity: getStylesForMatch(match[0]).activity,
+        efficiency: getStylesForMatch(match[0]).efficiency,
+        growth: getStylesForMatch(match[0]).growth,
+        profitability: getStylesForMatch(match[0]).profitability,
+        stability: getStylesForMatch(match[0]).stability,
+      }
+    };
+  });
+});
 
 // 컴포넌트에서 사용할 수 있도록 `styles`를 반응형 참조로 만듭니다.
 const styles = ref({});
@@ -295,6 +300,13 @@ const styles = ref({});
 .fade-next-round-enter-active,
 .fade-next-round-leave-active {
     transition: opacity 0.2s ease-out;
+}
+.image {
+  transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+  transform: scale(0.95); /* 이미지 크기를 95%로 줄입니다 */
 }
 .card-container {
     display: flex;

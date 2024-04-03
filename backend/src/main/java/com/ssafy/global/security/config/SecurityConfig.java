@@ -2,6 +2,7 @@ package com.ssafy.global.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.domain.users.repository.UserRepository;
+import com.ssafy.domain.users.service.RefreshTokenService;
 import com.ssafy.global.oauth2.handler.OAuth2LoginFailureHandler;
 import com.ssafy.global.oauth2.handler.OAuth2LoginSuccessHandler;
 import com.ssafy.global.oauth2.service.CustomOAuth2UserService;
@@ -41,6 +42,7 @@ public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final RefreshTokenService refreshTokenService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -89,7 +91,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil, userRepository);
+        return new JwtAuthenticationFilter(jwtUtil, userRepository, refreshTokenService);
     }
 
 }
