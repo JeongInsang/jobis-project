@@ -55,6 +55,6 @@ public class UserController {
     @GetMapping("/scrap")
     public ResponseEntity<Object> usersScrapCompanyList(){
         List<CompanyResponse> companyResponseList = userService.findUserScrap(authUtil.getLoginUserId());
-        return SuccessResponse.createSuccess(SuccessCode.FIND_SCRAP_SUCCESS, companyResponseList);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_SCRAPCOMPANY_SUCCESS, companyResponseList);
     }
 }

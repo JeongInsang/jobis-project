@@ -2,14 +2,23 @@
 
 import axios from 'axios';
 import base64 from 'base-64';
+import router from '@/router';
 
 // 토큰이 10분 미만인지 검증
-function isTokenValid(token) {
+function isTokenLeftTenMin(token) {
     if (!token) return false;
     const payload = JSON.parse(base64.decode(token.split('.')[1])); // base-64 디코딩
     const expirationTime = payload.exp * 1000;
     const currentTime = Date.now();
     return expirationTime - currentTime > 600000;
+}
+
+function isTokenIsValid(token) {
+    if (!token) return false;
+    const payload = JSON.parse(base64.decode(token.split('.')[1])); // base-64 디코딩
+    const expirationTime = payload.exp * 1000;
+    const currentTime = Date.now();
+    return expirationTime - currentTime < 0;
 }
 
 // 로컬 스토리지에서 토큰 가져오기
@@ -49,7 +58,11 @@ function localAxios() {
             return config;
         }
 
-        if (isTokenValid(accessToken)) {
+        if (isTokenIsValid(accessToken)) {
+            router.push({name: 'tokenexpire'});
+        }
+
+        if (isTokenLeftTenMin(accessToken)) {
             addTokenToHeaders(config.headers, accessToken, 'Authorization');
             // if (refreshToken) {
             //     addTokenToHeaders(config.headers, refreshToken, 'Refresh-Token');
@@ -61,6 +74,25 @@ function localAxios() {
         }
 
         return config;
+    }, error => {
+        return Promise.reject(error);
+    });
+
+    // 응답 인터셉터 설정
+    instance.interceptors.response.use(response => {
+
+        const accessToken = response.headers['authorization'];
+        const refreshToken = response.headers['refresh-token'];
+
+        // 응답을 받은 후 처리할 내용 추가 가능
+        if (accessToken) {
+
+            localStorage.setItem('accessToken', accessToken.replace('Bearer ', ''));
+        }
+        if(refreshToken) {
+            localStorage.setItem('refreshToken', refreshToken);
+        }
+        return response;
     }, error => {
         return Promise.reject(error);
     });

@@ -43,6 +43,8 @@ onMounted(() => {
     getYouthCompanyInformation();
     getCompanyInformation();
     getLicenseData();
+    // 페이지 스크롤을 최상단으로 이동
+    window.scrollTo(0, 0);
 });
 const companyData = ref([]);
 
