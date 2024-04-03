@@ -23,8 +23,8 @@ const getYouthCompanyInformation = () => {
     })
         .then((res) => {
             // 청년친화강소기업 정보를 가져와서 처리
-            console.log(res.data);
             youthCompanyData.value = res.data;
+            console.log(youthCompanyData.value);
         })
         .catch((err) => {
             console.log(err);

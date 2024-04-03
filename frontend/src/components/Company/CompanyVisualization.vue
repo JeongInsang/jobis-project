@@ -32,7 +32,7 @@ const API_URL = store.API_URL;
 const getcompanyInformation = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/info/1006`,
+        url: `${API_URL}/api/company/info/1818`,
     })
         .then((res) => {
             visualizationData.value = res.data.data.factor;
