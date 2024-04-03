@@ -145,13 +145,13 @@ import { useCounterStore } from '@/stores/counter';
 import { getCompanyRate, getCompanyQuarter } from '@/apis/api/company';
 import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const companyId = ref(route.params.companyId);
 const store = useCounterStore();
 const companyRate = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const API_URL = store.API_URL;
 const quarter = ref(null);
-const route = useRoute();
 
 
 onMounted(() => {
@@ -161,7 +161,7 @@ onMounted(() => {
 
 const getCompanyRatio = () => {
     getCompanyRate(
-        route.params.companyId,
+        companyId.value,
         (res) => {
             companyRate.value = res.data.data;
         },
@@ -173,7 +173,7 @@ const getCompanyRatio = () => {
 
 const loadCompanyQuarter = () => {
     getCompanyQuarter(
-        route.params.companyId,
+        companyId.value,
         (res) => {
             quarter.value = res.data.data;
         },

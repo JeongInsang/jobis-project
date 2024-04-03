@@ -244,6 +244,7 @@ import { getStatement } from '@/apis/api/company';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const companyId = ref(route.params.companyId);
 const store = useCounterStore();
 const API_URL = store.API_URL;
 const financialStatements = ref(null);
