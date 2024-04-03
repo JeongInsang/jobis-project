@@ -40,7 +40,7 @@
                 <!-- <strong v-if="companyData.youthCompany">청년친화강소기업여부 :</strong> -->
                 <div v-if="companyData.youthCompany">
                     <div>고용률 : {{ youthCompanyData[0].employmentRate }}</div>
-                    <div>연봉 : {{ youthCompanyData[0].salary }}</div>
+                    <div>평균월급 : {{ youthCompanyData[0].salary }}</div>
                     <div>청년비율 : {{ youthCompanyData[0].youthRate }}</div>
                     <div>청년고용률: {{ youthCompanyData[0].youthHireRate }}</div>
                     <div>청년고용증가인원 : {{ youthCompanyData[0].youthHireIncreasingCnt }}</div>
@@ -65,6 +65,7 @@ const youthCompanyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
 const scraped = ref(null);
+
 const route = useRoute();
 const isLogin = ref(false);
 

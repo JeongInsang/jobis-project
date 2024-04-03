@@ -145,6 +145,7 @@ import { useCounterStore } from '@/stores/counter';
 import { getCompanyRate, getCompanyQuarter } from '@/apis/api/company';
 import { useRoute } from 'vue-router';
 
+const companyId = ref(route.params.companyId);
 const store = useCounterStore();
 const companyRate = ref(null);
 const accessToken = localStorage.getItem('accessToken');

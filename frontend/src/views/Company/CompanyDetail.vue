@@ -157,7 +157,7 @@ const getLicenseData = function () {
     margin-left: 7rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* 가운데 정렬 */
+    /* align-items: flex-start; 가운데 정렬 */
     /* License와 News 컴포넌트가 세로로 나열되도록 합니다. */
 }
 </style>

@@ -12,7 +12,7 @@ import Navbar from './components/Home/Navbar.vue';
 import Footer from './components/Home/Footer.vue';
 </script>
 
-<style scoped>
+<style>
 @font-face {
     font-family: 'Pretendard-Black';
     src: url('@/assets/fonts/Pretendard-Black.woff');
@@ -49,14 +49,7 @@ import Footer from './components/Home/Footer.vue';
     font-family: 'Pretendard-Thin';
     src: url('@/assets/fonts/Pretendard-Thin.woff');
 }
-div,
-h1,
-h2,
-h3,
-h4,
-h5,
-span,
-input {
-    font-family: 'Pretendard-Medium';
+* {
+    font-family: 'Pretendard-Bold';
 }
 </style>
