@@ -1,31 +1,23 @@
-<template>
-    <div class="body">
-        <h2 class="main" contenteditable="true">Text</h2>
-    </div>
-</template>
-
-<script setup></script>
-
-<style scoped>
 .body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 20vh;
     background: #007bff;
 }
 .main {
+    font-family: 'Pretendard-Bold';
     position: relative;
-    font-size: 6em;
+    font-size: 3em;
     letter-spacing: 15px;
-    color: #bad7f5;
+    color: #f9efef;
     text-transform: uppercase;
     width: 100%;
     text-align: center;
-    -webkit-box-reflect: below 1px linear-gradient(transparent, #000);
+    /* -webkit-box-reflect: below 1px linear-gradient(transparent, #fff); */
     line-height: 0.7em;
     outline: none;
-    /* animation: animate 5s linear infinite; */
+    animation: animate 5s linear infinite;
 }
 @keyframes animate {
     0%,
@@ -59,4 +51,3 @@
             0 0 160px #007bff;
     }
 }
-</style>

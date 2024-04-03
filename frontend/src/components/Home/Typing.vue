@@ -31,7 +31,7 @@ setInterval(() => {
 }, 5000);
 
 // 타이핑할 문자열 배열
-const texts = ['개발자', '엔지니어', '기획자'];
+const texts = ['Developer', 'Engineer', 'Designer', 'Researcher', 'Doctor'];
 
 // 현재 텍스트 인덱스
 let textIndex = 0;
@@ -105,8 +105,8 @@ onMounted(() => {
 }
 
 .typing-animation {
-    font-size: 3em;
-    color: yellow;
+    font-size: 3.7em;
+    color: #007bff;
     font-family: 'Pretendard-Bold';
     position: absolute;
     top: 46%;
@@ -121,7 +121,7 @@ onMounted(() => {
 
 .typing-animation::after {
     content: '';
-    border-left: 2px solid yellow; /* 커서 선 스타일 및 색상 설정 */
+    border-left: 2px solid #007bff; /* 커서 선 스타일 및 색상 설정 */
     margin-left: 5px; /* 커서와 텍스트 사이의 간격 조정 */
     animation: blink-caret 0.75s step-end infinite; /* 커서 깜빡임 애니메이션 적용 */
 }
@@ -141,7 +141,7 @@ onMounted(() => {
         border-color: transparent;
     }
     50% {
-        border-color: yellow; /* 커서 색상 */
+        border-color: #007bff; /* 커서 색상 */
     }
 }
 .title1 {

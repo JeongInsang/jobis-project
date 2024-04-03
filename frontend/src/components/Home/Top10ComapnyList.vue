@@ -7,15 +7,20 @@
             margin-left: 1em;
             margin-bottom: 2rem;
             margin-top: 4rem;
-            color: #c0c0c0;
-        ">
-        # 조회수 많은 기업
+            color: #007bff;
+        "
+        data-aos="flip-left"
+        data-aos-duration="1000">
+        VIEWS TOP 10
     </h1>
+    <!-- <div class="body">
+        <h2 class="main" contenteditable="true">조회수 상위 기업</h2>
+    </div> -->
 
     <section style="background-color: white; height: 50vh" class="d-flex">
         <div class="container" style="align-items: center; justify-content: center">
             <Swiper
-                style="border: 3px solid gainsboro; border-radius: 1.5rem"
+                style="border: 3px solid #007bff; border-radius: 1.5rem"
                 :loop="true"
                 :speed="15000"
                 :free-mode="true"
@@ -109,6 +114,7 @@ const getTopViewList = () => {
 </script>
 
 <style scoped>
+@import url('@/assets/blueTone/maintext.css');
 .swiper {
     width: 100%;
     height: 80%;
@@ -138,6 +144,7 @@ const getTopViewList = () => {
     height: 12rem;
     width: 12rem;
     margin-bottom: 0.5rem;
+    border-radius: 1rem;
 }
 .font {
     font-family: 'Pretendard-Bold';
