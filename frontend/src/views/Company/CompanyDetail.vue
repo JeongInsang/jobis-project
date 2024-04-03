@@ -2,7 +2,7 @@
     <div class="container">
         <div class="top-section">
             <CompanyInformation class="company-info" />
-            <div class="visualization">
+            <div class="visualization card">
                 <h3>기업 지표 시각화 그래프</h3>
                 <CompanyVisualization />
             </div>
@@ -64,7 +64,22 @@ const route = useRoute();
     display: flex;
     flex-direction: column;
 }
+.card {
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 255, 0.2);
+    transition: all 0.2s;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
+    margin-bottom: 2rem;
+}
 
+/* .card:hover {
+    box-shadow: -12px 12px 2px -1px rgba(0, 0, 255, 0.2);
+} */
 .top-section {
     display: flex;
     width: 100%;

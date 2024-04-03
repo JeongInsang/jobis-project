@@ -1,16 +1,19 @@
 <template>
-    <div class="container">
+    <div class="container1">
         <div>
-            <button @click="startTournamentAndgetInfo" v-if="!isTournamentStarted">
-                대진 시작
-            </button>
-            <button @click="resetTournament" v-if="winner">다시하기</button>
+            <h2>기업선호 월드컵</h2>
             <div v-if="!winner">
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
                     <h2 style="text-align: center" :key="currentRound">
                         {{ currentRound }}
                     </h2>
                 </transition>
+                <button
+                    @click="startTournamentAndgetInfo"
+                    v-if="!isTournamentStarted"
+                    class="learn-more">
+                    게임 시작!
+                </button>
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
                     <div
                         v-if="currentMatchIndex < matches.length"
@@ -39,18 +42,40 @@
                     </div>
                 </transition>
             </div>
-            <div v-else>
-                <h2>축하합니다!</h2>
-                <p>{{ winner.name }}가 코드 선택 월드컵에서 우승했습니다!</p>
+            <div v-else style="width: 55rem">
+                <!-- 수정된 부분: 추가 정보 확인 버튼 클릭 시, winner의 name 정보만을 표시 -->
+                <h3>{{ winner.name }}가 선호기업 선택 월드컵에서 우승했습니다!</h3>
+                <div v-if="winnerInfoLoaded" style="margin-top: 2rem">
+                    <h4 style="margin-bottom: 2rem">성향과 비슷한 추천 기업 목록</h4>
+                    <div class="card-container">
+                        <div v-for="(info, index) in win" :key="index" class="unique-card">
+                            <div class="background-overlay"></div>
+                            <div class="card-content">
+                                <div class="card-title">{{ info.name }}</div>
+                                <div class="card-description">{{ info.type }}</div>
+                                <div>활동성 : {{ info.factor.activity.toFixed(6) }}</div>
+                                <div>안정성 : {{ info.factor.stability.toFixed(6) }}</div>
+                                <div>수익성 : {{ info.factor.profitability.toFixed(6) }}</div>
+                                <div>성장성 : {{ info.factor.growth.toFixed(6) }}</div>
+                                <div>효율성 : {{ info.factor.efficiency.toFixed(6) }}</div>
+                                <!-- <div class="card-description">{{ info.address }}</div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <button @click="resetTournament" v-if="winner" class="learn-more">
+                        다시하기
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { watch } from 'vue';
 
 const store = useCounterStore();
 const isNextRound = ref(false);
@@ -63,13 +88,12 @@ let currentRound = ref('16강');
 const selectionConfirmed = ref(false);
 const API_URL = store.API_URL;
 const accessToken = localStorage.getItem('accessToken');
+
 const startTournamentAndgetInfo = function () {
     companiesInfo();
     startTournament();
 };
-const getWorldcupImgPath = (worldcupId) => {
-    return new URL(`@/assets/img/worldcup/${worldcupId}.jpg`, import.meta.url).href;
-};
+
 const companiesInfo = function () {
     axios({
         method: 'get',
@@ -87,7 +111,30 @@ const companiesInfo = function () {
             console.log(err);
         });
 };
+const winnerInfoLoaded = ref(false);
 
+const getWinnerInfo = () => {
+    winnerInfo();
+};
+const win = ref('');
+const winnerInfo = function () {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/recommendation/${winner.value.worldcupId}`, // winner의 정보로 API 요청
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+        .then((res) => {
+            win.value = res.data.data;
+            winnerInfoLoaded.value = true; // winner 정보가 로드되었음을 표시
+            console.log(win.value);
+            console.log(winnerInfoLoaded.value);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 const createMatches = () => {
     const newMatches = [];
     for (let i = 0; i < companies.value.length; i += 2) {
@@ -160,6 +207,11 @@ const startNextRound = () => {
         setTimeout(() => (isNextRound.value = false), 500);
     }, 1000);
 };
+watch(winner, (newValue) => {
+    if (newValue !== '') {
+        getWinnerInfo();
+    }
+});
 </script>
 
 <style scoped>
@@ -173,5 +225,70 @@ const startNextRound = () => {
 .fade-next-round-enter-active,
 .fade-next-round-leave-active {
     transition: opacity 0.2s ease-out;
+}
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.unique-card {
+    display: flex;
+    position: relative;
+    width: 16rem;
+    height: 12rem;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+.unique-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-content {
+    padding: 10px;
+    text-align: center;
+    color: #888;
+    z-index: 2;
+    transition: color 0.3s;
+}
+
+.unique-card:hover .card-content {
+    color: #ff7e5f;
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(52, 73, 94, 0.7);
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.unique-card:hover .background-overlay {
+    opacity: 1;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    padding-top: 0;
+    padding-bottom: 5px;
+    display: block;
+    padding-left: 5px;
+    font-size: 14px;
 }
 </style>

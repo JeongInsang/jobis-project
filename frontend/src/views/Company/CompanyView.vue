@@ -1,5 +1,6 @@
 <template>
     <CompanyChoice />
+    <!-- <img src="../../assets/img/유연근무제_TRUE.PNG" alt="" style="width: 15rem" /> -->
     <!-- <WorldCupTest /> -->
     <!-- <VsCompany /> -->
 </template>
