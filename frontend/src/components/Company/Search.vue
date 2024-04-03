@@ -155,6 +155,9 @@ const keyword = ref('');
 const type = ref([]);
 const location = ref([]);
 const API_URL = store.API_URL;
+const totalData = ref(0);
+const pageButtons = ref([]);
+const maxButtons = 10; // 최대 버튼 수
 
 const fetchData = async () => {
     try {
@@ -163,16 +166,16 @@ const fetchData = async () => {
         );
         data.value = response.data.data.content;
         console.log(data.value);
+        console.log(response.data.data, 'Total 갯수 확인용');
+        totalData.value = response.data.data.totalElements;
+        console.log(totalData.value);
+        generatePageButtons();
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 };
 
 // /////////////////////////////////////////////페이지 네이션/////////////////////////////////////////////////
-
-const totalData = ref(1000);
-const pageButtons = ref([]);
-const maxButtons = 10; // 최대 버튼 수
 
 const previousPage = () => {
     if (page.value > 0) {
@@ -205,11 +208,11 @@ const generatePageButtons = () => {
     }
 
     pageButtons.value = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    console.log(pageButtons.value, 'pagebuttons');
 };
 
 onMounted(() => {
     fetchData();
-    generatePageButtons();
 });
 
 // 마지막 페이지 여부 확인 함수
@@ -394,6 +397,7 @@ watch(
 
         console.log('for 문 다 돌고 location', location.value);
         console.log('for 문 다 돌고 type', type.value);
+        page.value = 0;
 
         fetchData();
     }
