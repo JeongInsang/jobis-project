@@ -1,4 +1,4 @@
-package com.ssafy.global.oauth2;
+package com.ssafy.global.oauth2.util;
 
 import com.ssafy.domain.users.entity.SocialType;
 import com.ssafy.global.oauth2.userinfo.GoogleOAuth2UserInfo;

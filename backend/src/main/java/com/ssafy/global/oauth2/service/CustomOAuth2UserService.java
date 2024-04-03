@@ -2,22 +2,23 @@ package com.ssafy.global.oauth2.service;
 
 import com.ssafy.domain.users.entity.SocialType;
 import com.ssafy.domain.users.entity.Users;
-import com.ssafy.domain.users.repository.UserRepository;
+import com.ssafy.domain.users.exception.DuplicatedEmailException;
 import com.ssafy.domain.users.service.UserAuthService;
 import com.ssafy.domain.users.service.UserService;
-import com.ssafy.global.oauth2.CustomOAuth2User;
-import com.ssafy.global.oauth2.OAuthAttributes;
+import com.ssafy.global.oauth2.userinfo.OAuth2UserInfo;
+import com.ssafy.global.oauth2.util.CustomOAuth2User;
+import com.ssafy.global.oauth2.util.OAuthAttributes;
+import com.ssafy.global.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -32,7 +33,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private static final String KAKAO = "kakao";
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException, RestApiException {
         log.info("CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
 
         /**
@@ -86,14 +87,29 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
      * 만약 찾은 회원이 있다면, 그대로 반환하고 없다면 saveUser()를 호출하여 회원을 저장한다.
      */
     private Users getUser(OAuthAttributes attributes, SocialType socialType) {
-        Users findUser = userAuthService.findUserBySocialTypeAndId(socialType,
-                attributes.getOauth2UserInfo().getId());
+        OAuth2UserInfo oauth2UserInfo = attributes.getOauth2UserInfo();
+        String userEmail = oauth2UserInfo.getEmail();
 
-        if(findUser == null) {
+        // 이미 가입된 이메일이 있는지 확인
+        boolean alreadyExistUser = userAuthService.checkEmail(userEmail);
+
+        // 이미 가입된 이메일이 있는 경우
+        if (!alreadyExistUser) {
+            // 이미 가입된 이메일과 소셜 타입을 이용하여 해당 사용자 정보 조회
+            Users findUser = userAuthService.findUserByEmailAndSocialType(socialType, oauth2UserInfo.getId());
+
+            if (findUser != null) {
+                return findUser;
+            } else {
+                // 해당 이메일로 가입된 사용자 정보가 없는 경우 예외 처리
+                throw new OAuth2AuthenticationException(new OAuth2Error("already_registered"), "이미 가입된 이메일입니다.");
+            }
+        } else {
+            // 가입되지 않은 사용자인 경우 새로운 사용자로 등록
             return saveUser(attributes, socialType);
         }
-        return findUser;
     }
+
 
     /**
      * OAuthAttributes의 toEntity() 메소드를 통해 빌더로 User 객체 생성 후 반환

@@ -36,8 +36,8 @@ public class RefreshTokenService {
                 .getRefreshToken();
     }
 
-    public void deleteRefreshToken(RefreshToken refreshToken) {
-        refreshTokenRedisRepository.delete(refreshToken);
+    public void deleteRefreshTokenByUserId(String userId) {
+        refreshTokenRedisRepository.deleteById(userId);
     }
 
 
