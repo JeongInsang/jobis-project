@@ -53,7 +53,6 @@
                             <span>전체 분석 내용</span>
                             <p style="width: 380px">{{ match.description }}</p>
                         </div>
-                        </div>
                     </div>
                 </transition>
             </div>
