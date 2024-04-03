@@ -5,6 +5,7 @@ import static com.ssafy.domain.company.entity.QCompanyScrap.companyScrap;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -54,137 +55,126 @@ public class CompanyService {
      * @return
      */
 
-
     public Page<CompanySearchResponse> getCompanies(Pageable pageable, String keyword, List<String> location, List<String> type) {
-        // 비회원이 기업 검색 조회할 때 (스크랩 여부 포함 x)
         log.info("비회원 !!! pageable = {} keyword = {} location = {} type = {}", pageable, keyword, location, type);
+
+        // BooleanExpression 수정
         List<CompanySearchResponse> companyList = jpaQueryFactory
                 .selectFrom(company)
                 .where(
                         containsKeyword(keyword),
                         inLocation(location),
                         inType(type))
-                .offset(pageable.getOffset())  // 조회 시작 위치
-                .limit(pageable.getPageSize())  // 현재 시작 위치
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch()
                 .stream()
                 .map(CompanySearchDtoMapper::companySearchResponse)
                 .collect(Collectors.toList());
 
-            log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
+        // 검색 조건이 올바르게 전달되었는지 확인하기 위한 로그 출력 추가
+        log.info("name = {}, address = {}, type = {}", keyword, location, type);
 
-            // 페이지 전체 수
-            JPAQuery<Long> countQuery = jpaQueryFactory
-                    .select(company.count())
-                    .from(company)
-                    .where(
-                            containsKeyword(keyword),
-                            inLocation(location),
-                            inType(type));
+        // 페이지 전체 수
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(company.count())
+                .from(company)
+                .where(
+                        containsKeyword(keyword),
+                        inLocation(location),
+                        inType(type));
 
-            log.info("============ countQuery: {}", countQuery);
-//            log.info("totalsize = {}", countQuery);
-//            return new PageImpl<>(companyList, pageable, countQuery::fetchOne);
-            return PageableExecutionUtils.getPage(companyList, pageable, countQuery::fetchOne);
-        }
-//
-//
-////        log.info("회원 !!!! id = {}, name = {}, address = {}, type = {}", id, company.name.contains(keyword), company.address.in(location), company.type.in(type));
-//
-//        // 회원이 기업 검색할 때 (스크랩 여부 포함 o)
-//        List<CompanySearchResponse> companyList = jpaQueryFactory
-//                .select(Projections.bean(CompanySearchResponse.class,
-//                        company.id,
-//                        company.name,
-//                        company.address,
-//                        company.type,
-//
-//                        // isScrapped는 엔티티안에 없어서 서브쿼리 날려줘야함
-//                        ExpressionUtils.as(JPAExpressions.selectOne()
-//                                .from(companyScrap)
-//                                .where(companyScrap.company.eq(company).and(companyScrap.user.id.eq(id)))
-//                                .exists(), "isScraped"))) // isScraped 필드 추가
-//                .from(company)
-//                .where(
-//                        containsKeyword(keyword),
-//                        inLocation(location),
-//                        inType(type))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-////        log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
-//        long totalSize = companyList.size();
-//
-//
-//        // 페이지 전체 수
-//        JPAQuery<Long> countQuery = jpaQueryFactory
-//                .select(company.count())
-//                .from(company)
-//                .where(
-//                        containsKeyword(keyword),
-//                        inLocation(location),
-//                        inType(type));
-//
-////
-////        log.info("totalsize = {}", totalSize);
-////        return new PageImpl<>(companyList, pageable, totalSize);
-//        log.info("============ countQuery: {}", countQuery);
-//        return PageableExecutionUtils.getPage(companyList, pageable, countQuery::fetchOne);
-//    }
+        log.info("============ countQuery: {}", countQuery);
 
-
-
-//    public Page<CompanySearchResponse> getCompanies(Pageable pageable, String keyword, List<String> location, List<String> type) {
-//        // 회원이 기업 검색할 때 (스크랩 여부 포함 o)
-//        List<CompanySearchResponse> companyList = jpaQueryFactory
-//                .select(Projections.bean(CompanySearchResponse.class,
-//                        company.id,
-//                        company.name,
-//                        company.address,
-//                        company.type,
-////                        ExpressionUtils.as(JPAExpressions.selectOne()
-////                                .from(companyScrap)
-////                                .where(companyScrap.company.eq(company).and(companyScrap.user.id.eq(id)))
-////                                .exists(), "isScraped")))
-//                        ExpressionUtils.as(JPAExpressions.selectOne()
-//                                .from(companyScrap)
-//                                .where((companyScrap.company.eq(company)).and(companyScrap.user.id.eq(id))), "isScraped")))
-//
-//                .from(company)
-//                .where(
-//                        containsKeyword(keyword),
-//                        inLocation(location),
-//                        inType(type))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//
-//        // 페이지 전체 수
-//        JPAQuery<Long> countQuery = jpaQueryFactory
-//                .select(company.count())
-//                .from(company)
-//                .where(
-//                        containsKeyword(keyword),
-//                        inLocation(location),
-//                        inType(type));
-//
-//        log.info("============ countQuery: {}", countQuery);
-//        return PageableExecutionUtils.getPage(companyList, pageable, countQuery::fetchOne);
-//    }
+        // PageableExecutionUtils 사용하지 않고 직접 Page 생성
+        List<Long> totalCountList = countQuery.fetch();
+        Long totalCount = totalCountList.isEmpty() ? 0L : totalCountList.get(0);
+        return new PageImpl<>(companyList, pageable, totalCount);
+    }
 
     private BooleanExpression containsKeyword(String keyword) {
         return keyword != null ? company.name.contains(keyword) : null;
     }
 
     private BooleanExpression inLocation(List<String> locations) {
-        return !locations.isEmpty() ? company.address.in(locations) : null;
+        if (locations != null && !locations.isEmpty()) {
+            BooleanExpression[] expressions = locations.stream()
+                    .map(company.address::contains)
+                    .toArray(BooleanExpression[]::new);
+            return Expressions.anyOf(expressions);
+        }
+        return null;
     }
 
     private BooleanExpression inType(List<String> types) {
-        return !types.isEmpty() ? company.type.in(types) : null;
+        if (types != null && !types.isEmpty()) {
+            BooleanExpression[] expressions = types.stream()
+                    .map(company.type::contains)
+                    .toArray(BooleanExpression[]::new);
+            return Expressions.anyOf(expressions);
+        }
+        return null;
     }
+
+
+
+//    public Page<CompanySearchResponse> getCompanies(Pageable pageable, String keyword, List<String> location, List<String> type) {
+////        log.info("비회원 !!! pageable = {} keyword = {} location = {} type = {}", pageable, keyword, location, type);
+//        List<CompanySearchResponse> companyList = jpaQueryFactory
+//                .selectFrom(company)
+//                .where(
+//                        containsKeyword(keyword),
+//                        inLocation(location),
+//                        inType(type))
+//                .offset(pageable.getOffset())  // 조회 시작 위치
+//                .limit(pageable.getPageSize())  // 현재 시작 위치
+//                .fetch()
+//                .stream()
+//                .map(CompanySearchDtoMapper::companySearchResponse)
+//                .collect(Collectors.toList());
+//
+//        log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
+//
+//            // 페이지 전체 수
+//        JPAQuery<Long> countQuery = jpaQueryFactory
+//                .select(company.count())
+//                .from(company)
+//                .where(
+//                        containsKeyword(keyword),
+//                        inLocation(location),
+//                        inType(type));
+//
+//        log.info("============ countQuery: {}", countQuery);
+////      log.info("totalsize = {}", countQuery);
+////      return new PageImpl<>(companyList, pageable, countQuery::fetchOne);
+//        return PageableExecutionUtils.getPage(companyList, pageable, countQuery::fetchOne);
+//    }
+//
+//    private BooleanExpression containsKeyword(String keyword) {
+//        return keyword != null ? company.name.contains(keyword) : null;
+//    }
+//
+//    private BooleanExpression inLocation(List<String> locations) {
+//        return !locations.isEmpty() ? company.address.in(locations) : null;
+//    }
+//
+//    private BooleanExpression inType(List<String> types) {
+//        return !types.isEmpty() ? company.type.in(types) : null;
+//    }
+//
+//
+//
+//    private BooleanExpression containsKeyword(String keyword) {
+//        return keyword != null ? company.name.contains(keyword) : null;
+//    }
+//
+//    private BooleanExpression inLocation(List<String> locations) {
+//        return locations != null && !locations.isEmpty() ? company.address.in(locations) : null;
+//    }
+//
+//    private BooleanExpression inType(List<String> types) {
+//        return types != null && !types.isEmpty() ? company.type.in(types) : null;
+//    }
 
 
     /**
