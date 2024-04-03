@@ -10,8 +10,8 @@
         </section>
         <div class="container">
             <div class="row g-3">
-                <div class="col-md-4" v-for="(company, index) in companyDummyList" :key="index">
-                    <div class="card shadow-sm" v-if="company.scrap">
+                <div class="col-md-4" v-for="(company, index) in companyList" :key="index">
+                    <div class="card shadow-sm" v-if="company.scraped">
                         <div class="position-relative">
                             <img
                                 class="bd-placeholder-img card-img-top"
@@ -24,18 +24,18 @@
                             <button
                                 type="button"
                                 class="position-absolute top-0 end-0 border-0 container1"
-                                @click="cancle(company.scrapId)">
+                                @click="cancle(company.companyId)">
                                 <!-- <i class="bi bi-bookmark-star"></i> -->
                                 <i class="bi bi-bookmark-check-fill"></i>
                             </button>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                {{ company.companyname }}
+                                {{ company.name }}
                             </p>
-                            <p>{{ company.companytype }}</p>
+                            <p>{{ company.type }}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-body-secondary">{{ company.region }}</small>
+                                <small class="text-body-secondary">{{ company.address }}</small>
                             </div>
                         </div>
                     </div>
@@ -48,99 +48,29 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { useCounterStore } from '@/stores/counter';
+const store = useCounterStore()
 
-const API_URL = ref(null);
-const accessToken = ref(null);
+const API_URL = store.API_URL;
+const accessToken = localStorage.getItem('accessToken')
 
-const companyDummyList = ref([
-    {
-        companyname: '이지소프트',
-        companytype: '제조업',
-        region: '서울',
-        scrapId: 1,
-        scrap: true,
-    },
-    {
-        companyname: '(주)넥스틴',
-        companytype: '금융업',
-        region: '부산',
-        scrapId: 2,
-        scrap: true,
-    },
-    {
-        companyname: '주식회사 클라우드시스템',
-        companytype: '서비스업',
-        region: '대구',
-        scrapId: 3,
-        scrap: true,
-    },
-    {
-        companyname: '넥스엔정보기술(주)',
-        companytype: 'IT업',
-        region: '인천',
-        scrapId: 4,
-        scrap: true,
-    },
-    {
-        companyname: '부곡스텐레스(주)',
-        companytype: '제조업',
-        region: '광주',
-        scrapId: 5,
-        scrap: true,
-    },
-    {
-        companyname: '단암시스템즈 주식회사',
-        companytype: '금융업',
-        region: '대전',
-        scrapId: 6,
-        scrap: true,
-    },
-    {
-        companyname: '파크시스템스(주)',
-        companytype: '서비스업',
-        region: '울산',
-        scrapId: 7,
-        scrap: true,
-    },
-    {
-        companyname: '라온시큐어(주)',
-        companytype: 'IT업',
-        region: '세종',
-        scrapId: 8,
-        scrap: true,
-    },
-    {
-        companyname: '(주)플래티어',
-        companytype: '제조업',
-        region: '경기',
-        scrapId: 9,
-        scrap: true,
-    },
-    {
-        companyname: '한국무라타전자(주)',
-        companytype: '금융업',
-        region: '강원',
-        scrapId: 10,
-        scrap: true,
-    },
-
-    // More sample data...
-]);
 
 onMounted(() => {
     getCompanyList();
+    
+    
 });
 const companyList = ref(null);
 const getCompanyList = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/user/scrap`,
+        url: `${API_URL}/api/user/scrap`,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
     })
         .then((res) => {
-            companyList.value = res.data;
+            companyList.value = res.data.data;
             console.log(companyList.value);
         })
         .catch((err) => {
@@ -152,7 +82,7 @@ const isCancle = ref(true);
 const cancle = (scrapId) => {
     axios({
         method: 'delete',
-        url: `${API_URL}/company/scrap/${scrapId}`,
+        url: `${API_URL}/api/company/scrap/${scrapId}`,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

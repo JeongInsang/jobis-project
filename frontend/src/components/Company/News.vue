@@ -1,30 +1,4 @@
 <template>
-    <div>
-        <h2>최근 뉴스 정보</h2>
-        <ul>
-            <li v-for="article in newsArticles" :key="article.id">
-                {{ article.title }} - {{ article.date }}
-            </li>
-        </ul>
-    </div>
-</template>
-
-<script setup>
-import { ref } from 'vue';
-
-const newsArticles = ref([
-    { id: 1, title: 'News Article 1', date: '2022-01-01' },
-    { id: 2, title: 'News Article 2', date: '2022-02-01' },
-    { id: 3, title: 'News Article 3', date: '2022-03-01' },
-    // 더 많은 뉴스 리스트 아이템들...
-]);
-</script>
-
-<style scoped>
-/* 스타일링 */
-</style>
-
-<!-- <template>
     <div>뉴스 리스트</div>
 </template>
 
@@ -36,26 +10,29 @@ import { useCounterStore } from '@/stores/counter';
 const store = useCounterStore();
 const accessToken = localStorage.getItem('accessToken');
 const NewsList = ref([]);
+const keyWord = ref([]);
 
 const getNewsData = function () {
     axios({
         method: 'get',
-        url: `${store.API_URL}/news/${store.companyId}/${store.name}`,
+        url: `${store.API_URL}/api/news/1818/구름`,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
     })
         .then((res) => {
             NewsList.value = res.data;
-            console.log(res.data);
+            keyWord.value = res.data.data.keyWords;
+            console.log(NewsList.value);
+            console.log(keyWord.value);
         })
         .catch((err) => {
             console.log(err);
         });
 };
-onmounted(() => {
-    getLicenseData();
-})
+onMounted(() => {
+    getNewsData();
+});
 </script>
 
-<style scoped></style> -->
+<style scoped></style>

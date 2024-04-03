@@ -17,9 +17,9 @@ export const useCounterStore = defineStore(
                 url: `${import.meta.env.VITE_APP_API_URL}/logout`, // 임시임
             })
                 .then((res) => {
+                    console.log(res);
                     token.value = null;
                     // currentUser.value = null;
-                    localStorage.clear();
                     isLogin.value = false;
                     localStorage.clear();
 
