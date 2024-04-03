@@ -1,7 +1,7 @@
 <template>
-    <div class="container1">
-        <div>
-            <h2>기업선호 월드컵</h2>
+    <div class="container1" style="margin-top: 30px;">
+        <div style="font-family: 'Pretendard'; justify-content: center; align-self: center">
+            <h2 style="text-align: center;">기업선호 월드컵</h2>
             <div v-if="!winner">
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
                     <h2 style="text-align: center" :key="currentRound">
@@ -26,17 +26,20 @@
                                     alt="나와라 제발"
                                     class="image" />
 
-                                <div class="text">
-                                    <span>{{ match.name }}</span>
-                                    <p>활동성 : {{ match.activity }}</p>
-                                    <p>효율성 : {{ match.efficiency }}</p>
-                                    <p>성장성 : {{ match.growth }}</p>
-                                    <p>수익성 : {{ match.profitability }}</p>
-                                    <p>안정성 : {{ match.stability }}</p>
-                                    <br />
-                                    <span>전체 분석 내용</span>
-                                    <p style="width: 380px">{{ match.description }}</p>
-                                </div>
+                                    <div class="text">
+                                        <span style="font-size: 20px;">{{ match.name }}</span>
+                                        <div>
+                                            <p :style="styles.activity">활동성 : {{ match.activity }}</p>
+                                            <p :style="styles.efficiency">효율성 : {{ match.efficiency }}</p>
+                                            <p :style="styles.growth">성장성 : {{ match.growth }}</p>
+                                            <p :style="styles.profitability">수익성 : {{ match.profitability }}</p>
+                                            <p :style="styles.stability">안정성 : {{ match.stability }}</p>
+                                            <br />
+                                        </div>
+                                        <span>전체 분석 내용</span>
+                                        <p style="width: 380px">{{ match.description }}</p>
+                                    </div>
+
                             </div>
                         </div>
                     </div>
@@ -174,7 +177,9 @@ const resetTournament = () => {
 const nextMatch = ref(null);
 
 const selectWinner = (matchIndex, winnerIndex) => {
-    winners.value.push(matches.value[matchIndex][winnerIndex]);
+    const selectedMatch = matches.value[matchIndex][winnerIndex];
+    winners.value.push(selectedMatch);
+    styles.value = calculateStyles(selectedMatch); // 스타일 업데이트
     selectionConfirmed.value = false;
     setTimeout(() => {
         selectionConfirmed.value = true;
@@ -221,6 +226,36 @@ watch(winner, (newValue) => {
         getWinnerInfo();
     }
 });
+
+const calculateStyles = (match) => {
+  // 각 수치와 관련된 키를 배열로 저장합니다.
+  const factors = ['activity', 'efficiency', 'growth', 'profitability', 'stability'];
+  
+  // 각 수치를 값과 함께 객체 배열로 변환합니다.
+  const valuesWithKeys = factors.map(key => ({ key, value: match[key] }));
+
+  // 수치를 기준으로 내림차순 정렬합니다.
+  const sortedValues = valuesWithKeys.sort((a, b) => b.value - a.value);
+
+  // 가장 큰 값과 두 번째로 큰 값을 찾습니다.
+  const highestValueKey = sortedValues[0].key;
+  const secondHighestValueKey = sortedValues[1].key;
+
+  // 결과적으로 적용할 스타일 객체를 반환합니다.
+  return factors.reduce((styles, key) => {
+    if (key === highestValueKey) {
+      styles[key] = { color: 'red' };
+    } else if (key === secondHighestValueKey) {
+      styles[key] = { color: 'blue' };
+    } else {
+      styles[key] = {}; // 기본 스타일
+    }
+    return styles;
+  }, {});
+};
+
+// 컴포넌트에서 사용할 수 있도록 `styles`를 반응형 참조로 만듭니다.
+const styles = ref({});
 </script>
 
 <style scoped>
