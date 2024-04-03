@@ -47,6 +47,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String act = jwtDto.getType()+" "+jwtDto.getAccessToken();
         String rft = jwtDto.getRefreshToken();
-        response.sendRedirect(redirectUriStorage.getRedirectUri() + "/" + act + "/" + rft);
+        String SOCIAL_SUCCESS_URL = "/login-success";
+        response.sendRedirect(redirectUriStorage.getRedirectUri() + SOCIAL_SUCCESS_URL + "/" + act + "/" + rft);
     }
 }

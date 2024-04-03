@@ -7,6 +7,7 @@ import com.ssafy.global.oauth2.util.RedirectUriStorage;
 import com.ssafy.global.response.code.SuccessCode;
 import com.ssafy.global.response.structure.SuccessResponse;
 import com.ssafy.global.security.util.JwtUtil;
+import com.ssafy.global.util.AuthUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ public class UserAuthController {
     private final UserAuthService userAuthService;
     private final RedirectUriStorage redirectUriStorage;
     private final JwtUtil jwtUtil;
+    private final AuthUtil authUtil;
 
     @PostMapping("/register")
     @Operation(summary = "회원가입")
@@ -50,16 +52,17 @@ public class UserAuthController {
             @RequestParam(name = "redirect_uri") String redirect_uri,
             HttpServletResponse response
     ) throws IOException {
-        redirectUriStorage.setRedirectUri(redirect_uri+"/login-success");
+        redirectUriStorage.setRedirectUri(redirect_uri);
         response.sendRedirect("/api/oauth2/authorization/"+socialType);
     }
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃")
-    public void logout(HttpServletRequest request) {
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
         String accessToken = jwtUtil.extractAccessToken(request);
         log.info("Controller === 헤더의 accesstoken : {}", accessToken);
         userAuthService.logout(accessToken);
+        return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
     }
 
     @GetMapping("/check")

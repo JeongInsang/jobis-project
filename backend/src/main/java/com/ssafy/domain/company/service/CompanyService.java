@@ -60,6 +60,7 @@ public class CompanyService {
 
         // 비회원이 기업 검색 조회할 때 (스크랩 여부 포함 x)
         if(!authUtil.isAuthenticated()){
+            log.info("비회원");
             List<CompanySearchResponse> companyList = jpaQueryFactory
                 .selectFrom(company)
                 .where(
@@ -79,6 +80,7 @@ public class CompanyService {
             log.info("totalsize = {}", totalSize);
             return new PageImpl<>(companyList, pageable, totalSize);
         }
+        log.info("회원");
 
         // 비회원이 기업 검색할 때 (스크랩 여부 포함 o)
         List<CompanySearchResponse> companyList = jpaQueryFactory
