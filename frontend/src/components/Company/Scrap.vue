@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row g-3">
                 <div class="col-md-4" v-for="(company, index) in companyList" :key="index">
-                    <div class="card shadow-sm" v-if="company.scraped">
+                    <div class="card shadow-sm">
                         <div class="position-relative">
                             <img
                                 class="bd-placeholder-img card-img-top"
@@ -49,16 +49,13 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useCounterStore } from '@/stores/counter';
-const store = useCounterStore()
+const store = useCounterStore();
 
 const API_URL = store.API_URL;
-const accessToken = localStorage.getItem('accessToken')
-
+const accessToken = localStorage.getItem('accessToken');
 
 onMounted(() => {
     getCompanyList();
-    
-    
 });
 const companyList = ref(null);
 const getCompanyList = () => {
@@ -79,10 +76,10 @@ const getCompanyList = () => {
 };
 
 const isCancle = ref(true);
-const cancle = (scrapId) => {
+const cancle = (companyId) => {
     axios({
         method: 'delete',
-        url: `${API_URL}/api/company/scrap/${scrapId}`,
+        url: `${API_URL}/api/company/scrap/${companyId}`,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
