@@ -30,6 +30,7 @@ public enum ErrorCode implements ResponseCode {
      * User
      */
     DUPLICATED_USER(HttpStatus.CONFLICT, "이미 가입된 유저 정보입니다."),
+    DUPLICATED_EMAIL(HttpStatus.CONFLICT, "이미 해당 이메일로 가입된 정보가 존재합니다.."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 정보를 찾을 수 없습니다."),
 

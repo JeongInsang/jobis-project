@@ -59,7 +59,7 @@ public class JwtUtil {
      *
      */
     public JwtDto generateJwtDto(Authentication authentication) {
-        log.info("== jwtDto 생성 ==");
+        log.info("== jwtDto 생성, 시간 : {} ==", new Date(System.currentTimeMillis() + accessTokenExpired));
         log.info("authentication info {}", authentication.toString());
 
         String accessToken = Jwts.builder()

@@ -33,6 +33,7 @@ public class UserService {
     private final CompanyScrapRepository companyScrapRepository;
 
     public void register(RegisterRequest request) {
+        log.info("--- register service 진입 ---");
 
         String email = request.getEmail();
         String password = passwordEncoder.encode(request.getPassword());

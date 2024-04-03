@@ -3,6 +3,7 @@ package com.ssafy.global.security.filter;
 import com.ssafy.domain.users.dto.JwtDto;
 import com.ssafy.domain.users.exception.UserNotFoundException;
 import com.ssafy.domain.users.repository.UserRepository;
+import com.ssafy.domain.users.service.RefreshTokenService;
 import com.ssafy.global.security.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final RefreshTokenService refreshTokenService;
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
@@ -37,14 +39,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 필터 적용하지 않을 경로
     private final String[] excludePath = {
             "/api/login/**",
+//            "/api/user/logout",
             "/api/user/login",
+            "/api/user/login/**",
             "/api/user/register",
-            "/api/company/**",
             "/api/news/**",
             "/api/patent/**",
             "/api/swagger-ui/**",
             "/api/api-docs/**",
-            "/api/v3/api-docs/**"
+            "/api/v3/api-docs/**",
+            "/api/company/youthcompany/**",
+            "/api/company/statement/**",
+            "/api/company/search**",
+            "/api/company/rate/**",
+            "/api/company/quarter/**",
+            "/api/company/popular",
+            "/api/company/info/**",
     };
 
     @Override
@@ -80,6 +90,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      *  reIssueRefreshToken()로 리프레시 토큰 재발급 & DB에 리프레시 토큰 업데이트 메소드 호출
      *  그 후 JwtService.sendAccessTokenAndRefreshToken()으로 응답 헤더에 보내기
      */
+
+
+
+
+
+
+
+
     public void checkRefreshTokenAndReIssueAccessToken(HttpServletRequest request, HttpServletResponse response, String refreshToken, FilterChain filterChain) throws ServletException, IOException {
         log.info("=== 토큰 재발급 메서드 ===");
         String accessToken = jwtUtil.extractAccessToken(request);
@@ -90,17 +108,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String myRefreshToken = jwtUtil.getRedisRefreshToken(id);
         log.info(" 아이디로 가져온 리프레시토큰 : {}", myRefreshToken);
 
-        if (refreshToken.equals(myRefreshToken)) {
-            log.info("일치하는 리프레시토큰 존재, 엑세스 + 리프레시토큰 재발급");
-            JwtDto reIssueJwt = jwtUtil.generateJwtDto(id);
+            if (refreshToken.equals(myRefreshToken)) {
+                log.info("일치하는 리프레시토큰 존재, 엑세스 + 리프레시토큰 재발급");
+                JwtDto reIssueJwt = jwtUtil.generateJwtDto(id);
+                refreshTokenService.addRefreshToken(Integer.valueOf(id), reIssueJwt.getRefreshToken());
+
 //                Users user = userRepository.findById(Integer.parseInt(id))
 //                        .orElseThrow(UserNotFoundException::new);
-            jwtUtil.setAccessAndRefreshToken(response, reIssueJwt);
+                jwtUtil.setAccessAndRefreshToken(response, reIssueJwt);
 
+            }
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
-
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("=== access token 요청 검증 후 contextHolder에 등록 ===");

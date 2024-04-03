@@ -1,4 +1,4 @@
-package com.ssafy.global.oauth2;
+package com.ssafy.global.oauth2.util;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
