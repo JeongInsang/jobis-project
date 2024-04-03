@@ -2,13 +2,15 @@
     <div>
         <canvas ref="chartCanvas" class="chart-canvas"></canvas>
         <div v-if="visualizationData !== null">
-            <div>
-                활동성 : {{ visualizationData.activity.toFixed(4) }} 안정성 :
-                {{ visualizationData.stability.toFixed(4) }} 효율성 :
-                {{ visualizationData.efficiency.toFixed(4) }}
-                <div>
-                    성장성 : {{ visualizationData.growth.toFixed(4) }} 수익성 :
-                    {{ visualizationData.profitability.toFixed(4) }}
+            <div class="value">
+                <div class="row1">
+                    <div>활동성 : {{ visualizationData.activity.toFixed(4) }}</div>
+                    <div>안정성 : {{ visualizationData.stability.toFixed(4) }}</div> 
+                    <div>효율성 : {{ visualizationData.efficiency.toFixed(4) }}</div>
+                </div>
+                <div class="row2">
+                    <p>성장성 : {{ visualizationData.growth.toFixed(4) }}</p> 
+                    <p>수익성 : {{ visualizationData.profitability.toFixed(4) }}</p>
                 </div>
             </div>
         </div>
@@ -102,5 +104,17 @@ onMounted(() => {
 .chart-canvas {
     width: 25rem; /* 원하는 너비로 설정 */
     height: 20rem; /* 원하는 높이로 설정 */
+}
+/* .value{
+    display: flex;
+} */
+.row1{
+    display: flex;
+    justify-content: space-around;
+}
+.row2{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.6em;
 }
 </style>

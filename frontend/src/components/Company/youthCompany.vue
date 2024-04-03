@@ -1,6 +1,8 @@
 <template>
     <div v-if="youthCompanyData !== null" class="card1">
-        <img
+        <h2 style="margin-top: 1em; margin-left: 1em;">복지 지원 여부</h2>
+        <div style="margin-left: 0.8em;">
+            <img
             v-if="youthCompanyData[0].supportSelfDevelopment == false"
             src="@/assets/img/welfare_false/교육_자기개발비지원_FALSE.png"
             alt="" />
@@ -120,6 +122,8 @@
             v-if="youthCompanyData[0].goToSchoolLater == true"
             src="@/assets/img/welfare_false/후진학참여제도_TRUE.png"
             alt="" />
+        </div>
+        
     </div>
 </template>
 
@@ -160,7 +164,8 @@ const getYouthCompanyInformation = () => {
 <style scoped>
 @import url('@/assets/sheet.css');
 img {
-    width: 14rem;
+    width: 13rem;
     height: 10rem;
 }
+
 </style>

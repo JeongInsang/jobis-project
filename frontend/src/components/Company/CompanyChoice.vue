@@ -17,7 +17,7 @@
                     v-if="!isTournamentStarted"
                     class="learn-more"
                     style="margin: 0 auto; display: block; background-color: #007bff; color: #fff;"> <!-- 배경색과 글자색 지정 -->
-                    게임 시작!
+                    Start!
                 </button>
                 <!-- 현재 경기 표시 -->
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
@@ -50,8 +50,6 @@
                                     </div>
 
                             </div>
-                            <span>전체 분석 내용</span>
-                            <p style="width: 380px">{{ match.description }}</p>
                         </div>
                     </div>
                 </transition>
@@ -60,7 +58,7 @@
                 <!-- 수정된 부분: 추가 정보 확인 버튼 클릭 시, winner의 name 정보만을 표시 -->
                 <h3>가상기업 <span style="color: red;">{{ winner.name }}</span> (이)가 우승했습니다 !</h3>
                 <div v-if="winnerInfoLoaded" style="margin-top: 2rem">
-                    <h4 style="margin-bottom: 2rem">성향과 비슷한 추천 기업 목록</h4>
+                    <h4 style="margin-bottom: 2rem">당신의 성향에 맞는 추천 기업</h4>
                     <div class="box" style="background-color: #007bff; color: #fff;"></div>
                     <div class="card-container">
                         <div v-for="(info, index) in win" :key="index" class="unique-card">

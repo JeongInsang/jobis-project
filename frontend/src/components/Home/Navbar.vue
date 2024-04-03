@@ -21,7 +21,7 @@
             </div>
             <div class="tab" v-if="store.isLogin">
                 <RouterLink style="text-decoration: none" :to="{ name: 'mypage' }"
-                    >Scrap</RouterLink
+                    >관심기업목록</RouterLink
                 >
             </div>
             <!-- <button class="primary" @click="goSignUp">

@@ -24,20 +24,20 @@
                         <p>회사주소: {{ companyData.address }}</p>
                         <div><strong>설립일자 :</strong> {{ companyData.foundAt }}</div>
                         <div><strong>대표자명 :</strong> {{ companyData.owner }}</div>
-                        <div><strong>자본금 :</strong> {{ companyData.capital }}</div>
-                        <div><strong>종업원수 :</strong> {{ companyData.employeeCnt }}</div>
+                        <div><strong>자본금 :</strong> {{ companyData.capital.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }}원</div>
+                        <div><strong>종업원수 :</strong> {{ companyData.employeeCnt }}명</div>
                         <div><strong>업종 :</strong> {{ companyData.type }}</div>
                         <div><strong>주요제품명 :</strong> {{ companyData.productName }}</div>
                     </div>
                 </div>
                 <!-- <strong v-if="companyData.youthCompany">청년친화강소기업여부 :</strong> -->
                 <div v-if="companyData.youthCompany">
-                    <div>고용률 : {{ youthCompanyData[0].employmentRate }}</div>
-                    <div>평균월급 : {{ youthCompanyData[0].salary }}</div>
-                    <div>청년비율 : {{ youthCompanyData[0].youthRate }}</div>
-                    <div>청년고용률: {{ youthCompanyData[0].youthHireRate }}</div>
-                    <div>청년고용증가인원 : {{ youthCompanyData[0].youthHireIncreasingCnt }}</div>
-                    <div>청년고용증가율 : {{ youthCompanyData[0].youthHireIncreasingRate }}</div>
+                    <div>고용률 : {{ youthCompanyData[0].employmentRate }}%</div>
+                    <div style="margin-top: 0.6em;">평균월급 : {{ youthCompanyData[0].salary.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }}원</div>
+                    <div style="margin-top: 0.6em;">청년비율 : {{ youthCompanyData[0].youthRate }}%</div>
+                    <div style="margin-top: 0.6em;">청년고용률: {{ youthCompanyData[0].youthHireRate }}%</div>
+                    <div style="margin-top: 0.6em;">청년고용증가인원 : {{ youthCompanyData[0].youthHireIncreasingCnt }}명</div>
+                    <div style="margin-top: 0.6em;">청년고용증가율 : {{ youthCompanyData[0].youthHireIncreasingRate }}%</div>
                 </div>
             </div>
         </div>
