@@ -1,35 +1,54 @@
 <template>
+    <!-- 기업선호 월드컵 컴포넌트 -->
     <div class="container1" style="margin-top: 30px;">
         <div style="font-family: 'Pretendard'; justify-content: center; align-self: center">
-            <h2 style="text-align: center;">기업선호 월드컵</h2>
+            <!-- 제목 -->
+            <div class="title-container"><h2 style="text-align: center;">기업선호 월드컵</h2></div>
             <div v-if="!winner">
+                <!-- 현재 라운드 표시 -->
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
                     <h2 style="text-align: center" :key="currentRound">
                         {{ currentRound }}
                     </h2>
                 </transition>
+                <!-- 게임 시작 버튼 -->
                 <button
                     @click="startTournamentAndgetInfo"
                     v-if="!isTournamentStarted"
-                    class="learn-more">
+                    class="learn-more"
+                    style="margin: 0 auto; display: block; background-color: #007bff; color: #fff;"> <!-- 배경색과 글자색 지정 -->
                     게임 시작!
                 </button>
+                <!-- 현재 경기 표시 -->
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
                     <div
                         v-if="currentMatchIndex < matches.length"
                         class="current-match-display"
-                        :key="currentMatchIndex"
-                    >
-                        <div v-for="(match, index) in matches[currentMatchIndex]" :key="index" class="card" @click="selectWinner(currentMatchIndex, index)">
-                        <img :src="`src/assets/img/worldcup/${match.worldcupId}.jpg`" alt="나와라 제발" class="image" />
-                        <div class="text">
-                            <span style="font-size: 20px;">{{ match.name }}</span>
-                            <div>
-                            <p :style="getStyle(match, 'activity')">활동성 : {{ match.activity }}</p>
-                            <p :style="getStyle(match, 'efficiency')">효율성 : {{ match.efficiency }}</p>
-                            <p :style="getStyle(match, 'growth')">성장성 : {{ match.growth }}</p>
-                            <p :style="getStyle(match, 'profitability')">수익성 : {{ match.profitability }}</p>
-                            <p :style="getStyle(match, 'stability')">안정성 : {{ match.stability }}</p>
+                        :key="currentMatchIndex">
+                        <div v-for="(match, index) in matches[currentMatchIndex]" :key="index">
+                            <!-- 경기 카드 -->
+                            <div class="card" @click="selectWinner(currentMatchIndex, index)">
+                                <!-- 이미지 -->
+                                <img
+                                    :src="`src/assets/img/worldcup/${match.worldcupId}.jpg`"
+                                    alt="나와라 제발"
+                                    class="image" />
+
+                                    <!-- 기업 정보 -->
+                                    <div class="text">
+                                        <span style="font-size: 20px;">{{ match.name }}</span>
+                                        <div>
+                                            <p :style="styles.activity">활동성 : {{ match.activity }}</p>
+                                            <p :style="styles.efficiency">효율성 : {{ match.efficiency }}</p>
+                                            <p :style="styles.growth">성장성 : {{ match.growth }}</p>
+                                            <p :style="styles.profitability">수익성 : {{ match.profitability }}</p>
+                                            <p :style="styles.stability">안정성 : {{ match.stability }}</p>
+                                            <br />
+                                        </div>
+                                        <span>전체 분석 내용</span>
+                                        <p style="width: 380px">{{ match.description }}</p>
+                                    </div>
+
                             </div>
                             <span>전체 분석 내용</span>
                             <p style="width: 380px">{{ match.description }}</p>
@@ -38,27 +57,31 @@
                     </div>
                 </transition>
             </div>
-            <div v-else style="width: 55rem">
+            <div v-else style="width: 55rem; text-align: center;"> <!-- 우승 기업을 가운데 정렬 -->
                 <!-- 수정된 부분: 추가 정보 확인 버튼 클릭 시, winner의 name 정보만을 표시 -->
-                <h3>{{ winner.name }}가 선호기업 선택 월드컵에서 우승했습니다!</h3>
+                <h3>가상기업 <span style="color: red;">{{ winner.name }}</span> (이)가 우승했습니다 !</h3>
                 <div v-if="winnerInfoLoaded" style="margin-top: 2rem">
                     <h4 style="margin-bottom: 2rem">성향과 비슷한 추천 기업 목록</h4>
+                    <div class="box" style="background-color: #007bff; color: #fff;"></div>
                     <div class="card-container">
                         <div v-for="(info, index) in win" :key="index" class="unique-card">
+                            <!-- 기업 카드 -->
                             <div class="background-overlay"></div>
                             <div @click="goCompanyDeatil(info.companyId)" class="card-content">
+                                <!-- 기업 정보 -->
                                 <div class="card-title">{{ info.name }}</div>
                                 <div class="card-description">{{ info.type }}</div>
-                                <div>활동성 : {{ info.factor.activity.toFixed(6) }}</div>
+                                <!-- <div>활동성 : {{ info.factor.activity.toFixed(6) }}</div>
                                 <div>안정성 : {{ info.factor.stability.toFixed(6) }}</div>
                                 <div>수익성 : {{ info.factor.profitability.toFixed(6) }}</div>
                                 <div>성장성 : {{ info.factor.growth.toFixed(6) }}</div>
-                                <div>효율성 : {{ info.factor.efficiency.toFixed(6) }}</div>
+                                <div>효율성 : {{ info.factor.efficiency.toFixed(6) }}</div> -->
                                 <!-- <div class="card-description">{{ info.address }}</div> -->
                             </div>
                         </div>
                     </div>
-                    <button @click="resetTournament" v-if="winner" class="learn-more">
+                    <!-- 다시하기 버튼 -->
+                    <button @click="resetTournament" v-if="winner" class="learn-more" style="background-color: #007bff; color: #ffffff;"> <!-- 다시하기 버튼 색상 변경 -->
                         다시하기
                     </button>
                 </div>
@@ -87,11 +110,13 @@ const selectionConfirmed = ref(false);
 const API_URL = store.API_URL;
 const accessToken = localStorage.getItem('accessToken');
 
+// 게임 시작 및 기업 정보 가져오기
 const startTournamentAndgetInfo = function () {
     companiesInfo();
     startTournament();
 };
 
+// 기업 상세 정보 페이지로 이동
 const goCompanyDeatil = (comapnyId) => [
     router.push({
         name: 'companydetail',
@@ -99,6 +124,7 @@ const goCompanyDeatil = (comapnyId) => [
     }),
 ];
 
+// 기업 정보 가져오기
 const companiesInfo = function () {
     axios({
         method: 'get',
@@ -118,6 +144,7 @@ const companiesInfo = function () {
 };
 const winnerInfoLoaded = ref(false);
 
+// 우승 기업 정보 가져오기
 const getWinnerInfo = () => {
     winnerInfo();
 };
@@ -140,6 +167,8 @@ const winnerInfo = function () {
             console.log(err);
         });
 };
+
+// 경기 생성
 const createMatches = () => {
     const newMatches = [];
     for (let i = 0; i < companies.value.length; i += 2) {
@@ -149,8 +178,9 @@ const createMatches = () => {
     matches.value = newMatches;
 };
 
-const isTournamentStarted = ref(false);
 
+// 게임 시작
+const isTournamentStarted = ref(false);
 const startTournament = () => {
     isTournamentStarted.value = true;
     if (!matches.value.length || currentRound.value === '16강') {
@@ -158,6 +188,7 @@ const startTournament = () => {
     }
 };
 
+// 게임 재시작
 const resetTournament = () => {
     isTournamentStarted.value = false;
     matches.value = [];
@@ -167,8 +198,9 @@ const resetTournament = () => {
     currentRound.value = '16강';
 };
 
-const nextMatch = ref(null);
 
+// 다음 경기 시작
+const nextMatch = ref(null);
 const selectWinner = (matchIndex, winnerIndex) => {
   const selectedMatch = matches.value[matchIndex][winnerIndex];
   winners.value.push(selectedMatch);
@@ -183,6 +215,7 @@ const selectWinner = (matchIndex, winnerIndex) => {
   }, 50);
 };
 
+// 다음 라운드 시작
 const startNextRound = () => {
     let nextRoundName;
     if (winners.value.length === 8) {
@@ -214,6 +247,8 @@ const startNextRound = () => {
         setTimeout(() => (isNextRound.value = false), 500);
     }, 1000);
 };
+
+// 우승자 변경 감지
 watch(winner, (newValue) => {
     if (newValue !== '') {
         getWinnerInfo();
@@ -290,6 +325,7 @@ const styles = ref({});
     transition:
         transform 0.3s,
         box-shadow 0.3s;
+    text-align: center;
 }
 
 .unique-card:hover {
@@ -299,7 +335,7 @@ const styles = ref({});
 
 .card-content {
     padding: 10px;
-    text-align: center;
+    text-align: center; /* 정보 텍스트들을 가운데 정렬 */
     color: #888;
     z-index: 2;
     transition: color 0.3s;
@@ -329,6 +365,7 @@ const styles = ref({});
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .card-description {
@@ -337,5 +374,29 @@ const styles = ref({});
     display: block;
     padding-left: 5px;
     font-size: 14px;
+    text-align: center; /* 정보 텍스트들을 가운데 정렬 */
 }
+
+/* 추가 */
+.title-container {
+    text-align: center;
+    margin-top: 30px;
+    position: relative; /* 부모 요소로부터의 상대 위치 설정 */
+    /* border: 2px solid #007bff; /* 테두리 컴포넌트의 색상을 #007bff로 설정합니다. */
+    /* background-color: #007bff; */
+    /* color: #fff; */
+    border-radius: 5px; /* 테두리의 둥글기를 조절합니다. */
+    padding: 20px; /* 컨테이너 내부의 여백을 설정합니다. */
+}
+
+.title-bar {
+    background-color: #007bff; /* 파란색 바 색상 */
+    height: 3px; /* 바의 높이 */
+    width: calc(100% - 32px); /* 부모 요소인 title-container의 너비에서 좌우 패딩을 뺀 값 */
+    margin: 0 auto; /* 가운데 정렬 */
+    position: absolute; /* 절대 위치 설정 */
+    bottom: -5px; /* 바의 하단을 조정하여 제목 아래에 위치하도록 설정 */
+    left: 16px; /* 바를 제목 컨테이너의 좌우 패딩에 맞추어 왼쪽으로 이동 */
+}
+
 </style>
