@@ -6,6 +6,7 @@ import CompanyDetail from '@/views/Company/CompanyDetail.vue';
 import MypageView from '@/views/Users/MypageView.vue';
 import SignupView from '@/views/Users/SignupView.vue';
 import LoginSuccessView from '@/views/Users/LoginSuccessView.vue';
+import LoginFailureView from '@/views/Users/LoginFailureView.vue';
 import Test from '@/views/Company/Test.vue';
 import CompanySearchView from '@/views/Company/CompanySearchView.vue';
 
@@ -47,6 +48,11 @@ const router = createRouter({
             path: '/login-success/:atk/:rtk',
             name: 'loginsuccess',
             component: LoginSuccessView,
+        },
+        {
+            path: '/login-failure',
+            name: 'login-failure',
+            component: LoginFailureView,
         },
         {
             path: '/test',
