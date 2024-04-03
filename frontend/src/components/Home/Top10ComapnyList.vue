@@ -2,17 +2,20 @@
     <h1
         style="
             margin-bottom: 5rem;
-            font-family: 'Pretendard-Light';
-            text-align: start;
+            font-family: 'Pretendard-Bold';
+            text-align: center;
             margin-left: 1em;
-            margin-bottom: 40px;
-            margin-top: 80px;
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+            color: #c0c0c0;
         ">
         # 조회수 많은 기업
     </h1>
-    <section style="background-color: rgb(241, 241, 241); height: 50vh" class="d-flex">
+
+    <section style="background-color: white; height: 50vh" class="d-flex">
         <div class="container" style="align-items: center; justify-content: center">
             <Swiper
+                style="border: 3px solid gainsboro; border-radius: 1.5rem"
                 :loop="true"
                 :speed="15000"
                 :free-mode="true"
@@ -23,35 +26,43 @@
                 }">
                 <SwiperSlide>
                     <div class="swiper-slide">
-                        <div class="card-container" v-for="comapny in companyList1">
-                            <div class="card card-size">
-                                <div class="card-body">
-                                    <img
-                                    class="img-size"
-                                        src="@/assets/img/jobis.png"
-                                        alt="" />
-                                    <h5 class="card-title font">
-                                        {{ comapny.name }}
-                                    </h5>
+                        <div class="card-container" v-for="company in companyList1">
+                            <RouterLink
+                                style="text-decoration: none"
+                                :to="{
+                                    name: 'companydetail',
+                                    params: { companyId: company.companyId },
+                                }">
+                                <div class="card card-size">
+                                    <div class="card-body">
+                                        <img class="img-size" src="@/assets/img/jobis.png" alt="" />
+                                        <h5 class="card-title font">
+                                            {{ company.name }}
+                                        </h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </RouterLink>
                         </div>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
                     <div class="swiper-slide">
                         <div class="card-container" v-for="company in companyList2">
-                            <div class="card card-size">
-                                <div class="card-body">
-                                    <img
-                                        class="img-size"
-                                        src="@/assets/img/jobis.png"
-                                        alt="" />
-                                    <h5 class="card-title font">
-                                        {{ company.name }}
-                                    </h5>
+                            <RouterLink
+                                style="text-decoration: none"
+                                :to="{
+                                    name: 'companydetail',
+                                    params: { companyId: company.companyId },
+                                }">
+                                <div class="card card-size">
+                                    <div class="card-body">
+                                        <img class="img-size" src="@/assets/img/jobis.png" alt="" />
+                                        <h5 class="card-title font">
+                                            {{ company.name }}
+                                        </h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </RouterLink>
                         </div>
                     </div>
                 </SwiperSlide>
@@ -70,8 +81,9 @@ import { onMounted, ref } from 'vue';
 
 const store = useCounterStore();
 const companyList = ref(null);
-const companyList1 = ref([])
-const companyList2 = ref([])
+const companyList1 = ref([]);
+const companyList2 = ref([]);
+const companyId = ref(null);
 
 onMounted(() => {
     getTopViewList();
@@ -83,19 +95,17 @@ const getTopViewList = () => {
     })
         .then((res) => {
             companyList.value = res.data.data;
+            companyId.value = res.data.data.companyId;
             console.log('상위 조회수 리스트 조회 : ', companyList.value);
             // companyList를 반으로 나누어 companyList1과 companyList2에 할당
             const halfIndex = Math.ceil(companyList.value.length / 2);
             companyList1.value = companyList.value.slice(0, halfIndex);
             companyList2.value = companyList.value.slice(halfIndex);
-         
         })
         .catch((err) => {
             console.log(err);
         });
 };
-
-
 </script>
 
 <style scoped>
@@ -106,8 +116,7 @@ const getTopViewList = () => {
 }
 .swiper-slide {
     text-align: center;
-
-    background: rgb(241, 241, 241);
+    background: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,19 +128,20 @@ const getTopViewList = () => {
 
 .card-container {
     width: 20rem;
-    height: 10rem;
+    height: 15rem;
 }
 .card-size {
-    width: 10rem;
-    height: 10rem;
+    width: 12rem;
+    height: 12rem;
 }
 .img-size {
-    height: 7rem;
-    width: 7rem;
+    height: 12rem;
+    width: 12rem;
     margin-bottom: 0.5rem;
 }
 .font {
-    font-family: 'Pretendard-Light';
-    font-size: 0.8rem;
+    font-family: 'Pretendard-Bold';
+    font-size: 1.1rem;
+    width: 12rem;
 }
 </style>

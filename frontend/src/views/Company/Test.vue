@@ -4,7 +4,8 @@
     <!-- <WorldCupTest /> -->
     <!-- <CardMoving /> -->
     <!-- <Moving /> -->
-    <SearchTest />
+    <!-- <SearchTest /> -->
+    <ButtonTest />
 </template>
 
 <script setup>
@@ -13,6 +14,7 @@ import Moving from '@/components/PageTest/Moving.vue';
 import WorldCupTest from '@/components/PageTest/WorldcupTest.vue';
 import CardMoving from '@/components/PageTest/CardMoving.vue';
 import SearchTest from '@/components/PageTest/SearchTest.vue';
+import ButtonTest from '@/components/PageTest/ButtonTest.vue';
 </script>
 
 <style scoped></style>

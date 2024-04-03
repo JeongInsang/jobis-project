@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
-        <h2 style="font-family: 'Pretendard-Bold'">기업 리스트</h2>
+    <div class="container font">
+        <h2 style="font-family: 'Pretendard-Bold'; margin-top: 3rem">강소기업 검색</h2>
         <!-- <SearchButton /> -->
-        <div class="d-flex w-100">
+        <div class="d-flex w-100 font">
             <div class="input-group mb-3 ms-3 w-25">
                 <input
                     @keydown.enter="fetchData"
@@ -21,52 +21,58 @@
                 </button>
             </div>
         </div>
-        <div class="d-flex">
-            <button class="button m-1" :class="{ active: regionIsclick }" @click="clickRiegon">
+        <div class="d-flex font">
+            <button
+                class="cssbuttons-io-button"
+                :class="{ active: regionIsclick }"
+                @click="clickRiegon">
                 지역
             </button>
-            <button class="button m-1" :class="{ active: typeIsclick }" @click="clickType">
+            <button
+                class="cssbuttons-io-button"
+                :class="{ active: typeIsclick }"
+                @click="clickType">
                 산업군
             </button>
         </div>
         <!-- 지역 버튼 클릭 시 나오는 항목들 -->
-        <div v-if="regionIsclick" class="d-flex col-9" v-bind="regionIsclick">
+        <div v-if="regionIsclick" class="d-flex col-8 font" v-bind="regionIsclick">
             <button
                 @click="toggleRegionButton(region.id)"
                 v-for="region in regions"
                 :key="region.id"
                 :class="{ active: isRegionSelected(region.id) }"
-                class="buttonS m-1 w-100">
+                class="cssbuttons-io-button">
                 {{ region.region }}
             </button>
         </div>
         <!-- 산업군 버튼 클릭 시 나오는 항목들 -->
-        <div v-if="typeIsclick" class="d-flex col-9" v-bind="typeIsclick">
+        <div v-if="typeIsclick" class="d-flex col-8 font" v-bind="typeIsclick">
             <button
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries1"
                 :key="industry.typeId"
                 :class="{ active: isTypeSelected(industry.typeId) }"
-                class="buttonS m-1 w-100">
+                class="cssbuttons-io-button">
                 {{ industry.industry }}
             </button>
         </div>
-        <div v-if="typeIsclick" class="d-flex col-9" v-bind="typeIsclick">
+        <div v-if="typeIsclick" class="d-flex col-8 font" v-bind="typeIsclick">
             <button
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries2"
                 :key="industry.typeId"
                 :class="{ active: isTypeSelected(industry.typeId) }"
-                class="buttonS m-1 w-100">
+                class="cssbuttons-io-button">
                 {{ industry.industry }}
             </button>
         </div>
     </div>
     <!-- 테이블 임 -->
-    <div class="container">
+    <div class="container font" style="margin-top: 2em">
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-bordered table-hover dt-responsive">
+                <table class="table table-bordered table-hover dt-responsive font">
                     <thead>
                         <tr>
                             <th>회사명</th>
@@ -76,7 +82,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="(company, index) in data" :key="index">
-                            <td @click="goCompanyDeatil(company.companyId)" class="company-detail">
+                            <td
+                                @click="goCompanyDeatil(company.companyId)"
+                                class="company-detail font">
                                 {{ company.name }}
                             </td>
                             <td>{{ company.type }}</td>
@@ -87,7 +95,7 @@
             </div>
         </div>
         <!-- 페이지 네이션 버튼 -->
-        <div class="d-flex">
+        <!-- <div class="d-flex">
             <button class="container pagenation-btn" @click="previousPage" :disabled="page === 0">
                 Previous Page
             </button>
@@ -100,6 +108,32 @@
                 {{ btn + 1 }}
             </button>
             <button class="container pagenation-btn" @click="nextPage">Next Page</button>
+        </div> -->
+        <!-- 페이지 네이션 테스트 용 -->
+        <div class="btn-group me-2 font" role="group" aria-label="First group">
+            <button
+                @click="previousPage"
+                :disabled="page === 0"
+                type="button"
+                class="btn btn-primary font">
+                <i class="bi bi-arrow-left-square"></i>
+            </button>
+            <button
+                type="button"
+                class="btn font"
+                @click="changePage(btn)"
+                v-for="(btn, index) in pageButtons"
+                :key="index"
+                :class="{ 'btn-primary': btn === page }">
+                {{ btn + 1 }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-primary font"
+                @click="nextPage"
+                :disabled="isLastPage">
+                <i class="bi bi-arrow-right-square"></i>
+            </button>
         </div>
     </div>
 </template>
@@ -116,14 +150,11 @@ const router = useRouter();
 // 기업 리스트 받을 변수
 const data = ref([]);
 const page = ref(store.currentPage);
-const size = ref(20); // 페이지당 아이템 수
+const size = ref(10); // 페이지당 아이템 수
 const keyword = ref('');
 const type = ref([]);
 const location = ref([]);
 const API_URL = store.API_URL;
-
-// 페이지 버튼 목록을 저장할 배열
-const pageButtons = ref([]);
 
 const fetchData = async () => {
     try {
@@ -137,6 +168,12 @@ const fetchData = async () => {
     }
 };
 
+// /////////////////////////////////////////////페이지 네이션/////////////////////////////////////////////////
+
+const totalData = ref(1000);
+const pageButtons = ref([]);
+const maxButtons = 10; // 최대 버튼 수
+
 const previousPage = () => {
     if (page.value > 0) {
         page.value--;
@@ -145,29 +182,24 @@ const previousPage = () => {
 };
 
 const nextPage = () => {
-    page.value++;
-    store.currentPage++;
+    if (page.value < Math.ceil(totalData.value / size.value) - 1) {
+        page.value++;
+        store.currentPage++;
+    }
 };
 
-// 페이지 버튼 클릭 시 해당 페이지로 이동
 const changePage = (pageIndex) => {
     page.value = pageIndex;
     store.currentPage = pageIndex;
 };
 
-// 데이터의 총 갯수
-const totalData = 24800;
-
-// 페이지 버튼 목록 생성
 const generatePageButtons = () => {
-    const totalPages = Math.ceil(totalData / size.value);
-    const maxButtons = 10; // 최대 버튼 수
+    const totalPages = Math.ceil(totalData.value / size.value);
     const currentPageIndex = page.value;
 
     let startPage = Math.max(0, currentPageIndex - Math.floor(maxButtons / 2));
     let endPage = Math.min(totalPages - 1, startPage + maxButtons - 1);
 
-    // Adjust startPage and endPage to show exactly maxButtons if possible
     if (endPage - startPage < maxButtons - 1) {
         startPage = Math.max(0, endPage - maxButtons + 1);
     }
@@ -178,6 +210,12 @@ const generatePageButtons = () => {
 onMounted(() => {
     fetchData();
     generatePageButtons();
+});
+
+// 마지막 페이지 여부 확인 함수
+const isLastPage = computed(() => {
+    const totalPages = Math.ceil(totalData.value / size.value);
+    return page.value === totalPages - 1;
 });
 
 watch(
@@ -373,7 +411,7 @@ const goCompanyDeatil = (comapnyId) => [
 </script>
 <style scoped>
 .active {
-    background-color: #ccc;
+    background: gainsboro;
 }
 .pagenation-btn {
     height: 4.2rem;
@@ -381,5 +419,65 @@ const goCompanyDeatil = (comapnyId) => [
 }
 .company-detail {
     cursor: pointer;
+}
+/* 버튼 스타일 테스트 용  */
+.cssbuttons-io-button {
+    align-items: center;
+    justify-content: center; /* 텍스트를 수평으로 중앙 정렬합니다 */
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 0.7em 0.8em; /* 필요에 따라 여백을 조정합니다 */
+    color: white;
+    background: #ad5389;
+    background: linear-gradient(0deg, rgb(23, 79, 192) 0%, rgb(102, 150, 247) 100%);
+    border: none;
+    margin: 0.1em;
+    letter-spacing: 0.05em;
+    border-radius: 20em;
+    width: 100px; /* 버튼의 고정된 너비를 설정합니다 */
+    white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 합니다 */
+    overflow: hidden; /* 텍스트가 넘치는 경우 숨깁니다 */
+    text-overflow: ellipsis; /* 넘치는 텍스트에 대해 점(...)을 표시합니다 */
+}
+
+.cssbuttons-io-button:hover {
+    box-shadow: 0 0.5em 1.5em -0.5em #1443a798;
+}
+
+.cssbuttons-io-button:active {
+    box-shadow: 0 0.3em 1em -0.5em #143ea798;
+}
+/* 수정된 스타일 */
+.cssbuttons-io-button.active {
+    background: linear-gradient(0deg, rgb(14, 51, 126) 0%, rgb(41, 70, 129) 100%);
+    box-shadow: none; /* 버튼이 활성화되었을 때 그림자를 없앱니다 */
+}
+
+.cssbuttons-io-button.active:hover {
+    box-shadow: 0 0.5em 1.5em -0.5em #1443a798;
+}
+
+.cssbuttons-io-button.active:active {
+    box-shadow: 0 0.3em 1em -0.5em #143ea798;
+}
+.font {
+    font-family: 'Pretendard-Bold';
+}
+/* 테이블 스타일 */
+/* 테이블 칼럼 너비 조정 */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 103px; /* 첫 번째 칼럼의 너비 */
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 120px; /* 두 번째 칼럼의 너비 */
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 300px; /* 세 번째 칼럼의 너비 */
 }
 </style>
