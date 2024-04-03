@@ -7,9 +7,11 @@
             margin-left: 1em;
             margin-bottom: 2rem;
             margin-top: 4rem;
-            color: #c0c0c0;
-        ">
-        # 조회수 많은 기업
+            color: #007bff;
+        "
+        data-aos="flip-left"
+        data-aos-duration="1000">
+        VIEWS TOP 10
     </h1>
 
     <section style="background-color: white; height: 50vh" class="d-flex">
@@ -138,6 +140,7 @@ const getTopViewList = () => {
     height: 12rem;
     width: 12rem;
     margin-bottom: 0.5rem;
+    border-radius: 1rem;
 }
 .font {
     font-family: 'Pretendard-Bold';

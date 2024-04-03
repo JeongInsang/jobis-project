@@ -1,78 +1,40 @@
 <template>
-    <div>1</div>
-    <button class="Btn"><i class="bi bi-star fs-5 star"></i></button>
-    <div v-if="isScarp" @click="scrap">
-        <button class="Btn"><i class="bi bi-star fs-5 star"></i></button>
-    </div>
-    <div v-else @click="scrap">
-        <button class="Btn"><i class="bi bi-star-fill fs-5 star"></i></button>
-    </div>
-
-    <div class="card">
-        <h2>CARD</h2>
+    <div class="body">
+        <h2 contenteditable="true">Text</h2>
     </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-const isScarp = ref(false);
-
-const scrap = () => {
-    isScarp.value = !isScarp.value;
-};
-</script>
+<script setup></script>
 
 <style scoped>
-@import url('@/assets/scrapbtn.css');
-
-/* 카드 css */
-.card {
-    width: 190px;
-    height: 254px;
-    /* background: #07182e; */
-    position: relative;
+.body {
     display: flex;
-    place-content: center;
-    place-items: center;
-    overflow: hidden;
-    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #007bff;
 }
-
-.card h2 {
-    z-index: 1;
-    color: white;
-    font-size: 2em;
+h2 {
+    position: relative;
+    font-size: 6em;
+    letter-spacing: 15px;
+    color: #bad7f5;
+    text-transform: uppercase;
+    width: 100%;
+    text-align: center;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #000);
+    line-height: 0.7em;
+    outline: none;
+    animation: animate 5s linear infinite;
 }
-
-.card::before {
-    content: '';
-    position: absolute;
-    width: 100px;
-    background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
-    height: 130%;
-    animation: rotBGimg 3s linear infinite;
-    transition: all 0.2s linear;
-}
-
-@keyframes rotBGimg {
-    from {
-        transform: rotate(0deg);
+@keyframes animate {
+    0% {
+        color: #007bff;
+        text-shadow: none;
     }
-
-    to {
-        transform: rotate(360deg);
+    100% {
+        color: #fff;
+        text-shadow: #007bff;
     }
 }
-
-.card::after {
-    content: '';
-    position: absolute;
-    /* background: #07182e; */
-    inset: 5px;
-    border-radius: 15px;
-}
-/* .card:hover:before {
-  background-image: linear-gradient(180deg, rgb(81, 255, 0), purple);
-  animation: rotBGimg 3.5s linear infinite;
-} */
 </style>
