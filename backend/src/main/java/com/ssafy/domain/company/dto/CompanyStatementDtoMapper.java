@@ -19,12 +19,6 @@ public class CompanyStatementDtoMapper {
                 .build();
     }
 
-//    public static List<CompanyStatementResponse> companyStatementEntityToDtoList(final List<CompanyStatement> companyStatementList){
-//        return companyStatementList.stream()
-//                .map(CompanyStatementDtoMapper::companyStatementEntityToDto)
-//                .collect(Collectors.toList());
-//    }
-
     public static List<CompanyStatementResponse> companyStatementEntityToDtoList(final List<CompanyStatement> companyStatementList){
         return companyStatementList.stream()
                 // 필터링을 통해 assetValueType이 특정 값들을 제외한 항목들만 선택
