@@ -66,6 +66,9 @@ const formLogout = () => {
         console.log(res);
         store.setIsLogin(false);
         localStorage.clear();
+
+        alert("로그아웃 완료")
+
         router.push({ name: 'home' });
         
     },
