@@ -43,7 +43,7 @@ public enum ErrorCode implements ResponseCode {
 
     BLOCK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 정지된 사용자입니다."),
 
-    SCRAP_NOT_FOUND(HttpStatus.NOT_FOUND, "기업스크랩 목록이 없습니다."),
+    SCRAPCOMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "기업스크랩 목록이 없습니다."),
 
     TENDENCY_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자성향 정보가 없습니다."),
 
@@ -55,6 +55,8 @@ public enum ErrorCode implements ResponseCode {
     COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "기업검색 정보가 없습니다."),
 
     BASE_NOT_FOUND(HttpStatus.NOT_FOUND, "기업기본 정보가 없습니다."),
+
+    SCRAP_NOT_FOUND(HttpStatus.NOT_FOUND, "관심기업 여부가 없습니다."),
 
     STATEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "재무제표 정보가 없습니다."),
 
