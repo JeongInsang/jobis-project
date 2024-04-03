@@ -7,6 +7,7 @@ import MypageView from '@/views/Users/MypageView.vue';
 import SignupView from '@/views/Users/SignupView.vue';
 import LoginSuccessView from '@/views/Users/LoginSuccessView.vue';
 import LoginFailureView from '@/views/Users/LoginFailureView.vue';
+import TokenExpireView from '@/views/Users/TokenExpireView.vue';
 import Test from '@/views/Company/Test.vue';
 import CompanySearchView from '@/views/Company/CompanySearchView.vue';
 
@@ -53,6 +54,11 @@ const router = createRouter({
             path: '/login-failure',
             name: 'login-failure',
             component: LoginFailureView,
+        },
+        {
+            path: '/token-expire',
+            name: 'tokenexpire',
+            component: TokenExpireView,
         },
         {
             path: '/test',
