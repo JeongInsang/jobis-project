@@ -76,7 +76,7 @@ const getCompanyInformation = () => {
                 getYouthCompanyInformation(); // 청년친화강소기업 여부가 true면 정보를 가져옴
             }
             console.log(companyData.value, 'companyData 입니다.');
-            // console.log(scraped.value, 'scraped입니다.');
+            console.log(scraped.value, 'scraped입니다.');
         })
         .catch((err) => {
             console.log(err);
@@ -114,6 +114,7 @@ const scrap = () => {
             })
                 .then((res) => {
                     console.log('스크랩 성공 했습니다.', res);
+                    getCompanyInformation();
                 })
                 .catch((err) => {
                     console.log('스크랩 실패 했습니다.', err);
