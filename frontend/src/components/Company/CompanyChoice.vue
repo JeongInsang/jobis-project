@@ -50,7 +50,7 @@
                     <div class="card-container">
                         <div v-for="(info, index) in win" :key="index" class="unique-card">
                             <div class="background-overlay"></div>
-                            <div class="card-content">
+                            <div @click="goCompanyDeatil(info.companyId)" class="card-content">
                                 <div class="card-title">{{ info.name }}</div>
                                 <div class="card-description">{{ info.type }}</div>
                                 <div>활동성 : {{ info.factor.activity.toFixed(6) }}</div>
@@ -76,7 +76,9 @@ import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import { watch } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const store = useCounterStore();
 const isNextRound = ref(false);
 const companies = ref([]);
@@ -93,6 +95,13 @@ const startTournamentAndgetInfo = function () {
     companiesInfo();
     startTournament();
 };
+
+const goCompanyDeatil = (comapnyId) => [
+    router.push({
+        name: 'companydetail',
+        params: { companyId: comapnyId },
+    }),
+];
 
 const companiesInfo = function () {
     axios({
@@ -247,7 +256,7 @@ watch(winner, (newValue) => {
 
 .unique-card:hover {
     transform: scale(1.1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 16px rgba(57, 57, 57, 0.3);
 }
 
 .card-content {
@@ -259,7 +268,7 @@ watch(winner, (newValue) => {
 }
 
 .unique-card:hover .card-content {
-    color: #ff7e5f;
+    color: #ff3300;
 }
 
 .background-overlay {
@@ -268,7 +277,7 @@ watch(winner, (newValue) => {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(52, 73, 94, 0.7);
+    background: rgba(192, 220, 249, 0.7);
     border-radius: 15px;
     opacity: 0;
     transition: opacity 0.3s;

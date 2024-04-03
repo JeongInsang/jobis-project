@@ -162,10 +162,7 @@ const fetchData = async () => {
             `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`
         );
         data.value = response.data.data.content;
-        // totalData.value = response.data.data.totalElements;
-        console.log(response.data);
         console.log(data.value);
-        console.log(totalData.value, 'totalData 수 입니다');
     } catch (error) {
         console.error('Error fetching data:', error);
     }

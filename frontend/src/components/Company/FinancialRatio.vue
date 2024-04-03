@@ -1,5 +1,5 @@
 <template>
-    <div class="indicators-section card">
+    <div class="indicators-section card3">
         <table class="indicators">
             <thead v-if="quarter !== null">
                 <tr>
@@ -189,5 +189,5 @@ const getCompanyQuarter = () => {
 </script>
 
 <style scoped>
-@import url('@/assets/information.css');
+@import url('@/assets/ratio.css');
 </style>
