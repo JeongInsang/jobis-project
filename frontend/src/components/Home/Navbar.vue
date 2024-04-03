@@ -1,6 +1,6 @@
 <template>
     <nav class="top-bar">
-        <Logo />
+        <!-- <Logo /> -->
         <!-- <div class="rectangle-4137"><Logo /></div> -->
         <div class="title">
             <RouterLink style="text-decoration: none" :to="{ name: 'home' }">JOBIS</RouterLink>
