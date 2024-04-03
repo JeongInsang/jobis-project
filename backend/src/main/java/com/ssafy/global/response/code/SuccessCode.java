@@ -51,7 +51,7 @@ public enum SuccessCode implements ResponseCode {
 
     FIND_BASE_SUCCESS(HttpStatus.OK, "기업기본 정보 조회에 성공했습니다."),
 
-    FIND_STATEMENT_SUCCESS(HttpStatus.OK, "기업재무재표 정보 조회에 성공했습니다."),
+    FIND_STATEMENT_SUCCESS(HttpStatus.OK, "기업재무제표 정보 조회에 성공했습니다."),
 
     FIND_RATE_SUCCESS(HttpStatus.OK, "기업재무비율 정보 조회에 성공했습니다."),
 
