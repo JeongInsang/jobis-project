@@ -22,17 +22,20 @@ import 'chartjs-adapter-date-fns';
 import 'chartjs-plugin-datalabels';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { useRoute } from 'vue-router';
 
 const chartCanvas = ref(null);
 const visualizationData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
-
+const route = useRoute();
+const companyId = ref(route.params.companyId);
 const API_URL = store.API_URL;
+
 const getcompanyInformation = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/info/1818`,
+        url: `${API_URL}/api/company/info/${companyId.value}`,
     })
         .then((res) => {
             visualizationData.value = res.data.data.factor;
@@ -96,6 +99,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* @import url('@/assets/sheet.css'); */
 .chart-canvas {
     width: 30rem; /* 원하는 너비로 설정 */
     height: 20rem; /* 원하는 높이로 설정 */
