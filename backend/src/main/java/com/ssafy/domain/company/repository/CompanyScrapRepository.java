@@ -13,7 +13,7 @@ public interface CompanyScrapRepository extends JpaRepository<CompanyScrap, Inte
     List<CompanyScrap> findAllByUser(Users user);
 
     // 관심기업목록 취소
-    void deleteCompanyScrapByUserAndCompany(Company company, Users user);
+    void deleteCompanyScrapByCompanyAndUser(Company company, Users user);
 
     boolean existsByCompanyAndUser(Company company, Users user);
 

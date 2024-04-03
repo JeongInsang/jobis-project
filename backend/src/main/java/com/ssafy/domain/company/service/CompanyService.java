@@ -240,7 +240,7 @@ public class CompanyService {
         Users user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        companyScrapRepository.deleteCompanyScrapByUserAndCompany(company, user);
+        companyScrapRepository.deleteCompanyScrapByCompanyAndUser(company, user);
     }
 
 }
