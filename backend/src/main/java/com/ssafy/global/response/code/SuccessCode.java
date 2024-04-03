@@ -26,7 +26,7 @@ public enum SuccessCode implements ResponseCode {
 
     PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),
 
-    FIND_SCRAP_SUCCESS(HttpStatus.OK, "기업 스크랩 목록 조회에 성공했습니다."),
+    FIND_SCRAPCOMPANY_SUCCESS(HttpStatus.OK, "기업 스크랩 목록 조회에 성공했습니다."),
 
     APPLY_TENDENCY_SUCCESS(HttpStatus.OK, "사용자성향 정보 입력에 성공했습니다."),
 
@@ -50,6 +50,8 @@ public enum SuccessCode implements ResponseCode {
     SEARCH_COMPANY_SUCCESS(HttpStatus.OK, "기업검색 목록 조회에 성공했습니다."),
 
     FIND_BASE_SUCCESS(HttpStatus.OK, "기업기본 정보 조회에 성공했습니다."),
+
+    FIND_SCRAP_SUCCESS(HttpStatus.OK, "기업 관심 여부 조회에 성공했습니다."),
 
     FIND_STATEMENT_SUCCESS(HttpStatus.OK, "기업재무제표 정보 조회에 성공했습니다."),
 

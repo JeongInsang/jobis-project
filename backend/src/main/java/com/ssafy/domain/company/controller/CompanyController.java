@@ -57,6 +57,19 @@ public class CompanyController {
         return SuccessResponse.createSuccess(SuccessCode.FIND_BASE_SUCCESS, companyResponseList);
     }
 
+
+    /**
+     * 기업 스크랩 여부
+     * @param id
+     * @return
+     */
+    @GetMapping("/scrap/{companyId}")
+    public ResponseEntity<Object> companyScrap(@PathVariable("companyId") Integer id) {
+        companyService.isCompanyScraped(id, authUtil.getLoginUserId());
+        return SuccessResponse.createSuccess(SuccessCode.FIND_SCRAP_SUCCESS);
+    }
+
+
     /**
      * 기업 재무제표 조회
      * @param id
@@ -64,7 +77,7 @@ public class CompanyController {
      */
 
     @GetMapping("/statement/{companyId}")
-    public ResponseEntity<Object> companyStatement(@PathVariable("companyId") Integer id){
+    public ResponseEntity<Object> companyStatement(@PathVariable("companyId") Integer id) {
         List<CompanyStatementResponse> companyStatementResponseList = companyService.findCompanyStatement(id);
         log.info("69 line, CompanyController, 재무제표");
         return SuccessResponse.createSuccess(SuccessCode.FIND_STATEMENT_SUCCESS, companyStatementResponseList);
