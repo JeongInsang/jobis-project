@@ -2,7 +2,7 @@
     <div class="container font">
         <h2 style="font-family: 'Pretendard-Bold'; margin-top: 3rem">강소기업 검색</h2>
         <!-- <SearchButton /> -->
-        <div class="d-flex w-100 font">
+        <div class="d-flex w-100 font justify-content-end">
             <div class="input-group mb-3 ms-3 w-25">
                 <input
                     @keydown.enter="fetchData"
@@ -24,7 +24,7 @@
         </div>
         <div class="d-flex font">
             <button
-                class="cssbuttons-io-button"
+                class="cssbuttons-io-button1"
                 :class="{ active: regionIsclick }"
                 @click="clickRiegon">
                 지역
@@ -43,8 +43,8 @@
                 v-for="region in regions"
                 :key="region.id"
                 :class="{ active: isRegionSelected(region.id) }"
-                class="cssbuttons-io-button">
-                {{ region.region }}
+                class="cssbuttons-io-button1">
+                {{ region.region.substring(0, 2) }}
             </button>
         </div>
         <!-- 산업군 버튼 클릭 시 나오는 항목들 -->
@@ -55,7 +55,8 @@
                 :key="industry.typeId"
                 :class="{ active: isTypeSelected(industry.typeId) }"
                 class="cssbuttons-io-button">
-                {{ industry.industry }}
+                
+                {{ industry.typeId === 7 ? industry.industry.substring(0, 8) : industry.industry.substring(0, 7) }}
             </button>
         </div>
         <div v-if="typeIsclick" class="d-flex col-10 font" v-bind="typeIsclick">
@@ -65,12 +66,12 @@
                 :key="industry.typeId"
                 :class="{ active: isTypeSelected(industry.typeId) }"
                 class="cssbuttons-io-button">
-                {{ industry.industry }}
+                {{ industry.typeId === 14 ? industry.industry.substring(0, 6) : industry.industry.substring(0, 7) }}
             </button>
         </div>
     </div>
     <!-- 테이블 임 -->
-    <div class="container font" style="margin-top: 2em">
+    <div class="container font" style="margin-top: 2em; text-align: center;">
         <div class="row">
             <div class="col-xs-12">
                 <table class="table table-bordered table-hover dt-responsive font">
@@ -113,6 +114,13 @@
         <!-- 페이지 네이션 테스트 용 -->
         <div class="btn-group me-2 font" role="group" aria-label="First group">
             <button
+                @click="firstPage"
+                :disabled="page === 0"
+                type="button"
+                class="btn btn-primary font">
+                <i class="bi bi-arrow-bar-left"></i>
+            </button>
+            <button
                 @click="previousPage"
                 :disabled="page === 0"
                 type="button"
@@ -134,6 +142,13 @@
                 @click="nextPage"
                 :disabled="isLastPage">
                 <i class="bi bi-arrow-right-square"></i>
+            </button>
+            <button
+                @click="lastPage"
+                :disabled="page === Math.ceil(totalData / size) - 1"
+                type="button"
+                class="btn btn-primary font">
+                <i class="bi bi-arrow-bar-right"></i>
             </button>
         </div>
     </div>
@@ -213,6 +228,17 @@ const generatePageButtons = () => {
     pageButtons.value = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
     console.log(pageButtons.value, 'pagebuttons');
 };
+
+const firstPage = () => {
+    page.value = 0;
+    store.currentPage = 0;
+};
+
+const lastPage = () => {
+    page.value = Math.ceil(totalData.value / size.value) - 1;
+    store.currentPage = Math.ceil(totalData.value / size.value) - 1;
+};
+
 
 onMounted(() => {
     fetchData();
@@ -417,8 +443,8 @@ const goCompanyDeatil = (comapnyId) => [
 ];
 </script>
 <style scoped>
-.active {
-    background: gainsboro;
+.row {
+    background: white
 }
 .pagenation-btn {
     height: 4.2rem;
@@ -436,8 +462,7 @@ const goCompanyDeatil = (comapnyId) => [
     font-size: 14px;
     padding: 0.7em 0.8em; /* 필요에 따라 여백을 조정합니다 */
     color: white;
-    background: #ad5389;
-    background: linear-gradient(0deg, rgb(23, 79, 192) 0%, rgb(102, 150, 247) 100%);
+    background: #60B7FF;
     border: none;
     margin: 0.1em;
     letter-spacing: 0.05em;
@@ -449,31 +474,85 @@ const goCompanyDeatil = (comapnyId) => [
 }
 
 .cssbuttons-io-button:hover {
-    box-shadow: 0 0.5em 1.5em -0.5em #1443a798;
+    box-shadow: 0 0.5em 1.5em -0.5em #60B7FF;
 }
 
 .cssbuttons-io-button:active {
-    box-shadow: 0 0.3em 1em -0.5em #143ea798;
+    box-shadow: 0 0.3em 1em -0.5em #60B7FF;
 }
 /* 수정된 스타일 */
 .cssbuttons-io-button.active {
-    background: linear-gradient(0deg, rgb(14, 51, 126) 0%, rgb(41, 70, 129) 100%);
+    background: #4a8dc4;
     box-shadow: none; /* 버튼이 활성화되었을 때 그림자를 없앱니다 */
 }
 
 .cssbuttons-io-button.active:hover {
-    box-shadow: 0 0.5em 1.5em -0.5em #1443a798;
+    box-shadow: 0 0.5em 1.5em -0.5em #60B7FF;
 }
 
 .cssbuttons-io-button.active:active {
-    box-shadow: 0 0.3em 1em -0.5em #143ea798;
+    box-shadow: 0 0.3em 1em -0.5em #60B7FF;
 }
+
+.cssbuttons-io-button1 {
+    align-items: center;
+    justify-content: center; /* 텍스트를 수평으로 중앙 정렬합니다 */
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0.7em 0.8em; /* 필요에 따라 여백을 조정합니다 */
+    color: white;
+    background: #099CFF;
+    border: none;
+    margin: 0.1em;
+    letter-spacing: 0.05em;
+    border-radius: 20em;
+    width: 120px; /* 버튼의 고정된 너비를 설정합니다 */
+    white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 합니다 */
+    overflow: hidden; /* 텍스트가 넘치는 경우 숨깁니다 */
+    text-overflow: ellipsis; /* 넘치는 텍스트에 대해 점(...)을 표시합니다 */
+}
+
+.cssbuttons-io-button1:hover {
+    box-shadow: 0 0.5em 1.5em -0.5em #099CFF;
+}
+
+.cssbuttons-io-button1:active {
+    box-shadow: 0 0.3em 1em -0.5em #099CFF;
+}
+
+/* 수정된 스타일 */
+.cssbuttons-io-button1.active {
+    background: #066eb3;
+    box-shadow: none; /* 버튼이 활성화되었을 때 그림자를 없앱니다 */
+}
+
+.cssbuttons-io-button1.active:hover {
+    box-shadow: 0 0.5em 1.5em -0.5em #099CFF;
+}
+
+.cssbuttons-io-button1.active:active {
+    box-shadow: 0 0.3em 1em -0.5em #099CFF;
+}
+
 .font {
     font-family: 'Pretendard-Bold';
     font-size: 17px;
 }
 /* 테이블 스타일 */
 /* 테이블 칼럼 너비 조정 */
+table {
+    border-radius: 10px;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px white;
+}
+th {
+    background: #007bff;
+    color: white;
+    /* border-radius: 10px;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px white; */
+}
 th:nth-child(1),
 td:nth-child(1) {
     width: 103px; /* 첫 번째 칼럼의 너비 */
@@ -481,11 +560,23 @@ td:nth-child(1) {
 
 th:nth-child(2),
 td:nth-child(2) {
-    width: 120px; /* 두 번째 칼럼의 너비 */
+    width: 150px; /* 두 번째 칼럼의 너비 */
 }
 
 th:nth-child(3),
 td:nth-child(3) {
     width: 300px; /* 세 번째 칼럼의 너비 */
 }
+th {
+    border-radius: 10px;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px white;
+}
+
+/* td {
+    
+    border-radius: 10px;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px white;
+} */
 </style>
