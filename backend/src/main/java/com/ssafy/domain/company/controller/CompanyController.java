@@ -65,8 +65,8 @@ public class CompanyController {
      */
     @GetMapping("/scrap/{companyId}")
     public ResponseEntity<Object> companyScrap(@PathVariable("companyId") Integer id) {
-        companyService.isCompanyScraped(id, authUtil.getLoginUserId());
-        return SuccessResponse.createSuccess(SuccessCode.FIND_SCRAP_SUCCESS);
+        boolean scrapResult = companyService.isCompanyScraped(id, authUtil.getLoginUserId());
+        return SuccessResponse.createSuccess(SuccessCode.FIND_SCRAP_SUCCESS, scrapResult);
     }
 
 
