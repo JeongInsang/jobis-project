@@ -142,7 +142,11 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { useRoute } from 'vue-router';
+import router from '@/router';
+const route = useRoute();
 
+const companyId = ref(route.params.companyId);
 const store = useCounterStore();
 const companyRate = ref(null);
 const accessToken = localStorage.getItem('accessToken');
@@ -156,7 +160,7 @@ onMounted(() => {
 const getCompanyRatio = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/rate/1006`,
+        url: `${API_URL}/api/company/rate/${companyId.value}`,
         // headers: {
         //     Authorization: `Bearer ${accessToken}`,
         // },
@@ -173,7 +177,7 @@ const getCompanyRatio = () => {
 const getCompanyQuarter = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/quarter/1006`,
+        url: `${API_URL}/api/company/quarter/${companyId.value}`,
         // headers: {
         //     Authorization: `Bearer ${accessToken}`,
         // },
