@@ -21,35 +21,35 @@
                 </button>
                 <!-- 현재 경기 표시 -->
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
-                    <div
+                <div
                         v-if="currentMatchIndex < matches.length"
                         class="current-match-display"
-                        :key="currentMatchIndex">
-                        <div v-for="(match, index) in matches[currentMatchIndex]" :key="index">
-                            <!-- 경기 카드 -->
-                            <div class="card" @click="selectWinner(currentMatchIndex, index)">
-                                <!-- 이미지 -->
-                                <img
-                                    :src="`src/assets/img/worldcup/${match.worldcupId}.jpg`"
-                                    alt="나와라 제발"
-                                    class="image" />
-
-                                    <!-- 기업 정보 -->
-                                    <div class="text">
-                                        <span style="font-size: 20px;">{{ match.name }}</span>
-                                        <div>
-                                            <p :style="styles.activity">활동성 : {{ match.activity }}</p>
-                                            <p :style="styles.efficiency">효율성 : {{ match.efficiency }}</p>
-                                            <p :style="styles.growth">성장성 : {{ match.growth }}</p>
-                                            <p :style="styles.profitability">수익성 : {{ match.profitability }}</p>
-                                            <p :style="styles.stability">안정성 : {{ match.stability }}</p>
-                                            <br />
-                                        </div>
-                                        <span>전체 분석 내용</span>
-                                        <p style="width: 380px">{{ match.description }}</p>
-                                    </div>
-
+                        :key="currentMatchIndex"
+                    ><!--
+                        <div v-for="(match, index) in matches[currentMatchIndex]" :key="index" class="card" @click="selectWinner(currentMatchIndex, index)">
+                        <img :src="`src/assets/img/worldcup/${match.worldcupId}.jpg`" alt="나와라 제발" class="image" /> -->
+                        <div
+                            v-for="(match, index) in matches[currentMatchIndex]"
+                            :key="index"
+                            class="card"
+                            @mouseover="toggleHover(index, true)"
+                            @mouseleave="toggleHover(index, false)"
+                            @click="selectWinner(currentMatchIndex, index)"
+                            >
+                            <img :src="`src/assets/img/worldcup/${match.worldcupId}.jpg`" alt="나와라 제발" class="image" />
+<div class="text">
+                        <!-- <div class="text"> -->
+                            <span style="font-size: 20px;">{{ match.name }}</span>
+                            <div>
+                            <p :style="getStyle(match, 'activity')">활동성 : {{ match.activity }}</p>
+                            <p :style="getStyle(match, 'efficiency')">효율성 : {{ match.efficiency }}</p>
+                            <p :style="getStyle(match, 'growth')">성장성 : {{ match.growth }}</p>
+                            <p :style="getStyle(match, 'profitability')">수익성 : {{ match.profitability }}</p>
+                            <p :style="getStyle(match, 'stability')">안정성 : {{ match.stability }}</p>
                             </div>
+                            <span>전체 분석 내용</span>
+                            <p style="width: 380px">{{ match.description }}</p>
+                        </div>
                         </div>
                     </div>
                 </transition>
@@ -276,6 +276,16 @@ const matchStyles = computed(() => {
 
 // 컴포넌트에서 사용할 수 있도록 `styles`를 반응형 참조로 만듭니다.
 const styles = ref({});
+
+const hoverStates = ref([]);
+
+watch(matches, (newMatches) => {
+  hoverStates.value = newMatches.map(() => false);
+}, { immediate: true });
+
+const toggleHover = (index, state) => {
+  hoverStates.value[index] = state;
+};
 </script>
 
 <style scoped>
@@ -295,7 +305,7 @@ const styles = ref({});
 }
 
 .card:hover .image {
-  transform: scale(0.95); /* 이미지 크기를 95%로 줄입니다 */
+  transform: scale(0.75); /* 이미지 크기를 95%로 줄입니다 */
 }
 .card-container {
     display: flex;
