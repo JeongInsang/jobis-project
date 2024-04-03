@@ -181,6 +181,8 @@ const formLogIn = () => {
                 localStorage.setItem('refreshToken', refreshToken);
                 store.setIsLogin(true);
 
+                alert("로그인에 성공하였습니다!")
+
                 router.push({ name: 'home' });
             }),
                 (error) => {

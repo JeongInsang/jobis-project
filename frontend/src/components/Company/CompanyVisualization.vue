@@ -25,6 +25,8 @@ import 'chartjs-plugin-datalabels';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import { useRoute } from 'vue-router';
+import { getCompanyDetail } from '@/apis/api/company';
+
 
 const chartCanvas = ref(null);
 const visualizationData = ref(null);
@@ -35,20 +37,18 @@ const companyId = ref(route.params.companyId);
 const API_URL = store.API_URL;
 
 const getcompanyInformation = function () {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/info/${companyId.value}`,
-    })
-        .then((res) => {
+    getCompanyDetail(
+        companyId.value,
+        (res) => {
             visualizationData.value = res.data.data.factor;
             console.log(visualizationData.value);
             // console.log('데이터 받음');
             renderChart(); // 데이터를 받은 후에 차트를 렌더링
-        })
-        .catch((err) => {
+        },
+        (res) => {
             console.log(err);
-            console.log('실패');
-        });
+        }
+    );
 };
 
 const renderChart = () => {

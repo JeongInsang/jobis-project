@@ -30,6 +30,8 @@ import BalanceSheet from '@/components/Company/BalanceSheet.vue';
 import FinancialRatio from '@/components/Company/FinancialRatio.vue';
 import youthCompany from '@/components/Company/youthCompany.vue';
 import { useRoute } from 'vue-router';
+import { getCompanyDetail } from '@/apis/api/company';
+import { getPatent } from '@/apis/api/patent';
 
 const route = useRoute();
 const youthCompanyData = ref(null);
@@ -49,21 +51,19 @@ onMounted(() => {
 const companyData = ref([]);
 
 const getCompanyInformation = () => {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/info/${companyId.value}`,
-    })
-        .then((res) => {
+    getCompanyDetail(companyId.value,
+        (res) => {
             companyData.value = res.data.data;
             scraped.value = res.data.data.scraped;
             if (companyData.value.youthCompany) {
                 getYouthCompanyInformation();
             }
-            console.log(companyData.value, 'companyData 입니다.');
-        })
-        .catch((err) => {
+            console.log(companyData.value, 'companyData 입니다.');       
+        },
+        (err) => {
             console.log(err);
-        });
+        }
+    );
 };
 
 const getYouthCompanyInformation = () => {
@@ -80,18 +80,15 @@ const getYouthCompanyInformation = () => {
 };
 
 const getLicenseData = function () {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/patent/${companyId.value}`,
-    })
-        .then((res) => {
+    getPatent(companyId.value,
+        (res) => {
             patents.value = res.data.data;
             visiblePatents.value = patents.value.slice(0, batchSize);
-        })
-        .catch((err) => {
-            console.log(err);
-            console.log('실패');
-        });
+        },
+        (err) => {
+            console.log(err)
+        }
+    );
 };
 </script>
 

@@ -142,53 +142,45 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { getCompanyRate, getCompanyQuarter } from '@/apis/api/company';
 import { useRoute } from 'vue-router';
-import router from '@/router';
-const route = useRoute();
 
+const route = useRoute();
 const companyId = ref(route.params.companyId);
 const store = useCounterStore();
 const companyRate = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const API_URL = store.API_URL;
 const quarter = ref(null);
+
+
 onMounted(() => {
     getCompanyRatio();
-    getCompanyQuarter();
+    loadCompanyQuarter();
 });
 
 const getCompanyRatio = () => {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/rate/${companyId.value}`,
-        // headers: {
-        //     Authorization: `Bearer ${accessToken}`,
-        // },
-    })
-        .then((res) => {
+    getCompanyRate(
+        companyId.value,
+        (res) => {
             companyRate.value = res.data.data;
-            // console.log(companyRate.value);
-        })
-        .catch((err) => {
+        },
+        (err) => {
             console.error(err);
-        });
+        }
+    )
 };
 
-const getCompanyQuarter = () => {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/quarter/${companyId.value}`,
-        // headers: {
-        //     Authorization: `Bearer ${accessToken}`,
-        // },
-    })
-        .then((res) => {
+const loadCompanyQuarter = () => {
+    getCompanyQuarter(
+        companyId.value,
+        (res) => {
             quarter.value = res.data.data;
-            // console.log(quarter.value);
-        })
-        .catch((err) => {
+        },
+        (err) => {
             console.error(err);
-        });
+        }
+    )
 };
 </script>
 
