@@ -9,6 +9,7 @@
                     v-model="keyword"
                     type="text"
                     class="form-control"
+                    style="font-size: 20px"
                     placeholder="회사명을 검색하세요"
                     aria-label="Recipient's username"
                     aria-describedby="button-addon2" />
@@ -36,7 +37,7 @@
             </button>
         </div>
         <!-- 지역 버튼 클릭 시 나오는 항목들 -->
-        <div v-if="regionIsclick" class="d-flex col-8 font" v-bind="regionIsclick">
+        <div v-if="regionIsclick" class="d-flex col-10 font" v-bind="regionIsclick">
             <button
                 @click="toggleRegionButton(region.id)"
                 v-for="region in regions"
@@ -47,7 +48,7 @@
             </button>
         </div>
         <!-- 산업군 버튼 클릭 시 나오는 항목들 -->
-        <div v-if="typeIsclick" class="d-flex col-8 font" v-bind="typeIsclick">
+        <div v-if="typeIsclick" class="d-flex col-10 font" v-bind="typeIsclick">
             <button
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries1"
@@ -57,7 +58,7 @@
                 {{ industry.industry }}
             </button>
         </div>
-        <div v-if="typeIsclick" class="d-flex col-8 font" v-bind="typeIsclick">
+        <div v-if="typeIsclick" class="d-flex col-10 font" v-bind="typeIsclick">
             <button
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries2"
@@ -170,6 +171,8 @@ const fetchData = async () => {
         totalData.value = response.data.data.totalElements;
         console.log(totalData.value);
         generatePageButtons();
+        // 페이지 스크롤을 최상단으로 이동
+        window.scrollTo(0, 130);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -430,7 +433,7 @@ const goCompanyDeatil = (comapnyId) => [
     justify-content: center; /* 텍스트를 수평으로 중앙 정렬합니다 */
     font-family: inherit;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
     padding: 0.7em 0.8em; /* 필요에 따라 여백을 조정합니다 */
     color: white;
     background: #ad5389;
@@ -439,7 +442,7 @@ const goCompanyDeatil = (comapnyId) => [
     margin: 0.1em;
     letter-spacing: 0.05em;
     border-radius: 20em;
-    width: 100px; /* 버튼의 고정된 너비를 설정합니다 */
+    width: 120px; /* 버튼의 고정된 너비를 설정합니다 */
     white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 합니다 */
     overflow: hidden; /* 텍스트가 넘치는 경우 숨깁니다 */
     text-overflow: ellipsis; /* 넘치는 텍스트에 대해 점(...)을 표시합니다 */
@@ -467,6 +470,7 @@ const goCompanyDeatil = (comapnyId) => [
 }
 .font {
     font-family: 'Pretendard-Bold';
+    font-size: 17px;
 }
 /* 테이블 스타일 */
 /* 테이블 칼럼 너비 조정 */

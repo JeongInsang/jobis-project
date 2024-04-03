@@ -46,15 +46,15 @@
                     <div class="social-buttons-container">
                         <!-- 카카오 로그인 버튼 -->
                         <button @click="snsLogin('kakao')" class="sns-button">
-                            <img src="@/img/kakao.png" alt="Kakao" class="sns-icon">
+                            <img src="@/img/kakao.png" alt="Kakao" class="sns-icon" />
                         </button>
                         <!-- 구글 로그인 버튼 -->
                         <button @click="snsLogin('google')" class="sns-button">
-                            <img src="@/img/google.png" alt="Google" class="sns-icon">
+                            <img src="@/img/google.png" alt="Google" class="sns-icon" />
                         </button>
                         <!-- 네이버 로그인 버튼 -->
                         <button @click="snsLogin('naver')" class="sns-button">
-                            <img src="@/img/naver.png" alt="Naver" class="sns-icon">
+                            <img src="@/img/naver.png" alt="Naver" class="sns-icon" />
                         </button>
                     </div>
                 </div>
@@ -78,12 +78,16 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import LoginLogo from '@/components/Users/LoginLogo.vue';
 import { watch } from 'vue';
 import { signUp, logIn } from '@/apis/api/user';
 import router from '@/router';
+onMounted(() => {
+    // 최상단으로 이동
+    window.scrollTo(0, 0);
+});
 
 // 회원가입 로직
 const store = useCounterStore();
