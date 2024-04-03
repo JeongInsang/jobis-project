@@ -15,7 +15,7 @@ const keyWord = ref([]);
 const getNewsData = function () {
     axios({
         method: 'get',
-        url: `${store.API_URL}/api/news/1818/구름`,
+        url: `${store.API_URL}/api/news/1818/(주)대신`,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
