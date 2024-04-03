@@ -12,7 +12,7 @@
                     @click="startTournamentAndgetInfo"
                     v-if="!isTournamentStarted"
                     class="learn-more">
-                    게임 시작!
+                    시작!
                 </button>
                 <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
                     <div
