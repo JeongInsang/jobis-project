@@ -1,19 +1,19 @@
 <template>
-    <div style="font-family: 'Pretendard-Light'" class="container">
+    <div class="container">
         <h2 style="font-family: 'Pretendard-Bold'">기업 리스트</h2>
         <!-- <SearchButton /> -->
         <div class="d-flex w-100">
             <div class="input-group mb-3 ms-3 w-25">
                 <input
-                    @keydown.enter="search"
-                    v-bind="keyword"
+                    @keydown.enter="fetchData"
+                    v-model="keyword"
                     type="text"
                     class="form-control"
                     placeholder="회사명을 검색하세요"
                     aria-label="Recipient's username"
                     aria-describedby="button-addon2" />
                 <button
-                    @click="search"
+                    @click="fetchData"
                     class="btn btn-outline-secondary"
                     type="button"
                     id="button-addon2">
@@ -22,10 +22,10 @@
             </div>
         </div>
         <div class="d-flex">
-            <button class="button m-1" :class="{ selected: regionIsclick }" @click="clickRiegon">
+            <button class="button m-1" :class="{ active: regionIsclick }" @click="clickRiegon">
                 지역
             </button>
-            <button class="button m-1" :class="{ selected: typeIsclick }" @click="clickType">
+            <button class="button m-1" :class="{ active: typeIsclick }" @click="clickType">
                 산업군
             </button>
         </div>
@@ -35,7 +35,7 @@
                 @click="toggleRegionButton(region.id)"
                 v-for="region in regions"
                 :key="region.id"
-                :class="{ buttonS: true, selected: isRegionSelected(region.id) }"
+                :class="{ active: isRegionSelected(region.id) }"
                 class="buttonS m-1 w-100">
                 {{ region.region }}
             </button>
@@ -46,7 +46,7 @@
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries1"
                 :key="industry.typeId"
-                :class="{ buttonS: true, selected: isTypeSelected(industry.typeId) }"
+                :class="{ active: isTypeSelected(industry.typeId) }"
                 class="buttonS m-1 w-100">
                 {{ industry.industry }}
             </button>
@@ -56,127 +56,174 @@
                 @click="toggleButton(industry.typeId)"
                 v-for="industry in industries2"
                 :key="industry.typeId"
-                :class="{ buttonS: true, selected: isTypeSelected(industry.typeId) }"
+                :class="{ active: isTypeSelected(industry.typeId) }"
                 class="buttonS m-1 w-100">
                 {{ industry.industry }}
             </button>
         </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <table class="table table-bordered table-hover dt-responsive">
-                        <caption class="text-center">
-                            캡션 자리
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th>회사명</th>
-                                <th>산업군</th>
-                                <th>지역</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(company, index) in paginatedData" :key="index">
-                                <td @click="goCompanyDeatil(company.companyId)" class="cursor">
-                                    {{ company.companyname }}
-                                </td>
-                                <td>{{ company.companytype }}</td>
-                                <td>{{ company.region }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" :class="{ disabled: currentPage === 0 }">
-                                <a
-                                    class="page-link"
-                                    href="#"
-                                    aria-label="Previous"
-                                    @click="prevPage">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li
-                                class="page-item"
-                                v-for="page in totalPages"
-                                :key="page"
-                                :class="{ active: page === currentPage + 1 }">
-                                <a class="page-link" href="#" @click="changePage(page - 1)">{{
-                                    page
-                                }}</a>
-                            </li>
-                            <li
-                                class="page-item"
-                                :class="{ disabled: currentPage === totalPages - 1 }">
-                                <a class="page-link" href="#" aria-label="Next" @click="nextPage">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+    </div>
+    <!-- 테이블 임 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-hover dt-responsive">
+                    <thead>
+                        <tr>
+                            <th>회사명</th>
+                            <th>산업군</th>
+                            <th>지역</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(company, index) in data" :key="index">
+                            <td @click="goCompanyDeatil(company.companyId)" class="company-detail">
+                                {{ company.name }}
+                            </td>
+                            <td>{{ company.type }}</td>
+                            <td>{{ company.address }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
+        <!-- 페이지 네이션 버튼 -->
+        <div class="d-flex">
+            <button class="container pagenation-btn" @click="previousPage" :disabled="page === 0">
+                Previous Page
+            </button>
+            <button
+                class="container pagenation-btn"
+                @click="changePage(btn)"
+                v-for="(btn, index) in pageButtons"
+                :key="index"
+                :class="{ active: btn === page }">
+                {{ btn + 1 }}
+            </button>
+            <button class="container pagenation-btn" @click="nextPage" >Next Page</button>
         </div>
     </div>
 </template>
 
 <script setup>
-import router from '@/router';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { useRouter } from 'vue-router';
+
 const store = useCounterStore();
+const router = useRouter();
+
+// 기업 리스트 받을 변수
+const data = ref([]);
+const page = ref(store.currentPage);
+const size = ref(20); // 페이지당 아이템 수
+const keyword = ref('');
+const type = ref([]);
+const location = ref([]);
 const API_URL = store.API_URL;
 
-const page = ref(1);
-const size = ref(null);
-const keyword = ref('');
-const type = ref('');
-const location = ref('');
-const comapnyDataList = ref([]);
+// 페이지 버튼 목록을 저장할 배열
+const pageButtons = ref([]);
+
+const fetchData = async () => {
+    try {
+        const response = await axios.get(
+            `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`
+        );
+        data.value = response.data.data.content;
+        console.log(data.value)
+        
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+const previousPage = () => {
+    if (page.value > 0) {
+        page.value--;
+        store.currentPage--;
+    }
+};
+
+const nextPage = () => {
+    page.value++;
+    store.currentPage++;
+};
+
+// 페이지 버튼 클릭 시 해당 페이지로 이동
+const changePage = (pageIndex) => {
+    page.value = pageIndex;
+    store.currentPage = pageIndex;
+};
+
+// 데이터의 총 갯수
+const totalData = 24800;
+
+// 페이지 버튼 목록 생성
+const generatePageButtons = () => {
+    const totalPages = Math.ceil(totalData / size.value);
+    const maxButtons = 10; // 최대 버튼 수
+    const currentPageIndex = page.value;
+
+    let startPage = Math.max(0, currentPageIndex - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages - 1, startPage + maxButtons - 1);
+
+    // Adjust startPage and endPage to show exactly maxButtons if possible
+    if (endPage - startPage < maxButtons - 1) {
+        startPage = Math.max(0, endPage - maxButtons + 1);
+    }
+
+    pageButtons.value = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+};
+
+
+
+
 onMounted(() => {
-    // getCompanyList();
-    search();
+    fetchData();
+    generatePageButtons();
 });
 
-// 회사명 검색 로직
-const search = function () {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`,
-    })
-        .then((res) => {
-            comapnyDataList.value = res.data;
-            console.log(comapnyDataList.value);
-        })
-        .catch((err) => {
-            console.error('회사명 검색 실패:', err);
-        });
-};
+watch(
+    () => page.value,
+    () => {
+        fetchData();
+        generatePageButtons();
+    }
+);
+
+router.beforeEach((to, from, next) => {
+    if (to != from) {
+        store.currentPage = 0;
+        page.value = 0;
+    }
+    next();
+});
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 산업군 필터 검색 버튼 리스트
 const industries1 = [
-    { typeId: 1, industry: '건설' },
+    { typeId: 1, industry: '건설업' },
     { typeId: 2, industry: '광업' },
-    { typeId: 3, industry: '교육' },
-    { typeId: 4, industry: '금융/보험' },
-    { typeId: 5, industry: '농/임/어업' },
-    { typeId: 6, industry: '도/소매' },
-    { typeId: 7, industry: '보건/사회복지' },
-    { typeId: 8, industry: '부동산' },
-    { typeId: 9, industry: '임대업' },
+    { typeId: 3, industry: '교육 서비스업' },
+    { typeId: 4, industry: '금융 및 보험업' },
+    { typeId: 5, industry: '농업, 임업 및 어업' },
+    { typeId: 6, industry: '도매 및 소매업' },
+    { typeId: 7, industry: '보건업 및 사회복지 서비스업' },
+    { typeId: 8, industry: '부동산업' },
+    { typeId: 9, industry: '사업시설 관리, 사업 지원 및 임대 서비스업' },
 ];
 
 const industries2 = [
-    { typeId: 10, industry: '원료 재생' },
-    { typeId: 11, industry: '숙박/음식점' },
-    { typeId: 12, industry: '예술/스포츠' },
-    { typeId: 13, industry: '운수/창고' },
-    { typeId: 14, industry: '전기/가스/증기' },
-    { typeId: 15, industry: '과학기술' },
-    { typeId: 16, industry: '정보통신' },
-    { typeId: 17, industry: '제조' },
+    { typeId: 10, industry: '수도, 하수 및 폐기물 처리, 원료 재생업' },
+    { typeId: 11, industry: '숙박 및 음식점업' },
+    { typeId: 12, industry: '예술, 스포츠 및 여가관련 서비스업' },
+    { typeId: 13, industry: '운수 및 창고업' },
+    { typeId: 14, industry: '전기, 가스, 증기 및 공기조절 공급업' },
+    { typeId: 15, industry: '전문, 과학 및 기술 서비스업' },
+    { typeId: 16, industry: '정보통신업' },
+    { typeId: 17, industry: '제조업' },
     { typeId: 18, industry: '기타' },
 ];
 
@@ -201,8 +248,6 @@ const regions = [
     { id: 17, region: '제주' },
 ];
 
-// watch로 현재 페이지 값이 바뀔 때 마다 회사리스트 가져오는 함수 실행
-// watch(currentPage.value, getCompanyList);
 
 // 산업군 별로 필터 로직
 const typeIsclick = ref(false);
@@ -227,29 +272,41 @@ const clickRiegon = () => {
 // 선택된 산업군 필터들
 const selectTypeFilter = ref([]);
 const isCheckedType = ref(false);
+
 const toggleButton = (buttonId) => {
     for (let i = 0; i < selectTypeFilter.value.length; i++) {
+        // selectedTypeFilter 리스트에 i 번째 인덱스에 있는 값이 buttonId(=industries의 typeId 값)과 같으면
+        // selectedTypeFilter 리스트에서 해당 값을 제거하여 필터 해제 기능
         if (selectTypeFilter.value[i] === buttonId) {
             selectTypeFilter.value.splice(i, 1);
+            console.log(selectTypeFilter.value, 'selectTypeFilter 값')
             isCheckedType.value = true;
             break;
         }
     }
+    // 반복문 돌아서 selectTypeFilter 리스트 안에 새로 들어온 buttonId 값이 없으면 리스트에 들어온 값(예: 7,5,3 등등) 추가
     if (isCheckedType.value === false) {
         selectTypeFilter.value.push(buttonId);
+        
     }
     isCheckedType.value = false;
-    console.log('선택된 산업군 필터 항목들 : ', selectTypeFilter.value);
+    
 };
 
 // 선택된 지역 필터들
 const selectRegionFilter = ref([]);
 const isCheckedRegion = ref(false);
+
 const toggleRegionButton = (buttonId) => {
+    
+    
     for (let i = 0; i < selectRegionFilter.value.length; i++) {
         if (selectRegionFilter.value[i] === buttonId) {
             selectRegionFilter.value.splice(i, 1);
+            
             isCheckedRegion.value = true;
+            
+            
             break;
         }
     }
@@ -257,36 +314,67 @@ const toggleRegionButton = (buttonId) => {
         selectRegionFilter.value.push(buttonId);
     }
     isCheckedRegion.value = false;
-    console.log('선택된 지역 필터 항목들 : ', selectRegionFilter.value);
+    
 };
 
-// 산업군 버튼 토글
+// 산업군 토글 버튼이 선택되었다는 css 적용 용도로 만들어 놓음
 const isTypeSelected = (buttonId) => {
     return selectTypeFilter.value.includes(buttonId);
 };
 
-// 지역 버튼 토글
+// 지역 토글 버튼이 선택되었다는 css 적용 용도로 만들어 놓음
 const isRegionSelected = (buttonId) => {
     return selectRegionFilter.value.includes(buttonId);
 };
 
 // Filter가 선택 될 때 마다 필터된 요청 보내기
 watch(
-    [selectRegionFilter, selectTypeFilter],
+    [selectRegionFilter.value, selectTypeFilter.value],
     ([newRegionFilters, newTypeFilters], [oldRegionFilters, oldTypeFilters]) => {
-        axios({
-            method: 'get', // GET 또는 POST에 따라 요청 방식을 변경
-            url: `${API_URL}/company/search?keyword=${keyword.value}&location=${newRegionFilters}&type=${newTypeFilters}`,
-        })
-            .then((response) => {
-                // 응답 받은 데이터를 저장
-                comapnyDataList.value = res.data;
-                console.log('필터링된 회사 리스트:', comapnyDataList.value);
-            })
-            .catch((error) => {
-                // 오류 처리
-                console.error('필터링된 회사를 가져오는 중 오류 발생:', error);
-            });
+        console.log('반복문 돌기전 newRegionFilters : ',newRegionFilters)
+        // 지역 선택 필터 기능 구현
+        location.value = []
+        for (let x = 0; x < newRegionFilters.length; x++) {
+            let addLocation = ''
+            // newRegionFilters 리스트 안에 값들이 Id 값들임 => 4, 9 등등
+            // Id 값으로 '대전' 과 같은 str을 매칭 시켜줌
+            addLocation = regions[newRegionFilters[x] - 1].region
+            // addLocation 은 '대전' => 이러한 값임
+            console.log('addLocation : ',addLocation)
+            // 이미 location에 담겨져 있지는 않은지 확인 해야 함
+            location.value.push(addLocation)
+            
+        }
+
+        console.log('반복문 돌기전 newTypeFilters : ',newTypeFilters)
+        // 산업군 선택 필터 기능 구현
+        type.value = []
+        for (let i = 0; i < newTypeFilters.length; i++) {
+            let addType = ''
+            // newTypeFilters 리스트 안에 값들이 Id 값들임 => 4, 9 등등
+            // Id 값으로 '제조업' 과 같은 str을 매칭 시켜줌
+            if (newTypeFilters[i] < 10) {
+
+                addType = industries1[newTypeFilters[i] - 1].industry
+                // addLocation 은 '대전' => 이러한 값임
+                console.log('addLocation : ',addType)
+            }
+            else {
+                addType = industries2[newTypeFilters[i] - 10].industry
+                // addLocation 은 '대전' => 이러한 값임
+                console.log('addLocation : ',addType)
+            }
+            // 이미 location에 담겨져 있지는 않은지 확인 해야 함
+            type.value.push(addType)
+            
+        }
+        
+        
+        console.log('for 문 다 돌고 location',location.value)
+        console.log('for 문 다 돌고 type',type.value)
+        
+        fetchData()
+        
     }
 );
 
@@ -300,106 +388,15 @@ const goCompanyDeatil = (comapnyId) => [
     }),
 ];
 </script>
-
 <style scoped>
-body {
-    font-size: 140%;
+.active {
+    background-color: #ccc;
 }
-
-h2 {
-    text-align: center;
-    padding: 20px 0;
+.pagenation-btn {
+    height: 4.2rem;
+    width: 4.2rem;
 }
-
-table caption {
-    padding: 0.5em 0;
-}
-
-table.dataTable th,
-table.dataTable td {
-    white-space: nowrap;
-}
-
-.p {
-    text-align: center;
-    padding-top: 140px;
-    font-size: 14px;
-}
-
-/* 버튼 css */
-.button {
-    width: 5em;
-    height: 3em;
-    border-radius: 30em;
-    font-size: 15px;
-    font-family: inherit;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    box-shadow:
-        3px 3px 6px #c5c5c5,
-        -3px -3px 6px #ffffff;
-}
-
-.button::before {
-    content: '';
-    width: 0;
-    height: 3em;
-    border-radius: 30em;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-image: linear-gradient(to right, #0fd850 0%, #f9f047 100%);
-    transition: 0.5s ease;
-    display: block;
-    z-index: -1;
-}
-
-.button:hover::before {
-    width: 9em;
-}
-
-/* 작은 버튼 */
-.buttonS {
-    width: 5em;
-    height: 3em;
-    border-radius: 30em;
-    font-size: 12px;
-    font-family: inherit;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    box-shadow:
-        3px 3px 6px #c5c5c5,
-        -3px -3px 6px #ffffff;
-}
-
-.buttonS::before {
-    content: '';
-    width: 0;
-    height: 3em;
-    border-radius: 30em;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-image: linear-gradient(to right, #0fd850 0%, #f9f047 100%);
-    transition: 0.5s ease;
-    display: block;
-    z-index: -1;
-}
-
-.buttonS:hover::before {
-    width: 9em;
-}
-
-.selected {
-    /* 선택된 버튼의 스타일 */
-    background-color: greenyellow;
-}
-/* 마우스 커서 모양 */
-.cursor {
+.company-detail {
     cursor: pointer;
 }
 </style>

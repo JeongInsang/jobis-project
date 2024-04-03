@@ -46,6 +46,8 @@ def extract_keywords_from_result(analysis_result):
     return keywords
 
 def call_openapi(news_articles):
+    if(news_articles == []):
+        return {}
     api_key = os.getenv('API_KEY')
     prompt = generate_prompt_for_job_seekers(news_articles)
 

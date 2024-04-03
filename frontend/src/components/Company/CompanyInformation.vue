@@ -14,6 +14,12 @@
                         <div><strong>종업원수 :</strong> {{ companyData.employeeCnt }}</div>
                         <div><strong>업종 :</strong> {{ companyData.type }}</div>
                         <div><strong>주요제품명 :</strong> {{ companyData.productName }}</div>
+                        <div v-if="store.isLogin">
+                            <div v-if="scraped" @click="cancleScrap">
+                                <button>스크랩 됨</button>
+                            </div>
+                            <div v-else @click="scrap"><button>스크랩 안됨</button></div>
+                        </div>
                     </div>
                 </div>
                 <!-- <strong v-if="companyData.youthCompany">청년친화강소기업여부 :</strong> -->
@@ -34,11 +40,16 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { useRoute } from 'vue-router';
 
 const companyData = ref(null);
 const youthCompanyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
+const route = useRoute();
+const scraped = ref(null);
+
+const companyId = ref(route.params.companyId);
 onMounted(() => {
     getCompanyInformation();
 });
@@ -47,14 +58,16 @@ const API_URL = store.API_URL;
 const getCompanyInformation = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/info/1006`,
+        url: `${API_URL}/api/company/info/${companyId.value}`,
     })
         .then((res) => {
             companyData.value = res.data.data;
+            scraped.value = res.data.data.scraped;
             if (companyData.value.youthCompany) {
                 getYouthCompanyInformation(); // 청년친화강소기업 여부가 true면 정보를 가져옴
             }
-            console.log(companyData.value);
+            console.log(companyData.value, 'companyData 입니다.');
+            // console.log(scraped.value, 'scraped입니다.');
         })
         .catch((err) => {
             console.log(err);
@@ -64,7 +77,7 @@ const getCompanyInformation = () => {
 const getYouthCompanyInformation = () => {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/youthcompany/1006`,
+        url: `${API_URL}/api/company/youthcompany/${companyId.value}`,
     })
         .then((res) => {
             // 청년친화강소기업 정보를 가져와서 처리
@@ -73,6 +86,40 @@ const getYouthCompanyInformation = () => {
         })
         .catch((err) => {
             console.log(err);
+        });
+};
+
+// 스크랩 로직
+const scrap = () => {
+    if (scraped.value == false) {
+        axios({
+            method: 'post',
+            url: `${API_URL}/api/company/scrap/${companyId.value}`,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+            .then((res) => {
+                console.log('스크랩 성공 했습니다.', res);
+            })
+            .catch((err) => {
+                console.log('스크랩 실패 했습니다.', err);
+            });
+    }
+};
+const cancleScrap = () => {
+    axios({
+        method: 'delete',
+        url: `${API_URL}/api/company/scrap/${companyId.value}`,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+        .then((res) => {
+            console.log('scrap 취소 성공', res);
+        })
+        .catch((err) => {
+            console.log('scrap 취소 실패', err);
         });
 };
 </script>
