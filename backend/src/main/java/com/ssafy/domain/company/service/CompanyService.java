@@ -1,12 +1,8 @@
 package com.ssafy.domain.company.service;
 
 import static com.ssafy.domain.company.entity.QCompany.company;
-import static com.ssafy.domain.company.entity.QCompanyScrap.companyScrap;
 
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.domain.company.dto.*;
@@ -21,7 +17,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +42,6 @@ public class CompanyService {
 
     /**
      * 기업 검색
-     *
      * @param pageable
      * @param keyword
      * @param location
@@ -117,66 +111,6 @@ public class CompanyService {
     }
 
 
-
-//    public Page<CompanySearchResponse> getCompanies(Pageable pageable, String keyword, List<String> location, List<String> type) {
-////        log.info("비회원 !!! pageable = {} keyword = {} location = {} type = {}", pageable, keyword, location, type);
-//        List<CompanySearchResponse> companyList = jpaQueryFactory
-//                .selectFrom(company)
-//                .where(
-//                        containsKeyword(keyword),
-//                        inLocation(location),
-//                        inType(type))
-//                .offset(pageable.getOffset())  // 조회 시작 위치
-//                .limit(pageable.getPageSize())  // 현재 시작 위치
-//                .fetch()
-//                .stream()
-//                .map(CompanySearchDtoMapper::companySearchResponse)
-//                .collect(Collectors.toList());
-//
-//        log.info("name = {}, address = {}, type = {}", company.name.contains(keyword), company.address.in(location), company.type.in(type));
-//
-//            // 페이지 전체 수
-//        JPAQuery<Long> countQuery = jpaQueryFactory
-//                .select(company.count())
-//                .from(company)
-//                .where(
-//                        containsKeyword(keyword),
-//                        inLocation(location),
-//                        inType(type));
-//
-//        log.info("============ countQuery: {}", countQuery);
-////      log.info("totalsize = {}", countQuery);
-////      return new PageImpl<>(companyList, pageable, countQuery::fetchOne);
-//        return PageableExecutionUtils.getPage(companyList, pageable, countQuery::fetchOne);
-//    }
-//
-//    private BooleanExpression containsKeyword(String keyword) {
-//        return keyword != null ? company.name.contains(keyword) : null;
-//    }
-//
-//    private BooleanExpression inLocation(List<String> locations) {
-//        return !locations.isEmpty() ? company.address.in(locations) : null;
-//    }
-//
-//    private BooleanExpression inType(List<String> types) {
-//        return !types.isEmpty() ? company.type.in(types) : null;
-//    }
-//
-//
-//
-//    private BooleanExpression containsKeyword(String keyword) {
-//        return keyword != null ? company.name.contains(keyword) : null;
-//    }
-//
-//    private BooleanExpression inLocation(List<String> locations) {
-//        return locations != null && !locations.isEmpty() ? company.address.in(locations) : null;
-//    }
-//
-//    private BooleanExpression inType(List<String> types) {
-//        return types != null && !types.isEmpty() ? company.type.in(types) : null;
-//    }
-
-
     /**
      * 기업 기본정보 조회
      * @param id
@@ -185,10 +119,30 @@ public class CompanyService {
     public CompanyResponse findCompany(Integer id) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(CompanyNotFoundException::new);
+
         // 조회수 카운트
         company.companyViewsCnt();
         companyRepository.save(company);
+
+//        Boolean isScraped = userId != null && isCompanyScraped(userId, id);
         return CompanyDtoMapper.companyEntityToDto(company);
+    }
+
+
+    /**
+     * 기업스크랩 여부
+     * @param companyId
+     * @param userId
+     * @return
+     */
+    public boolean isCompanyScraped(Integer companyId, Integer userId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(CompanyNotFoundException::new);
+
+        Users user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return companyScrapRepository.existsByCompanyAndUser(company, user);
     }
 
 
@@ -286,7 +240,7 @@ public class CompanyService {
         Users user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        companyScrapRepository.deleteCompanyScrapByUserAndCompany(user, company);
+        companyScrapRepository.deleteCompanyScrapByUserAndCompany(company, user);
     }
 
 }
