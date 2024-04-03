@@ -6,7 +6,21 @@
                 <h1>기업 상세 정보</h1>
                 <div class="card-content">
                     <div class="details">
-                        <h2>{{ companyData.name }}</h2>
+                        <div class="d-flex">
+                            <h2>{{ companyData.name }}</h2>
+                            <div style="margin-left: 0.5rem">
+                                <div v-if="scraped" @click="cancleScrap">
+                                    <button class="Btn">
+                                        <i class="bi bi-star-fill fs-5 star"></i>
+                                    </button>
+                                </div>
+                                <div v-else @click="scrap">
+                                    <button class="Btn">
+                                        <i class="bi bi-star fs-5 star"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <p>회사주소: {{ companyData.address }}</p>
                         <div><strong>설립일자 :</strong> {{ companyData.foundAt }}</div>
                         <div><strong>대표자명 :</strong> {{ companyData.owner }}</div>
@@ -14,12 +28,6 @@
                         <div><strong>종업원수 :</strong> {{ companyData.employeeCnt }}</div>
                         <div><strong>업종 :</strong> {{ companyData.type }}</div>
                         <div><strong>주요제품명 :</strong> {{ companyData.productName }}</div>
-                        <div v-if="store.isLogin">
-                            <div v-if="scraped" @click="cancleScrap">
-                                <button>스크랩 됨</button>
-                            </div>
-                            <div v-else @click="scrap"><button>스크랩 안됨</button></div>
-                        </div>
                     </div>
                 </div>
                 <!-- <strong v-if="companyData.youthCompany">청년친화강소기업여부 :</strong> -->
@@ -41,13 +49,14 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 const companyData = ref(null);
 const youthCompanyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
-const route = useRoute();
 const scraped = ref(null);
+const route = useRoute();
 
 const companyId = ref(route.params.companyId);
 onMounted(() => {
@@ -67,7 +76,7 @@ const getCompanyInformation = () => {
                 getYouthCompanyInformation(); // 청년친화강소기업 여부가 true면 정보를 가져옴
             }
             console.log(companyData.value, 'companyData 입니다.');
-            // console.log(scraped.value, 'scraped입니다.');
+            console.log(scraped.value, 'scraped입니다.');
         })
         .catch((err) => {
             console.log(err);
@@ -92,19 +101,25 @@ const getYouthCompanyInformation = () => {
 // 스크랩 로직
 const scrap = () => {
     if (scraped.value == false) {
-        axios({
-            method: 'post',
-            url: `${API_URL}/api/company/scrap/${companyId.value}`,
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((res) => {
-                console.log('스크랩 성공 했습니다.', res);
+        if (!store.isLogin) {
+            router.push({ name: 'login' });
+            window.alert('로그인 해주세요');
+        } else {
+            axios({
+                method: 'post',
+                url: `${API_URL}/api/company/scrap/${companyId.value}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
             })
-            .catch((err) => {
-                console.log('스크랩 실패 했습니다.', err);
-            });
+                .then((res) => {
+                    console.log('스크랩 성공 했습니다.', res);
+                    getCompanyInformation();
+                })
+                .catch((err) => {
+                    console.log('스크랩 실패 했습니다.', err);
+                });
+        }
     }
 };
 const cancleScrap = () => {
@@ -126,4 +141,5 @@ const cancleScrap = () => {
 
 <style scoped>
 @import url('@/assets/information.css');
+@import url('@/assets/scrapbtn.css');
 </style>

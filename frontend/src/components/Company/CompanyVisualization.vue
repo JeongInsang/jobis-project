@@ -1,6 +1,6 @@
 <template>
     <div>
-        <canvas class="chart-canvas" ref="chartCanvas"></canvas>
+        <canvas ref="chartCanvas" class="chart-canvas"></canvas>
         <div v-if="visualizationData !== null">
             <div>
                 활동성 : {{ visualizationData.activity.toFixed(4) }} 안정성 :
@@ -22,17 +22,20 @@ import 'chartjs-adapter-date-fns';
 import 'chartjs-plugin-datalabels';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { useRoute } from 'vue-router';
 
 const chartCanvas = ref(null);
 const visualizationData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
-
+const route = useRoute();
+const companyId = ref(route.params.companyId);
 const API_URL = store.API_URL;
+
 const getcompanyInformation = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/api/company/info/1818`,
+        url: `${API_URL}/api/company/info/${companyId.value}`,
     })
         .then((res) => {
             visualizationData.value = res.data.data.factor;
@@ -55,7 +58,7 @@ const renderChart = () => {
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: Object.keys(visualizationData.value),
+            labels: ['활동성', '안정성', '효율성', '성장성', '수익성'], // 수정된 부분: 영어에서 한글로 변경
             datasets: [
                 {
                     label: '점수',
@@ -97,7 +100,7 @@ onMounted(() => {
 
 <style scoped>
 .chart-canvas {
-    width: 30rem; /* 원하는 너비로 설정 */
+    width: 25rem; /* 원하는 너비로 설정 */
     height: 20rem; /* 원하는 높이로 설정 */
 }
 </style>

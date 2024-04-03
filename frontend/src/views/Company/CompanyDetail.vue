@@ -2,18 +2,19 @@
     <div class="container">
         <div class="top-section">
             <CompanyInformation class="company-info" />
-            <div class="visualization">
+            <div class="card5">
                 <h3>기업 지표 시각화 그래프</h3>
                 <CompanyVisualization />
             </div>
         </div>
     </div>
     <div class="bottom-section">
-        <youthCompany />
+        <youthCompany v-if="companyData.youthCompany" />
         <BalanceSheet />
         <FinancialRatio />
-        <License />
-        <News />
+        <!-- patents가 null일 때 License 컴포넌트를 보이지 않도록 v-if를 사용하여 조건부 렌더링합니다. -->
+        <License v-if="patents && patents !== null" />
+        <!-- <News /> -->
     </div>
 </template>
 
@@ -28,17 +29,40 @@ import CompanyInformation from '@/components/Company/CompanyInformation.vue';
 import BalanceSheet from '@/components/Company/BalanceSheet.vue';
 import FinancialRatio from '@/components/Company/FinancialRatio.vue';
 import youthCompany from '@/components/Company/youthCompany.vue';
-// params로 쏜 CompanyId 받음 => 추후에 axios 쏠 때 이 companyId 값으로 쏘면 됨
 import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const youthCompanyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
 const API_URL = store.API_URL;
+const companyId = ref(route.params.companyId);
+const patents = ref(null);
 
 onMounted(() => {
     getYouthCompanyInformation();
+    getCompanyInformation();
+    getLicenseData();
 });
+const companyData = ref([]);
+
+const getCompanyInformation = () => {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/company/info/${companyId.value}`,
+    })
+        .then((res) => {
+            companyData.value = res.data.data;
+            scraped.value = res.data.data.scraped;
+            if (companyData.value.youthCompany) {
+                getYouthCompanyInformation();
+            }
+            console.log(companyData.value, 'companyData 입니다.');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 
 const getYouthCompanyInformation = () => {
     axios({
@@ -46,17 +70,27 @@ const getYouthCompanyInformation = () => {
         url: `${API_URL}/api/company/youthcompany/1006`,
     })
         .then((res) => {
-            // 청년친화강소기업 정보를 가져와서 처리
-            console.log(res.data);
             youthCompanyData.value = res.data;
         })
         .catch((err) => {
             console.log(err);
         });
 };
-const route = useRoute();
-// const companyId = ref(route.params);
-// console.log(companyId.value);
+
+const getLicenseData = function () {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/patent/${companyId.value}`,
+    })
+        .then((res) => {
+            patents.value = res.data.data;
+            visiblePatents.value = patents.value.slice(0, batchSize);
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log('실패');
+        });
+};
 </script>
 
 <style scoped>
@@ -64,7 +98,33 @@ const route = useRoute();
     display: flex;
     flex-direction: column;
 }
+.card5 {
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+    background: #fff;
+    width: 29rem;
+    height: 35rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 12ms;
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-top: 10px;
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 255, 0.2);
+    transition: all 0.2s;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
+    margin-bottom: 2rem;
+}
 
+/* .card:hover {
+    box-shadow: -12px 12px 2px -1px rgba(0, 0, 255, 0.2);
+} */
 .top-section {
     display: flex;
     width: 100%;
@@ -76,7 +136,7 @@ const route = useRoute();
 }
 
 .visualization {
-    width: 40%;
+    width: 45%;
     margin: 10px;
     padding: 10px;
     position: relative;

@@ -21,6 +21,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
+import { useRoute } from 'vue-router';
 
 const patents = ref([]);
 const visiblePatents = ref([]);
@@ -28,6 +29,9 @@ const batchSize = 3; // 한 번에 보여줄 특허 수
 const isExpanded = ref(false); // 리스트가 확장되었는지 여부를 추적
 const store = useCounterStore();
 const API_URL = store.API_URL;
+const route = useRoute();
+
+const companyId = ref(route.params.companyId);
 
 onMounted(() => {
     // console.log('특허 요청');
@@ -37,7 +41,7 @@ onMounted(() => {
 const getLicenseData = function () {
     axios({
         method: 'get',
-        url: `${API_URL}/api/patent/1006`,
+        url: `${API_URL}/api/patent/${companyId.value}`,
     })
         .then((res) => {
             patents.value = res.data.data;
@@ -72,7 +76,7 @@ const foldList = () => {
 <style scoped>
 .container1 {
     font-family: 'Arial', sans-serif;
-    max-width: 1600px;
+    width: 97%;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;

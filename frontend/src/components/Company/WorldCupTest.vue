@@ -1,246 +1,321 @@
 <template>
     <div class="container">
-        <div v-if="!winner">
-            <h2 style="text-align: center">{{ currentRound }}</h2>
-            <transition name="fade" mode="out-in">
-                <div
-                    v-if="currentMatchIndex < matches.length"
-                    class="current-match-display"
-                    :key="currentMatchIndex">
-                    <!-- 기업 1 카드 -->
-                    <div class="card" @click="selectWinner(currentMatchIndex, 0)">
-                        <div class="image">
-                            <Visualization />
-                        </div>
-                        <div class="text">
-                            <span>{{ matches[currentMatchIndex][0] }}</span>
-                            <p>성장성 : 12.9932</p>
-                            <p>안정성 : -0.0218</p>
-                            <p>수익성 : 0.6414</p>
-                            <p>활동성 : -0.3028</p>
-                            <p>가용성 : 1.0659</p>
-                            <br />
-                            <span>전체 분석 내용</span>
-                            <!-- <p>이 기업은 특허 개수를 바탕으로 성장성이 뛰어나고 어쩌구저쩌구</p> -->
+        <div>
+            <button @click="startTournamentAndgetInfo" v-if="!isTournamentStarted">
+                대진 시작
+            </button>
+            <button @click="resetTournament" v-if="winner">다시하기</button>
+            <!-- 다시하기 버튼 추가 -->
+            <div v-if="!winner">
+                <!-- 페이드 애니메이션을 적용한 라운드 표시 -->
+                <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
+                    <h2 style="text-align: center" :key="currentRound">
+                        {{ currentRound }}
+                    </h2>
+                </transition>
+                <transition :name="isNextRound ? 'fade-next-round' : 'fade'" mode="out-in">
+                    <div
+                        v-if="currentMatchIndex < matches.length"
+                        class="current-match-display"
+                        :key="currentMatchIndex">
+                        <!-- 대진 정보를 표시하는 카드 반복 -->
+                        <div v-for="(match, index) in matches[currentMatchIndex]" :key="index">
+                            <div class="card" @click="selectWinner(currentMatchIndex, index)">
+                                <!-- 시각화 영역 -->
+                                <div class="image">
+                                    <canvas :ref="'chartCanvas' + index"></canvas>
+                                </div>
+                                <!-- 기업 정보 표시 -->
+                                <div class="text">
+                                    <span>{{ match.name }}</span>
+                                    <!-- 기업의 특성 값들을 반복문을 통해 표시 -->
+                                    <p>활동성 : {{ match.activity }}</p>
+                                    <p>효율성 : {{ match.efficiency }}</p>
+                                    <p>성장성 : {{ match.growth }}</p>
+                                    <p>수익성 : {{ match.profitability }}</p>
+                                    <p>안정성 : {{ match.stability }}</p>
+                                    <br />
+                                    <span>전체 분석 내용</span>
+                                    <p style="width: 380px">{{ match.description }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <!-- 기업 2 카드 -->
-                    <div class="card" @click="selectWinner(currentMatchIndex, 1)">
-                        <div class="image">
-                            <Visualization />
-                        </div>
-                        <div class="text">
-                            <span>{{ matches[currentMatchIndex][1] }}</span>
-                            <p>성장성 : 2.9624</p>
-                            <p>안정성 : 21.8623</p>
-                            <p>수익성 : 0.2901</p>
-                            <p>활동성 : -0.7408</p>
-                            <p>가용성 : 0.0882</p>
-                            <br />
-                            <span>전체 분석 내용</span>
-                            <!-- <p>이 기업은 30년간 안정적으로 운영된 기업으로 복지가 좋고 그렇다나</p> -->
-                        </div>
-                    </div>
-                </div>
-            </transition>
-        </div>
-        <div v-else>
-            <h2>축하합니다!</h2>
-            <p>{{ winner }}가 코드 선택 월드컵에서 우승했습니다!</p>
+                </transition>
+            </div>
+            <div v-else>
+                <h2>축하합니다!</h2>
+                <p>{{ winner.name }}가 코드 선택 월드컵에서 우승했습니다!</p>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import Visualization from './Visualization.vue';
-const companies = [
-    '기업 A',
-    '기업 B',
-    '기업 C',
-    '기업 D',
-    '기업 E',
-    '기업 F',
-    '기업 G',
-    '기업 H',
-    '기업 I',
-    '기업 J',
-    '기업 K',
-    '기업 L',
-    '기업 M',
-    '기업 N',
-    '기업 O',
-    '기업 P',
-];
-// 대진 목록 배열
-const matches = ref([]);
-// 각 라운드의 승자들을 저장하는 배열
-const winners = ref([]);
-// 최종 우승자
-const winner = ref('');
-// 현재 표시 중인 대진의 인덱스
-const currentMatchIndex = ref(0);
-// 현재 라운드
-let currentRound = ref('16강');
-// 선택 확인 딜레이 상태
-const selectionConfirmed = ref(false);
+import axios from 'axios';
+import { useCounterStore } from '@/stores/counter';
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+import 'chartjs-plugin-datalabels';
 
-// 대진 생성 함수
-const createMatches = () => {
-    for (let i = 0; i < companies.length; i += 2) {
-        matches.value.push([companies[i], companies[i + 1]]);
-    }
+onMounted(() => {
+    // companiesInfo();
+});
+const store = useCounterStore();
+const isNextRound = ref(false);
+const companies = ref([]);
+const matches = ref([]);
+const winners = ref([]);
+const winner = ref('');
+const currentMatchIndex = ref(0);
+let currentRound = ref('16강');
+const selectionConfirmed = ref(false);
+const API_URL = store.API_URL;
+const chartCanvas1 = ref(null);
+const chartCanvas2 = ref(null);
+const chartCanvasRefs = ref([]); // 수정: chartCanvasRefs 배열 추가
+const accessToken = localStorage.getItem('accessToken');
+
+const startTournamentAndgetInfo = function () {
+    companiesInfo();
+    startTournament();
 };
 
+// 차트 인스턴스를 저장할 변수 선언
+const companiesInfo = function () {
+    axios({
+        method: 'get',
+        url: `${API_URL}/api/worldcup`,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+        .then((res) => {
+            companies.value = res.data.data;
+            console.log(companies.value);
+            createMatches(); // 데이터를 받은 후에 대진 생성
+            createChartInstances(); // 데이터를 받은 후에 차트 인스턴스 생성
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+let chartInstances = [];
+
+// 대진 생성 함수 수정
+const createMatches = () => {
+    const newMatches = [];
+    for (let i = 0; i < companies.value.length; i += 2) {
+        newMatches.push([companies.value[i], companies.value[i + 1]]);
+        console.log(companies.value);
+    }
+    matches.value = newMatches;
+};
+// 차트 인스턴스를 저장할 변수
+let charts = [];
+
+// 차트 인스턴스 생성 함수
+function createChartInstances() {
+    const canvasElements = document.querySelectorAll('.radar-chart');
+
+    canvasElements.forEach((canvas, index) => {
+        const ctx = canvas.getContext('2d');
+        const company = companies.value[index];
+
+        const data = {
+            labels: ['활동성', '효율성', '성장성', '수익성', '안정성'],
+            datasets: [
+                {
+                    label: company.name,
+                    data: [
+                        company.activity,
+                        company.efficiency,
+                        company.growth,
+                        company.profitability,
+                        company.stability,
+                    ],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                },
+            ],
+        };
+
+        const options = {
+            scales: {
+                r: {
+                    max: 9,
+                    min: -9,
+                    stepSize: 3,
+                },
+            },
+        };
+
+        const chart = new Chart(ctx, {
+            type: 'radar',
+            data: data,
+            options: options,
+        });
+
+        // 생성된 차트 인스턴스를 변수에 저장
+        charts.push(chart);
+
+        // 차트 캔버스의 참조를 chartCanvasRefs 배열에 할당
+        chartCanvasRefs.value.push(canvas);
+    });
+}
+
+// 차트 렌더링 함수 수정
+const renderChart = (canvasRef, data, chartInstance) => {
+    if (canvasRef.value !== null) {
+        const ctx = canvasRef.value.getContext('2d');
+        // 새 차트 인스턴스 생성 및 할당
+        return new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: Object.keys(data),
+                datasets: [
+                    {
+                        label: '점수',
+                        data: Object.values(data),
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    r: {
+                        max: 9,
+                        min: -9,
+                        stepSize: 3,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    datalabels: {
+                        display: true,
+                        color: '#000',
+                        font: {
+                            weight: 'bold',
+                        },
+                    },
+                },
+            },
+        });
+    }
+    // 캔버스 참조가 null이 아닌 경우에만 차트 인스턴스 반환
+    return chartInstance;
+};
+
+const isTournamentStarted = ref(false);
+// 대진 시작 함수
+// 대진 시작 함수 내부에서 차트 인스턴스 생성 함수 호출
+const startTournament = () => {
+    isTournamentStarted.value = true;
+    if (!matches.value.length || currentRound.value === '16강') {
+        createMatches(); // 대진 생성
+        createChartInstances(); // 차트 인스턴스 생성
+    }
+};
+// 대회를 재설정하는 함수
+const resetTournament = () => {
+    isTournamentStarted.value = false; // 대회 재설정 시 false로 설정하여 버튼을 다시 표시
+    matches.value = []; // 대진 배열을 비웁니다.
+    winners.value = []; // 우승자 배열을 비웁니다.
+    winner.value = ''; // 최종 우승자를 비웁니다.
+    currentMatchIndex.value = 0; // 현재 대진 인덱스를 초기화합니다.
+    currentRound.value = '16강'; // 현재 라운드를 '16강'으로 초기화합니다.
+    // createMatches(); // 대진 생성
+};
+const nextMatch = ref(null);
 // 기업 선택하는 함수
 const selectWinner = (matchIndex, winnerIndex) => {
+    chartInstances.forEach((chartInstance) => {
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+    });
     winners.value.push(matches.value[matchIndex][winnerIndex]);
-
+    console.log(matches.value[matchIndex][winnerIndex]);
+    console.log(matches.value);
     // 선택 확인 딜레이 시작
     selectionConfirmed.value = false;
     setTimeout(() => {
         selectionConfirmed.value = true;
         // 다음 대진으로 이동
         currentMatchIndex.value++;
-
+        console.log(currentMatchIndex.value);
         // 모든 대진이 끝나면 다음 라운드로
         if (currentMatchIndex.value >= matches.value.length) {
-            startNextRound();
+            startNextRound(); // 다음 라운드 시작 함수 호출
+        } else {
+            matches.value[currentMatchIndex.value].forEach((match, index) => {
+                const chartInstance = renderChart(
+                    chartCanvasRefs[index],
+                    match.visualizationData,
+                    chartInstances[index]
+                );
+                chartInstances[index] = chartInstance;
+            });
         }
-    }, 50); // 1초 딜레이
+    }, 50); // 선택 확인 딜레이 시간
 };
-
 // 다음 라운드를 시작하는 함수
 const startNextRound = () => {
-    if (winners.value.length === 1) {
-        winner.value = winners.value[0];
-    } else {
-        // 다음 라운드의 대진을 설정
-        matches.value = winners.value
-            .map((val, idx, arr) => (idx % 2 === 0 ? [val, arr[idx + 1]] : null))
-            .filter(Boolean);
-        winners.value = [];
-        currentMatchIndex.value = 0; // 다음 라운드의 첫 번째 대진으로 인덱스를 재설정
+    let nextRoundName; // 다음 라운드 이름을 임시 저장할 변수
 
-        // 다음 라운드로 이동
-        if (matches.value.length === 4) {
-            currentRound.value = '8강';
-        } else if (matches.value.length === 2) {
-            currentRound.value = '4강';
-        } else if (matches.value.length === 1) {
-            currentRound.value = '결승';
-        }
+    // 다음 라운드 이름 결정
+    if (winners.value.length === 8) {
+        nextRoundName = '8강';
+    } else if (winners.value.length === 4) {
+        nextRoundName = '4강';
+    } else if (winners.value.length === 2) {
+        nextRoundName = '결승';
+    } else if (winners.value.length === 1) {
+        nextRoundName = '우승';
     }
-};
 
-onMounted(() => {
-    createMatches();
-});
+    // 2초 동안 nextRoundName을 currentRound에 할당하여 표시
+    currentRound.value = nextRoundName;
+
+    setTimeout(() => {
+        // 2초 지연 후 로직 실행
+        if (winners.value.length === 1) {
+            winner.value = winners.value[0]; // 우승자 결정
+        } else {
+            matches.value = winners.value
+                .map((val, idx, arr) => (idx % 2 === 0 ? [val, arr[idx + 1]] : null))
+                .filter(Boolean); // 다음 라운드 대진 생성
+            winners.value = []; // 우승자 배열 초기화
+            currentMatchIndex.value = 0; // 대진 인덱스 초기화
+
+            // 실제 라운드명 업데이트
+            currentRound.value = nextRoundName;
+        }
+
+        // 애니메이션 재설정
+        const isNextRound = ref(null);
+        isNextRound.value = true;
+        setTimeout(() => (isNextRound.value = false), 500);
+    }, 1000); // 2초 지연
+};
 </script>
 
 <style scoped>
-.container {
-    border: solid #f0f0f0 3px;
-    border-radius: 10px;
-    width: 80%;
-    height: 50rem;
-    margin-left: auto;
-    margin-right: auto;
-}
-/* 현재 대진 표시 영역 스타일링 */
-.current-match-display {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-.card {
-    position: relative;
-    background: #fff;
-    width: 30rem;
-    height: 35rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 120ms;
-    overflow: hidden;
-    box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
-}
+@import url('@/assets/choice.css');
 
-.card:active {
-    transform: scale(0.95);
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 0px 0px 25px 5px rgba(255, 255, 255, 0.5);
-    z-index: 2;
-}
-
-.card:hover::after {
-    bottom: 0;
-}
-
-.card:active::after {
-    content: 'Adding !';
-    height: 65px;
-}
-
-.image {
-    position: absolute;
-    top: 0; /* 변경된 부분: 상단에 위치하도록 수정 */
-    left: 50%;
-    width: 100%;
-    height: auto;
-    filter: drop-shadow(3px 3px 5px #18181815);
-    transform: translate(-50%, 0); /* 애니메이션에 맞춰 수정 */
-    animation: shoes 1s ease infinite alternate;
-    transition: all 0.5s ease-in;
-}
-
-@keyframes shoes {
-    from {
-        top: -0.5%; /* 변경된 부분: 애니메이션 동작을 위해 상단에 위치하도록 수정 */
-    }
-
-    to {
-        top: 0.5%; /* 변경된 부분: 애니메이션 동작을 위해 상단에 위치하도록 수정 */
-    }
-}
-
-.text {
-    position: absolute;
-    top: 15%;
-    left: -80%;
-    color: #181818;
-    transition: all 0.3s ease-in;
-}
-
-.text span {
-    font-size: 25px;
-    font-weight: 800;
-    margin-bottom: 10px;
-}
-
-.text p {
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-.card:hover .text {
-    top: 15%;
-    left: 5%;
-}
-/* 애니메이션 스타일 */
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.5s;
+    transition: opacity 0.2s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-    opacity: 0;
+
+.fade-next-round-enter-active,
+.fade-next-round-leave-active {
+    transition: opacity 0.2s ease-out;
 }
 </style>
