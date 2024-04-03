@@ -11,9 +11,16 @@
 
 <script setup>
 import router from '@/router';
+import { useCounterStore } from '@/stores/counter';
+const store = useCounterStore();
 
 const goCompany = () => {
-    router.push({ name: 'company' });
+    if (!store.isLogin) {
+        router.push({ name: 'login' });
+        window.alert('로그인이 필요한 서비스입니다.');
+    } else {
+        router.push({ name: 'company' });
+    }
 };
 </script>
 
