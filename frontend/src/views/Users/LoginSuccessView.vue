@@ -13,7 +13,7 @@ onMounted(() => {
     const refreshToken = route.params.rtk;
 
     // 로컬스토리지에 토큰 저장
-    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('accessToken', accessToken.replace('Bearer ', ''));
     localStorage.setItem('refreshToken', refreshToken);
     store.setIsLogin(true);
 
