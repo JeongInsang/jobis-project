@@ -1,6 +1,6 @@
 <template>
     <div>
-        <canvas class="chart-canvas" ref="chartCanvas"></canvas>
+        <canvas ref="chartCanvas" class="chart-canvas"></canvas>
         <div v-if="visualizationData !== null">
             <div>
                 활동성 : {{ visualizationData.activity.toFixed(4) }} 안정성 :
@@ -58,7 +58,7 @@ const renderChart = () => {
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: Object.keys(visualizationData.value),
+            labels: ['활동성', '안정성', '효율성', '성장성', '수익성'], // 수정된 부분: 영어에서 한글로 변경
             datasets: [
                 {
                     label: '점수',
@@ -99,9 +99,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* @import url('@/assets/sheet.css'); */
 .chart-canvas {
-    width: 30rem; /* 원하는 너비로 설정 */
+    width: 25rem; /* 원하는 너비로 설정 */
     height: 20rem; /* 원하는 높이로 설정 */
 }
 </style>

@@ -99,7 +99,7 @@
                 :class="{ active: btn === page }">
                 {{ btn + 1 }}
             </button>
-            <button class="container pagenation-btn" @click="nextPage" >Next Page</button>
+            <button class="container pagenation-btn" @click="nextPage">Next Page</button>
         </div>
     </div>
 </template>
@@ -131,8 +131,7 @@ const fetchData = async () => {
             `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`
         );
         data.value = response.data.data.content;
-        console.log(data.value)
-        
+        console.log(data.value);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -175,9 +174,6 @@ const generatePageButtons = () => {
 
     pageButtons.value = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 };
-
-
-
 
 onMounted(() => {
     fetchData();
@@ -248,7 +244,6 @@ const regions = [
     { id: 17, region: '제주' },
 ];
 
-
 // 산업군 별로 필터 로직
 const typeIsclick = ref(false);
 const clickType = () => {
@@ -279,7 +274,7 @@ const toggleButton = (buttonId) => {
         // selectedTypeFilter 리스트에서 해당 값을 제거하여 필터 해제 기능
         if (selectTypeFilter.value[i] === buttonId) {
             selectTypeFilter.value.splice(i, 1);
-            console.log(selectTypeFilter.value, 'selectTypeFilter 값')
+            console.log(selectTypeFilter.value, 'selectTypeFilter 값');
             isCheckedType.value = true;
             break;
         }
@@ -287,10 +282,8 @@ const toggleButton = (buttonId) => {
     // 반복문 돌아서 selectTypeFilter 리스트 안에 새로 들어온 buttonId 값이 없으면 리스트에 들어온 값(예: 7,5,3 등등) 추가
     if (isCheckedType.value === false) {
         selectTypeFilter.value.push(buttonId);
-        
     }
     isCheckedType.value = false;
-    
 };
 
 // 선택된 지역 필터들
@@ -298,15 +291,12 @@ const selectRegionFilter = ref([]);
 const isCheckedRegion = ref(false);
 
 const toggleRegionButton = (buttonId) => {
-    
-    
     for (let i = 0; i < selectRegionFilter.value.length; i++) {
         if (selectRegionFilter.value[i] === buttonId) {
             selectRegionFilter.value.splice(i, 1);
-            
+
             isCheckedRegion.value = true;
-            
-            
+
             break;
         }
     }
@@ -314,7 +304,6 @@ const toggleRegionButton = (buttonId) => {
         selectRegionFilter.value.push(buttonId);
     }
     isCheckedRegion.value = false;
-    
 };
 
 // 산업군 토글 버튼이 선택되었다는 css 적용 용도로 만들어 놓음
@@ -331,50 +320,44 @@ const isRegionSelected = (buttonId) => {
 watch(
     [selectRegionFilter.value, selectTypeFilter.value],
     ([newRegionFilters, newTypeFilters], [oldRegionFilters, oldTypeFilters]) => {
-        console.log('반복문 돌기전 newRegionFilters : ',newRegionFilters)
+        console.log('반복문 돌기전 newRegionFilters : ', newRegionFilters);
         // 지역 선택 필터 기능 구현
-        location.value = []
+        location.value = [];
         for (let x = 0; x < newRegionFilters.length; x++) {
-            let addLocation = ''
+            let addLocation = '';
             // newRegionFilters 리스트 안에 값들이 Id 값들임 => 4, 9 등등
             // Id 값으로 '대전' 과 같은 str을 매칭 시켜줌
-            addLocation = regions[newRegionFilters[x] - 1].region
+            addLocation = regions[newRegionFilters[x] - 1].region;
             // addLocation 은 '대전' => 이러한 값임
-            console.log('addLocation : ',addLocation)
+            console.log('addLocation : ', addLocation);
             // 이미 location에 담겨져 있지는 않은지 확인 해야 함
-            location.value.push(addLocation)
-            
+            location.value.push(addLocation);
         }
 
-        console.log('반복문 돌기전 newTypeFilters : ',newTypeFilters)
+        console.log('반복문 돌기전 newTypeFilters : ', newTypeFilters);
         // 산업군 선택 필터 기능 구현
-        type.value = []
+        type.value = [];
         for (let i = 0; i < newTypeFilters.length; i++) {
-            let addType = ''
+            let addType = '';
             // newTypeFilters 리스트 안에 값들이 Id 값들임 => 4, 9 등등
             // Id 값으로 '제조업' 과 같은 str을 매칭 시켜줌
             if (newTypeFilters[i] < 10) {
-
-                addType = industries1[newTypeFilters[i] - 1].industry
+                addType = industries1[newTypeFilters[i] - 1].industry;
                 // addLocation 은 '대전' => 이러한 값임
-                console.log('addLocation : ',addType)
-            }
-            else {
-                addType = industries2[newTypeFilters[i] - 10].industry
+                console.log('addLocation : ', addType);
+            } else {
+                addType = industries2[newTypeFilters[i] - 10].industry;
                 // addLocation 은 '대전' => 이러한 값임
-                console.log('addLocation : ',addType)
+                console.log('addLocation : ', addType);
             }
             // 이미 location에 담겨져 있지는 않은지 확인 해야 함
-            type.value.push(addType)
-            
+            type.value.push(addType);
         }
-        
-        
-        console.log('for 문 다 돌고 location',location.value)
-        console.log('for 문 다 돌고 type',type.value)
-        
-        fetchData()
-        
+
+        console.log('for 문 다 돌고 location', location.value);
+        console.log('for 문 다 돌고 type', type.value);
+
+        fetchData();
     }
 );
 

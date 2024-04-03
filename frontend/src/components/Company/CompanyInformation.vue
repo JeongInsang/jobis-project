@@ -46,8 +46,8 @@ const companyData = ref(null);
 const youthCompanyData = ref(null);
 const accessToken = localStorage.getItem('accessToken');
 const store = useCounterStore();
-const route = useRoute();
 const scraped = ref(null);
+const route = useRoute();
 
 const companyId = ref(route.params.companyId);
 onMounted(() => {
