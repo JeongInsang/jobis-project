@@ -266,6 +266,13 @@ const styles = ref({});
 .fade-next-round-leave-active {
     transition: opacity 0.2s ease-out;
 }
+.image {
+  transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+  transform: scale(0.95); /* 이미지 크기를 95%로 줄입니다 */
+}
 .card-container {
     display: flex;
     flex-wrap: wrap;
