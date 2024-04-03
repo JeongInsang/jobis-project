@@ -80,12 +80,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div>
-                        <div class="card1" v-if="financialStatements && quarter !== null">
-                            <!-- Your existing HTML code -->
-                        </div>
-                        <canvas id="salesChart"></canvas>
-                    </div>
                     <h3>손익계산서</h3>
                     <table class="indicators">
                         <thead>
@@ -246,7 +240,11 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import Chart from 'chart.js/auto';
+import { useRoute } from 'vue-router';
+import router from '@/router';
+const route = useRoute();
 
+const companyId = ref(route.params.companyId);
 const store = useCounterStore();
 const API_URL = store.API_URL;
 const financialStatements = ref(null);
@@ -259,7 +257,7 @@ onMounted(() => {
 
 const getCompanySheet = () => {
     axios
-        .get(`${API_URL}/api/company/statement/1006`)
+        .get(`${API_URL}/api/company/statement/${companyId.value}`)
         .then((res) => {
             financialStatements.value = res.data.data;
             console.log('Financial Statements:', financialStatements.value);
@@ -272,7 +270,7 @@ const getCompanySheet = () => {
 
 const getCompanyQuarter = () => {
     axios
-        .get(`${API_URL}/api/company/quarter/1006`)
+        .get(`${API_URL}/api/company/quarter/${companyId.value}`)
         .then((res) => {
             quarter.value = res.data.data;
             console.log('Quarter:', quarter.value);
@@ -284,44 +282,6 @@ const getCompanyQuarter = () => {
 
 const formatNumber = (value) => {
     return value ? parseFloat(value).toLocaleString() : '-';
-};
-
-const renderChart = () => {
-    if (!financialStatements.value || !quarter.value) {
-        console.error('Financial statements or quarter data is not available');
-        return;
-    }
-
-    const salesData = financialStatements.value.map((item) => parseFloat(item.firstQuarter));
-    const labels = quarter.value.map((item) => item.firstQuarterDate);
-
-    const ctx = document.getElementById('salesChart');
-    if (!ctx) {
-        console.error('Canvas element not found');
-        return;
-    }
-
-    const myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: '매출액',
-                    data: salesData,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1,
-                },
-            ],
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
-            },
-        },
-    });
 };
 </script>
 <style scoped>
