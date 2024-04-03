@@ -83,6 +83,7 @@ import 'swiper/css';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import { onMounted, ref } from 'vue';
+import { getPopularCompany } from '@/apis/api/company';
 
 const store = useCounterStore();
 const companyList = ref(null);
@@ -94,22 +95,20 @@ onMounted(() => {
     getTopViewList();
 });
 const getTopViewList = () => {
-    axios({
-        method: 'get',
-        url: `${store.API_URL}/api/company/popular`,
-    })
-        .then((res) => {
+    getPopularCompany(
+        (res) => {
             companyList.value = res.data.data;
             companyId.value = res.data.data.companyId;
-            console.log('상위 조회수 리스트 조회 : ', companyList.value);
+
             // companyList를 반으로 나누어 companyList1과 companyList2에 할당
             const halfIndex = Math.ceil(companyList.value.length / 2);
             companyList1.value = companyList.value.slice(0, halfIndex);
             companyList2.value = companyList.value.slice(halfIndex);
-        })
-        .catch((err) => {
+        },
+        (err) => {
             console.log(err);
-        });
+        }
+    );
 };
 </script>
 

@@ -144,6 +144,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
+import { getCompanies } from '@/apis/api/company';
 
 const store = useCounterStore();
 const router = useRouter();
@@ -161,21 +162,30 @@ const pageButtons = ref([]);
 const maxButtons = 10; // 최대 버튼 수
 
 const fetchData = async () => {
-    try {
-        const response = await axios.get(
-            `${API_URL}/api/company/search?page=${page.value}&size=${size.value}&keyword=${keyword.value}&location=${location.value}&type=${type.value}`
-        );
-        data.value = response.data.data.content;
-        console.log(data.value);
-        console.log(response.data.data, 'Total 갯수 확인용');
-        totalData.value = response.data.data.totalElements;
-        console.log(totalData.value);
-        generatePageButtons();
-        // 페이지 스크롤을 최상단으로 이동
-        window.scrollTo(0, 130);
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
+    const payload = {
+        page: page.value,
+        size: size.value,
+        keyword: keyword.value,
+        type: type.value,
+        location: location.value,
+    };
+    getCompanies(
+        payload,
+        (response) => {
+            console.log("response : "+response.data);
+            data.value = response.data.data.content;
+            console.log(data.value);
+            console.log(response.data.data, 'Total 갯수 확인용');
+            totalData.value = response.data.data.totalElements;
+            console.log(totalData.value);
+            generatePageButtons();
+            // 페이지 스크롤을 최상단으로 이동
+            window.scrollTo(0, 130);
+        },
+        (error) => {
+            console.error('Error fetching data:', error);
+        }
+    );
 };
 
 // /////////////////////////////////////////////페이지 네이션/////////////////////////////////////////////////

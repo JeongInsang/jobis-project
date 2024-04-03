@@ -11,7 +11,8 @@ const route = useRoute();
 
 onMounted(() => {
 
-    window.alert("로그인 세션이 만료되었습니다.")
+    alert("로그인 세션이 만료되었습니다.")
+
 
     logOut(
         (res) => {

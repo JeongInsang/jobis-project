@@ -73,6 +73,8 @@ import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import { watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { worldcup } from '@/apis/api/worldcup';
+import { getRecommendation } from '@/apis/api/recommendation';
 
 const router = useRouter();
 const store = useCounterStore();
@@ -100,21 +102,16 @@ const goCompanyDeatil = (comapnyId) => [
 ];
 
 const companiesInfo = function () {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/worldcup`,
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
-        .then((res) => {
+    worldcup(
+        (res) => {
             companies.value = res.data.data;
             // console.log(companies.value);
             createMatches();
-        })
-        .catch((err) => {
+        },
+        (err) => {
             console.log(err);
-        });
+        }
+    )
 };
 const winnerInfoLoaded = ref(false);
 
@@ -123,22 +120,17 @@ const getWinnerInfo = () => {
 };
 const win = ref('');
 const winnerInfo = function () {
-    axios({
-        method: 'get',
-        url: `${API_URL}/api/recommendation/${winner.value.worldcupId}`, // winner의 정보로 API 요청
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
-        .then((res) => {
+    getRecommendation(winner.value.worldcupId,
+        (res) => {
             win.value = res.data.data;
             winnerInfoLoaded.value = true; // winner 정보가 로드되었음을 표시
             console.log(win.value);
-            console.log(winnerInfoLoaded.value);
-        })
-        .catch((err) => {
+            console.log(winnerInfoLoaded.value);          
+        },
+        (err) => {
             console.log(err);
-        });
+        }
+    );
 };
 const createMatches = () => {
     const newMatches = [];

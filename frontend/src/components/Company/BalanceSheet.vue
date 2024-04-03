@@ -246,7 +246,10 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 import Chart from 'chart.js/auto';
+import { getStatement } from '@/apis/api/company';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const store = useCounterStore();
 const API_URL = store.API_URL;
 const financialStatements = ref(null);
@@ -258,16 +261,16 @@ onMounted(() => {
 });
 
 const getCompanySheet = () => {
-    axios
-        .get(`${API_URL}/api/company/statement/1006`)
-        .then((res) => {
+    getStatement(route.params.companyId,
+        (res) => {
             financialStatements.value = res.data.data;
             console.log('Financial Statements:', financialStatements.value);
             renderChart();
-        })
-        .catch((err) => {
-            console.error('Error fetching financial statements:', err);
-        });
+        },
+        (err) => {
+            console.log(err)
+        }
+    )
 };
 
 const getCompanyQuarter = () => {
