@@ -34,14 +34,14 @@ public class NewsService {
 
             NewsData externalNews = fetchNewsFromExternalApi(name);
 
-            if (externalNews != null) {
+            if (externalNews.getNews() != null && externalNews.getKeywords() != null) {
                 log.info("{} ({}) 기사를 Redis에 저장합니다...", name, companyId);
 
                 return saveNewsToRedisAndReturnResponse(companyId, externalNews);
             } else {
                 log.info("{} ({}) 기사를 외부 API에서도 찾을 수 없습니다.", name, companyId);
 
-                throw new RuntimeException(ErrorCode.NEWS_NOT_FOUND.getMessage());
+                throw new RestApiException(ErrorCode.NEWS_NOT_FOUND);
             }
         } else {
             return NewsDtoMapper.newsRedisToDto(newsRedis.get());
@@ -58,7 +58,7 @@ public class NewsService {
     }
 
     private NewsData fetchNewsFromExternalApi(String name) {
-        WebClient webClient = WebClient.builder().baseUrl("http://localhost:8000").build();
+        WebClient webClient = WebClient.builder().baseUrl("http://j10b309.p.ssafy.io:8000").build();
 
         return webClient.get()
                 .uri("/news/{name}", name)

@@ -17,6 +17,7 @@ public enum SuccessCode implements ResponseCode {
     LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
 
     CHECK_EMAIL_GOOD(HttpStatus.OK, "사용 가능한 이메일입니다"),
+
     CHECK_EMAIL_BAD(HttpStatus.OK, "이미 사용 중인 이메일입니다"),
 
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
@@ -56,7 +57,9 @@ public enum SuccessCode implements ResponseCode {
 
     FIND_COMPANYYOUTH_SUCCESS(HttpStatus.OK, "청년친화기업 정보 조회에 성공했습니다."),
 
-    FIND_COMPANYQUARTERINFO_SUCCESS(HttpStatus.OK, "기업분기 정보 조회에 성공했습니다."),
+    FIND_COMPANYYQUARTERINFO_SUCCESS(HttpStatus.OK, "기업분기 정보 조회에 성공했습니다."),
+
+    FIND_COMPANYPOPULAR_SUCCESS(HttpStatus.OK, "조회수 top10 기업정보 조회에 성공했습니다."),
 
     CREATE_SCRAP_SUCCESS(HttpStatus.OK, "관심기업 저장에 성공했습니다."),
 
