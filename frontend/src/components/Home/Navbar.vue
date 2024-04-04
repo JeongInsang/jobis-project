@@ -67,7 +67,7 @@ const formLogout = () => {
         store.setIsLogin(false);
         localStorage.clear();
 
-        alert("로그아웃 완료")
+        alert("로그아웃 되었습니다.")
 
         router.push({ name: 'home' });
         

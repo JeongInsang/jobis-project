@@ -124,6 +124,7 @@ const formSignUp = () => {
                     ({ res }) => {
                         // 회원가입 성공
                         console.log(res);
+                        alert("회원가입에 성공하였습니다.");
                         showSignIn();
                     },
                     (error) => {
@@ -187,6 +188,7 @@ const formLogIn = () => {
             }),
                 (error) => {
                     console.log(error);
+                    alert("아이디 혹은 비밀번호가 일치하지 않습니다.")
                 };
         }
     }

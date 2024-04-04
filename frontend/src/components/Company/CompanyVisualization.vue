@@ -58,7 +58,7 @@ const renderChart = () => {
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['활동성', '안정성', '효율성', '성장성', '수익성'], // 수정된 부분: 영어에서 한글로 변경
+            labels: ['안정성', '수익성', '활동성', '성장성', '효율성'], // 수정된 부분: 영어에서 한글로 변경
             datasets: [
                 {
                     label: '점수',
