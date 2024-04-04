@@ -56,6 +56,7 @@ body {
     position: absolute;
     width: 50%;
     transition: 1s all ease;
+    top: 10%;
 }
 
 .leftbox {
@@ -90,7 +91,7 @@ h1 {
     margin-top: -8px;
 }
 .account {
-    margin-top: 45%;
+    margin-top: 10%;
     font-size: 10px;
 }
 p {
@@ -245,7 +246,7 @@ input[type='checkbox'] {
 .social-buttons-container {
     display: flex;
     justify-content: center;
-  }
+}
 
 /* 버튼 스타일링 */
 .sns-button {
@@ -257,10 +258,10 @@ input[type='checkbox'] {
     border: none;
     background-color: transparent;
     cursor: pointer;
-  }
-  
-  /* 이미지 스타일링 */
-  .sns-icon {
+}
+
+/* 이미지 스타일링 */
+.sns-icon {
     width: 50px;
     height: auto;
-  }
+}

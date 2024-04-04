@@ -62,14 +62,14 @@
             <div class="leftbox">
                 <h2 class="title"><span>JOB</span>IS</h2>
                 <p class="desc">pick your perfect <span>JOB</span></p>
-                <LoginLogo class="logo" />
+                <!-- <LoginLogo class="logo" /> -->
                 <p class="account">계정이 있으신가요?</p>
                 <button class="button" @click="showSignIn">로그인</button>
             </div>
             <div class="rightbox">
                 <h2 class="title"><span>JOB</span>IS</h2>
                 <p class="desc">pick your perfect <span>JOB</span></p>
-                <LoginLogo class="logo" />
+                <!-- <LoginLogo class="logo" /> -->
                 <p class="account">계정이 없으신가요?</p>
                 <button class="button" @click="showSignUp">회원가입</button>
             </div>
@@ -181,7 +181,7 @@ const formLogIn = () => {
                 localStorage.setItem('refreshToken', refreshToken);
                 store.setIsLogin(true);
 
-                alert("로그인에 성공하였습니다!")
+                alert('로그인에 성공하였습니다!');
 
                 router.push({ name: 'home' });
             }),
