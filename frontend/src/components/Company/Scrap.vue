@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row g-3">
                 <div class="col-md-4" v-for="(company, index) in companyList" :key="index">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm cursor" @click="goCompanyDeatil(company.companyId)">
                         <div class="position-relative">
                             <img
                                 class="bd-placeholder-img card-img-top"
@@ -49,6 +49,7 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useCounterStore } from '@/stores/counter';
+import router from '@/router';
 const store = useCounterStore();
 
 const API_URL = store.API_URL;
@@ -94,6 +95,13 @@ const cancle = (companyId) => {
         });
     isCancle.value = false;
 };
+
+const goCompanyDeatil = (companyId) => [
+    router.push({
+        name: 'companydetail',
+        params: { companyId: companyId },
+    }),
+];
 </script>
 
 <style scoped>
@@ -117,5 +125,8 @@ const cancle = (companyId) => {
 }
 .container1:active {
     transform: scale(0.9);
+}
+.cursor {
+    cursor: pointer;
 }
 </style>
